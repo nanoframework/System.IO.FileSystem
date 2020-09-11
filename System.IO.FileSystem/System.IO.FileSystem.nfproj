@@ -15,6 +15,7 @@
     <RootNamespace>System.IO</RootNamespace>
     <AssemblyName>System.IO.FileSystem</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	<NF_IsCoreLibrary>True</NF_IsCoreLibrary>
     <DocumentationFile>bin\$(Configuration)\System.IO.FileSystem.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Label="nanoFramework">
@@ -23,6 +24,11 @@
     <NFMDP_DUMP_FILES>true</NFMDP_DUMP_FILES>
     <NFMDP_XML_FILES>true</NFMDP_XML_FILES>
   </PropertyGroup>
+  <ItemGroup>
+    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.CoreLibrary.1.7.3\lib\mscorlib.dll">
+      <InProject>false</InProject>
+    </NFMDP_PE_LoadHints>
+  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="File.cs" />
