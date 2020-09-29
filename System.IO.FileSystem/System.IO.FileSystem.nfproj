@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build"
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildToolsPath)..\..\..\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
   </PropertyGroup>
@@ -12,10 +13,10 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>System.IO</RootNamespace>
+    <RootNamespace>System.IO.FileSystem</RootNamespace>
     <AssemblyName>System.IO.FileSystem</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
-	<NF_IsCoreLibrary>True</NF_IsCoreLibrary>
+    <NF_IsCoreLibrary>True</NF_IsCoreLibrary>
     <DocumentationFile>bin\$(Configuration)\System.IO.FileSystem.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
@@ -27,16 +28,14 @@
   <PropertyGroup>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
+  <ItemGroup>
+    <NFMDP_PE_ExcludeClassByName Include="ThisAssembly">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+  </ItemGroup>
   <PropertyGroup Label="nanoFramework">
-    <NF_GenerateStubs>true</NF_GenerateStubs>
-    <NFMDP_DAT_FILES>true</NFMDP_DAT_FILES>
-    <NFMDP_DUMP_FILES>true</NFMDP_DUMP_FILES>
-    <NFMDP_XML_FILES>true</NFMDP_XML_FILES>
-  </PropertyGroup>
-  <PropertyGroup Label="nanoFramework">
-    <!-- generate PE: TRUE -->
-    <NF_GenerateStubsDirectory>bin$(Configuration)\Stubs</NF_GenerateStubsDirectory>
-	<NF_GenerateSkeletonProjectName>nf_sys_io_filesystem</NF_GenerateSkeletonProjectName>
+    <NF_GenerateStubsDirectory>bin\$(Configuration)\Stubs</NF_GenerateStubsDirectory>
+    <NF_GenerateSkeletonProjectName>nf_sys_io_filesystem</NF_GenerateSkeletonProjectName>
     <Name>System.IO.FileSystem</Name>
   </PropertyGroup>
   <ItemGroup>
