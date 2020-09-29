@@ -9,7 +9,7 @@ namespace System.IO
     /// Contains constants for specifying the access you want for a file.
     /// You can have Read, Write or ReadWrite access.
     /// </summary>
-    [Serializable, Flags]
+    [Flags]
     public enum FileAccess
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace System.IO
     /// opening files.  You can specify what access other processes trying
     /// to open the same file concurrently can have.
     /// </summary>
-    [Serializable, Flags]
+    [Flags]
     public enum FileShare
     {
         /// <summary>

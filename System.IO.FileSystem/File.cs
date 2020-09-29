@@ -27,7 +27,9 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory or an existing file.</param>
-        public static void Copy(String sourceFileName, String destFileName)
+        public static void Copy(
+            string sourceFileName,
+            string destFileName)
         {
             Copy(sourceFileName, destFileName, false);
         }
@@ -38,11 +40,14 @@ namespace System.IO
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
         /// <param name="overwrite">true if the destination file can be overwritten; otherwise, false.</param>
-        public static void Copy(String sourceFileName, String destFileName, bool overwrite)
+        public static void Copy(
+            string sourceFileName,
+            string destFileName,
+            bool overwrite)
         {
             // TODO: File Handling missing
             
-            FileMode writerMode = (overwrite) ? FileMode.Create : FileMode.CreateNew;
+            FileMode writerMode = overwrite ? FileMode.Create : FileMode.CreateNew;
 
             FileStream reader = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read);
 
@@ -54,17 +59,21 @@ namespace System.IO
                     //writer.SetLength(fileLength);
 
                     byte[] buffer = new byte[_defaultCopyBufferSize];
-                    for ( ; ; )
+
+                    while (true)
                     {
                         int readSize = reader.Read(buffer, 0, _defaultCopyBufferSize);
+
                         if (readSize <= 0)
+                        {
                             break;
+                        }
 
                         writer.Write(buffer, 0, readSize);
                     }
 
                     // Copy the attributes too
-                    File.SetAttributes(destFileName, File.GetAttributes(sourceFileName));
+                    SetAttributes(destFileName, GetAttributes(sourceFileName));
                 }
             }
             finally
@@ -78,7 +87,7 @@ namespace System.IO
         /// </summary>
         /// <param name="path">The path and name of the file to create.</param>
         /// <returns></returns>
-        public static FileStream Create(String path)
+        public static FileStream Create(string path)
         {
             return new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
         }
@@ -86,11 +95,13 @@ namespace System.IO
         /// <summary>
         /// Deletes the specified file.
         /// </summary>
-        /// <param name="path">The name of the file to be deleted. Wildcard characters are not supported.</param>
-        public static void Delete(String path)
+        /// <param name="path">The name of the file to be deleted. Wild-card characters are not supported.</param>
+        public static void Delete(string path)
         {
             if (path == null)
+            {
                 throw new ArgumentNullException("Path must be defined.");
+            }
 
             Path.CheckInvalidPathChars(path);
 
@@ -102,7 +113,7 @@ namespace System.IO
                 // Only check folder if its not the Root
                 if (folderPath != Path.GetPathRoot(path))
                 {
-                    attributes = (byte)NativeFile.GetAttributesNative(folderPath);
+                    attributes = GetAttributesNative(folderPath);
 
                     // Check if Directory existing
                     if (attributes == 0xFF)
@@ -112,7 +123,8 @@ namespace System.IO
                 }
 
                 // Folder exists, now verify whether the file itself exists.
-                attributes = (byte)NativeFile.GetAttributesNative(path);
+                attributes = GetAttributesNative(path);
+
                 if (attributes == 0xFF)
                 {
                     // No-op on file not found
@@ -124,12 +136,13 @@ namespace System.IO
                 {
                     throw new IOException("Not allowed to delete ReadOnly Files.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
+
                 if ((attributes & (byte)(FileAttributes.Directory)) != 0)
                 {
                     throw new IOException("Not allowed to delete Directories.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
-                NativeFile.DeleteNative(path);
+                DeleteNative(path);
             }
             finally
             {
@@ -142,9 +155,9 @@ namespace System.IO
         /// </summary>
         /// <param name="path">The file to check.</param>
         /// <returns></returns>
-        public static bool Exists(String path)
+        public static bool Exists(string path)
         {
-            return NativeFile.ExistsNative(Path.GetDirectoryName(path), Path.GetFileName(path));
+            return ExistsNative(Path.GetDirectoryName(path), Path.GetFileName(path));
         }
 
         /// <summary>
@@ -152,15 +165,25 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The name of the file to move. Absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
-        public static void Move(String sourceFileName, String destFileName)
+        public static void Move(
+            string sourceFileName,
+            string destFileName)
         {
             // Src File must exists!
-            if (!File.Exists(sourceFileName))
+            if (!Exists(sourceFileName))
+            {
+#pragma warning disable S112 // General exceptions should never be thrown
                 throw new Exception("Source File not existing.");
+#pragma warning restore S112 // General exceptions should never be thrown
+            }
 
             // Dest must not exist!
-            if (File.Exists(destFileName))
+            if (Exists(destFileName))
+            {
+#pragma warning disable S112 // General exceptions should never be thrown
                 throw new Exception("Destination File already existing.");
+#pragma warning restore S112 // General exceptions should never be thrown
+            }
 
             // TODO: File Handling missing
 
@@ -174,7 +197,7 @@ namespace System.IO
             else
             {
                 // Same Volume (FAT_FS move)
-                NativeFile.MoveNative(sourceFileName, destFileName);
+                MoveNative(sourceFileName, destFileName);
             }
         }
 
@@ -187,7 +210,7 @@ namespace System.IO
         {
             byte attributes;
 
-            attributes = NativeFile.GetAttributesNative(path);
+            attributes = GetAttributesNative(path);
 
             if (attributes == 0xFF)
             {
@@ -206,41 +229,39 @@ namespace System.IO
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
-            NativeFile.SetAttributesNative(path, (byte) fileAttributes);
+            SetAttributesNative(path, (byte) fileAttributes);
         }
 
         #endregion
+
+
+        #region Stubs (Native Calls)
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern bool ExistsNative(string path, string fileName);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void MoveNative(string pathSrc, string pathDest);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void DeleteNative(string path);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern byte GetAttributesNative(string path);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void SetAttributesNative(string path, byte attributes);
+
+        #endregion
     }
-
-    #region Stubs (Native Calls)
-
-    internal static class NativeFile
-    {
-        [System.Diagnostics.DebuggerStepThrough]
-        [System.Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern bool ExistsNative(string path, string fileName);
-
-        [System.Diagnostics.DebuggerStepThrough]
-        [System.Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void MoveNative(string pathSrc, string pathDest);
-
-        [System.Diagnostics.DebuggerStepThrough]
-        [System.Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void DeleteNative(string path);
-
-        [System.Diagnostics.DebuggerStepThrough]
-        [System.Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern byte GetAttributesNative(string path);
-
-        [System.Diagnostics.DebuggerStepThrough]
-        [System.Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void SetAttributesNative(string path, byte attributes);
-    }
-
-    #endregion
 }
