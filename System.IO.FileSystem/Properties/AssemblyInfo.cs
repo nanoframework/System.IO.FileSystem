@@ -10,9 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("System.Io.FileSystem")]
-[assembly: AssemblyCopyright("Copyright © ")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -21,7 +19,5 @@ using System.Runtime.InteropServices;
 
 ////////////////////////////////////////////////////////////////
 // update this whenever the native assembly signature changes //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyNativeVersion("1.0.0.0")]
 ////////////////////////////////////////////////////////////////
