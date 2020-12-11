@@ -26,7 +26,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  nugetPackageName: 'System.IO.FileSystem'
+  nugetPackageName: 'nanoFramework.System.IO.FileSystem'
   repoName: 'lib-System.IO.FileSystem'
 
 steps:
