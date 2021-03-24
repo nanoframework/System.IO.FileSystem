@@ -45,8 +45,16 @@ namespace System.IO
             string destFileName,
             bool overwrite)
         {
-            // TODO: File Handling missing
-            
+            if (string.IsNullOrEmpty(sourceFileName))
+            {
+                throw new ArgumentException($"{nameof(sourceFileName)} is null or sempty.");
+            }
+
+            if (string.IsNullOrEmpty(destFileName))
+            {
+                throw new ArgumentException($"{nameof(sourceFileName)} is null or sempty.");
+            }
+
             FileMode writerMode = overwrite ? FileMode.Create : FileMode.CreateNew;
 
             FileStream reader = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read);
@@ -78,7 +86,7 @@ namespace System.IO
             }
             finally
             {
-                    reader.Dispose();
+                reader.Dispose();
             }
         }
 
@@ -229,11 +237,10 @@ namespace System.IO
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
-            SetAttributesNative(path, (byte) fileAttributes);
+            SetAttributesNative(path, (byte)fileAttributes);
         }
 
         #endregion
-
 
         #region Stubs (Native Calls)
 
