@@ -27,7 +27,7 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory or an existing file.</param>
-        /// /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
+        /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
         public static void Copy(
             string sourceFileName,
             string destFileName)
