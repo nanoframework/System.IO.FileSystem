@@ -7,15 +7,24 @@ using System;
 
 namespace System.IO
 {
+    /// <summary>
+    /// MemoryStream class
+    /// </summary>
     public class MemoryStream : Stream
     {
         private const int CapacityDefaultSize = 256;
-        private byte[] _buffer;    // Either allocated internally or externally.       
-        private int _position;     // read/write head.
-        private int _length;       // Number of bytes within the memory stream
-        private int _capacity;     // length of usable portion of buffer for stream
-        private bool _expandable;  // User-provided buffers aren't expandable.
-        private bool _isOpen;      // Is this stream open or closed?
+        // Either allocated internally or externally.
+        private byte[] _buffer;
+        // read/write head.
+        private int _position;
+        // Number of bytes within the memory stream
+        private int _length;
+        // length of usable portion of buffer for stream
+        private int _capacity;
+        // User-provided buffers aren't expandable.
+        private bool _expandable;
+        // Is this stream open or closed?
+        private bool _isOpen;
 
         private const int MemStreamMaxLength = 0xFFFF;
 
@@ -35,6 +44,7 @@ namespace System.IO
         /// Creates a memory stream from a buffer.
         /// </summary>
         /// <param name="buffer"></param>
+        /// <exception cref="ArgumentNullException">Buffer can't be null.</exception>
         public MemoryStream(byte[] buffer)
         {
             if (buffer == null)
@@ -121,6 +131,8 @@ namespace System.IO
         }
 
         ///<inheritdoc/>
+        ///<exception cref="IOException">Can't adjust position out of the buffer size for fixed size buffer</exception>
+        ///<exception cref="ArgumentOutOfRangeException">Position can't be negative or higher than the stream allocated size.</exception>
         public override long Position
         {
             get
@@ -139,7 +151,7 @@ namespace System.IO
 
                 if ((!_expandable) && (value >= _length))
                 {
-                    throw new IOException("Can't adjust position out of the buffer size for fixed size buffer");
+                    throw new IOException();
                 }
 
                 _position = (int)value;
@@ -147,6 +159,9 @@ namespace System.IO
         }
 
         ///<inheritdoc/>
+        /// <exception cref="ArgumentException">Invalid length.</exception>
+        /// <exception cref="ArgumentNullException">IBuffer is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Offset is negative or longer than count.</exception>
         public override int Read(byte[] buffer, int offset, int count)
         {
             EnsureOpen();
@@ -162,7 +177,7 @@ namespace System.IO
 
             if (buffer.Length - offset < count)
             {
-                throw new ArgumentException("Invalid length");
+                throw new ArgumentException();
             }
 
             int n = (int)(_length - _position);
@@ -198,6 +213,8 @@ namespace System.IO
         }
 
         ///<inheritdoc/>
+        ///<exception cref="IOException">You cannot Seek before origin or you cannot Seek after a fixed size buffer.</exception>
+        ///<exception cref="ArgumentException">"Invalid seek origin."</exception>
         public override long Seek(long offset, SeekOrigin origin)
         {
             EnsureOpen();
@@ -211,12 +228,12 @@ namespace System.IO
                 case SeekOrigin.Begin:
                     if (offset < 0)
                     {
-                        throw new IOException("You cannot Seek before origin.");
+                        throw new IOException();
                     }
 
                     if ((!_expandable) && (offset >= _length))
                     {
-                        throw new IOException("You cannot Seek after a fixed size buffer.");
+                        throw new IOException();
                     }
 
                     _position = (int)offset;
@@ -225,12 +242,12 @@ namespace System.IO
                 case SeekOrigin.Current:
                     if (offset + _position < 0)
                     {
-                        throw new IOException("You cannot Seek before origin.");
+                        throw new IOException();
                     }
 
                     if ((!_expandable) && (offset >= _length))
                     {
-                        throw new IOException("You cannot Seek after a fixed size buffer.");
+                        throw new IOException();
                     }
 
                     _position += (int)offset;
@@ -239,19 +256,19 @@ namespace System.IO
                 case SeekOrigin.End:
                     if (_length + offset < 0)
                     {
-                        throw new IOException("You cannot Seek before origin.");
+                        throw new IOException();
                     }
 
                     if ((!_expandable) && (_length + offset >= _length))
                     {
-                        throw new IOException("You cannot Seek after a fixed size buffer.");
+                        throw new IOException();
                     }
 
                     _position = _length + (int)offset;
                     break;
 
                 default:
-                    throw new ArgumentException("Invalid seek origin.");
+                    throw new ArgumentException();
             }
 
             return _position;
@@ -306,7 +323,7 @@ namespace System.IO
 
             if (buffer.Length - offset < count)
             {
-                throw new ArgumentException("Argument_InvalidOffLen");
+                throw new ArgumentException();
             }
 
             int i = _position + count;
