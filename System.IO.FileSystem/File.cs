@@ -27,6 +27,7 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory or an existing file.</param>
+        /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
         public static void Copy(
             string sourceFileName,
             string destFileName)
@@ -40,13 +41,22 @@ namespace System.IO
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
         /// <param name="overwrite">true if the destination file can be overwritten; otherwise, false.</param>
+        /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
         public static void Copy(
             string sourceFileName,
             string destFileName,
             bool overwrite)
         {
-            // TODO: File Handling missing
-            
+            if (string.IsNullOrEmpty(sourceFileName))
+            {
+                throw new ArgumentException(nameof(sourceFileName));
+            }
+
+            if (string.IsNullOrEmpty(destFileName))
+            {
+                throw new ArgumentException(nameof(sourceFileName));
+            }
+
             FileMode writerMode = overwrite ? FileMode.Create : FileMode.CreateNew;
 
             FileStream reader = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read);
@@ -78,7 +88,7 @@ namespace System.IO
             }
             finally
             {
-                    reader.Dispose();
+                reader.Dispose();
             }
         }
 
@@ -96,11 +106,13 @@ namespace System.IO
         /// Deletes the specified file.
         /// </summary>
         /// <param name="path">The name of the file to be deleted. Wild-card characters are not supported.</param>
+        /// <exception cref="ArgumentNullException">Path must be defined.</exception>
+        /// <exception cref="IOException">Directory not found. or Not allowed to delete ReadOnly Files. or Not allowed to delete Directories.</exception>
         public static void Delete(string path)
         {
             if (path == null)
             {
-                throw new ArgumentNullException("Path must be defined.");
+                throw new ArgumentNullException(nameof(path));
             }
 
             Path.CheckInvalidPathChars(path);
@@ -118,7 +130,7 @@ namespace System.IO
                     // Check if Directory existing
                     if (attributes == 0xFF)
                     {
-                        throw new IOException("Directory not found.", (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+                        throw new IOException("", (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                     }
                 }
 
@@ -134,7 +146,7 @@ namespace System.IO
                 // Check if file is ReadOnly or Directory (then not allowed to delete)
                 if ((attributes & (byte)(FileAttributes.ReadOnly)) != 0)
                 {
-                    throw new IOException("Not allowed to delete ReadOnly Files.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                    throw new IOException("ReadOnly Files.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
                 if ((attributes & (byte)(FileAttributes.Directory)) != 0)
@@ -165,6 +177,7 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The name of the file to move. Absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
+        /// /// <exception cref="Exception">Source File not existing or Destination File already existing.</exception>
         public static void Move(
             string sourceFileName,
             string destFileName)
@@ -173,7 +186,7 @@ namespace System.IO
             if (!Exists(sourceFileName))
             {
 #pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception("Source File not existing.");
+                throw new Exception(nameof(sourceFileName));
 #pragma warning restore S112 // General exceptions should never be thrown
             }
 
@@ -181,7 +194,7 @@ namespace System.IO
             if (Exists(destFileName))
             {
 #pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception("Destination File already existing.");
+                throw new Exception(nameof(destFileName));
 #pragma warning restore S112 // General exceptions should never be thrown
             }
 
@@ -206,6 +219,7 @@ namespace System.IO
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <returns>The FileAttributes of the file on the path.</returns>
+        /// <exception cref="IOException">File not found.</exception>
         public static FileAttributes GetAttributes(string path)
         {
             byte attributes;
@@ -229,11 +243,10 @@ namespace System.IO
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
-            SetAttributesNative(path, (byte) fileAttributes);
+            SetAttributesNative(path, (byte)fileAttributes);
         }
 
         #endregion
-
 
         #region Stubs (Native Calls)
 
