@@ -37,6 +37,8 @@ steps:
   parameters:
     classLibName: $(nugetPackageName)
     sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
+    runUnitTests: true
+    unitTestRunsettings: '$(System.DefaultWorkingDirectory)\Tests\NFUnitTestMemoryStream\nano.runsettings'
 
 # step from template @ nf-tools repo
 # report error
