@@ -18,13 +18,13 @@ namespace System.IO
         private bool _canWrite;
         private bool _canSeek;
 
-        private long _seekLimit;
+        private readonly long _seekLimit;
         private long _position;
 
         private bool _disposed;
 
-        private string _name;
-        private string _path;
+        private readonly string _name;
+        private readonly string _path;
 
         #endregion
 
