@@ -44,6 +44,7 @@
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Directory.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileAccess.cs" />
     <Compile Include="FileAttributes.cs" />
