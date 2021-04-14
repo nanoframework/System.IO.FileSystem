@@ -41,6 +41,11 @@ namespace System.IO
             return ExistsNative(path);
         }
 
+        public static void Move(string sourcePath, string destinationPath)
+        {
+            MoveNative(sourcePath, destinationPath);
+        }
+
         public static string[] GetFiles(string path)
         {
             return GetFilesNative(path);
@@ -74,6 +79,11 @@ namespace System.IO
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern bool ExistsNative(string path);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void MoveNative(string pathSrc, string pathDest);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
