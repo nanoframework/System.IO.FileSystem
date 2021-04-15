@@ -246,6 +246,21 @@ namespace System.IO
             SetAttributesNative(path, (byte)fileAttributes);
         }
 
+        public static DateTime GetCreationTime(string path)
+        {
+            return GetCreationTimeNative(path);
+        }
+
+        public static DateTime GetLastAccessTime(string path)
+        {
+            return GetLastAccessTimeNative(path);
+        }
+
+        public static DateTime GetLastWriteTime(string path)
+        {
+            return GetLastWriteTimeNative(path);
+        }
+
         #endregion
 
         #region Stubs (Native Calls)
@@ -274,6 +289,21 @@ namespace System.IO
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern void SetAttributesNative(string path, byte attributes);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern DateTime GetCreationTimeNative(string path);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern DateTime GetLastAccessTimeNative(string path);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern DateTime GetLastWriteTimeNative(string path);
 
         #endregion
     }
