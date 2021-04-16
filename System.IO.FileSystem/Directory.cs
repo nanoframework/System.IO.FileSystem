@@ -54,16 +54,6 @@ namespace System.IO
             return GetDirectoriesNative(path);
         }
 
-        public static DateTime GetCreationTime(string path)
-        {
-            return GetCreationTimeNative(path);
-        }
-
-        public static DateTime GetLastAccessTime(string path)
-        {
-            return GetLastAccessTimeNative(path);
-        }
-
         public static DateTime GetLastWriteTime(string path)
         {
             return GetLastWriteTimeNative(path);
@@ -107,16 +97,6 @@ namespace System.IO
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern string[] GetLogicalDrivesNative();
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern DateTime GetCreationTimeNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern DateTime GetLastAccessTimeNative(string path);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
