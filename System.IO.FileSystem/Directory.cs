@@ -12,8 +12,6 @@ namespace System.IO
     /// </summary>
     public static class Directory
     {
-
-
         #region Static Methods
 
         public static string[] GetLogicalDrives()
