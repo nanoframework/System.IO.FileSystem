@@ -18,7 +18,7 @@ namespace System.IO
 
         public static string[] GetLogicalDrives()
         {
-            return new string[] { "D:\\" };
+            return GetLogicalDrivesNative();
         }
 
         public static bool CreateDirectory(string path)
@@ -108,7 +108,7 @@ namespace System.IO
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void GetLogicalDrivesNative(string path);
+        private static extern string[] GetLogicalDrivesNative();
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
