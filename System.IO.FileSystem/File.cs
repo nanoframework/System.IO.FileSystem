@@ -293,16 +293,6 @@ namespace System.IO
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern DateTime GetCreationTimeNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern DateTime GetLastAccessTimeNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern DateTime GetLastWriteTimeNative(string path);
 
         #endregion
