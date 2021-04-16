@@ -246,16 +246,6 @@ namespace System.IO
             SetAttributesNative(path, (byte)fileAttributes);
         }
 
-        public static DateTime GetCreationTime(string path)
-        {
-            return GetCreationTimeNative(path);
-        }
-
-        public static DateTime GetLastAccessTime(string path)
-        {
-            return GetLastAccessTimeNative(path);
-        }
-
         public static DateTime GetLastWriteTime(string path)
         {
             return GetLastWriteTimeNative(path);
