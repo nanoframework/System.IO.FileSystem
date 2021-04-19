@@ -45,6 +45,10 @@ namespace System.IO
         /// <exception cref="IOException">This method will throw DirectoryNotEmpty exception if folder is not empty.</exception>
         public static void Delete(string path, bool recursive = false)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(nameof(path));
+            }
             DeleteNative(path);
         }
 
@@ -55,7 +59,7 @@ namespace System.IO
         /// <returns>True if directory under given path exists, otherwise it returns false.</returns>
         /// <exception cref="ArgumentNullException">Path must be defined.</exception>
         /// <exception cref="IOException">Invalid drive or path to the parent folder doesn't exist.</exception>
-        public static bool Exist(string path)
+        public static bool Exists(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -72,6 +76,21 @@ namespace System.IO
         /// <exception cref="Exception">Source directory not existing or destination folder already existing.</exception>
         public static void Move(string sourcePath, string destinationPath)
         {
+            // Src File must exists!
+            if (!Exists(sourcePath))
+            {
+#pragma warning disable S112 // General exceptions should never be thrown
+                throw new Exception(nameof(sourcePath));
+#pragma warning restore S112 // General exceptions should never be thrown
+            }
+
+            // Dest must not exist!
+            if (Exists(destinationPath))
+            {
+#pragma warning disable S112 // General exceptions should never be thrown
+                throw new Exception(nameof(destinationPath));
+#pragma warning restore S112 // General exceptions should never be thrown
+            }
             MoveNative(sourcePath, destinationPath);
         }
 
@@ -85,6 +104,10 @@ namespace System.IO
         /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
         public static string[] GetFiles(string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(nameof(path));
+            }
             return GetFilesNative(path);
         }
 
@@ -98,6 +121,10 @@ namespace System.IO
         /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
         public static string[] GetDirectories(string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(nameof(path));
+            }
             return GetDirectoriesNative(path);
         }
 
@@ -109,6 +136,10 @@ namespace System.IO
         /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
         public static DateTime GetLastWriteTime(string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException(nameof(path));
+            }
             return GetLastWriteTimeNative(path);
         }
 
