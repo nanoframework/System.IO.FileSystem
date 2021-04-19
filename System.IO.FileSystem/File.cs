@@ -254,10 +254,6 @@ namespace System.IO
         /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
         public static DateTime GetLastWriteTime(string path)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new ArgumentException(nameof(path));
-            }
             return GetLastWriteTimeNative(path);
         }
 
