@@ -28,10 +28,9 @@ namespace System.IO
         /// </summary>
         /// <param name="path">Path and name of the directory to create.</param>
         /// <exception cref="IOException">Path for creating the folder doesn't exist. This method does not create directories recursively.</exception>
-        public static bool CreateDirectory(string path)
+        public static void CreateDirectory(string path)
         {
             CreateNative(path);
-            return true;
         }
         /// <summary>
         /// Deletes directory from storage.
