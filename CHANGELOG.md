@@ -1,5 +1,17 @@
 # Changelog
 
+## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.0-preview.34...HEAD)
+
+**Implemented enhancements:**
+
+- Add System.Io.Directory class [\#17](https://github.com/nanoframework/System.IO.FileSystem/pull/17)
+
+## [v1.0.0-preview.34](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.0-preview.34) (2021-04-09)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.0-preview.33...v1.0.0-preview.34)
+
 ## [v1.0.0-preview.33](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.0-preview.33) (2021-04-09)
 
 [Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.0-preview.30...v1.0.0-preview.33)
