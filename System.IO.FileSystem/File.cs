@@ -177,7 +177,7 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The name of the file to move. Absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
-        /// /// <exception cref="Exception">Source File not existing or Destination File already existing.</exception>
+        /// <exception cref="Exception">Source File not existing or Destination File already existing.</exception>
         public static void Move(
             string sourceFileName,
             string destFileName)
@@ -246,6 +246,17 @@ namespace System.IO
             SetAttributesNative(path, (byte)fileAttributes);
         }
 
+        /// <summary>
+        /// Determines the time of the last write/modification to file under given path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>Time of the last write/modification.</returns>
+        /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
+        public static DateTime GetLastWriteTime(string path)
+        {
+            return GetLastWriteTimeNative(path);
+        }
+
         #endregion
 
         #region Stubs (Native Calls)
@@ -274,6 +285,11 @@ namespace System.IO
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern void SetAttributesNative(string path, byte attributes);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern DateTime GetLastWriteTimeNative(string path);
 
         #endregion
     }
