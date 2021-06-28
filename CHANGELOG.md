@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.1-preview.26...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.1-preview.29...HEAD)
+
+**Fixed bugs:**
+
+- GetDirectoryName fixed for path with no slash [\#32](https://github.com/nanoframework/System.IO.FileSystem/pull/32)
+
+## [v1.0.1-preview.29](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.1-preview.29) (2021-06-20)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.1-preview.26...v1.0.1-preview.29)
 
 **Documentation and other chores:**
 
