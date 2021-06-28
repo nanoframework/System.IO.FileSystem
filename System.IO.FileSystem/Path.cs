@@ -139,6 +139,9 @@ namespace System.IO
 
                     var lastPathPostion = path.LastIndexOf(DirectorySeparatorChar);
 
+                    if (lastPathPostion == -1)
+                        return string.Empty;
+
                     return path.Substring(0, lastPathPostion);
                 }
             }
