@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>nanoFramework.System.IO.FileSystem</id>
+    <version>$version$</version>
+    <title>System.IO.FileSystem</title>
+    <authors>nanoFramework project contributors</authors>
+    <owners>nanoFramework,dotnetfoundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/nanoframework/System.IO.FileSystem</projectUrl>
+    <icon>images\nf-logo.png</icon>
+    <repository type="git" url="https://github.com/nanoframework/System.IO.FileSystem" commit="$commit$" />
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
+    <description>This package includes the System.IO.FileSystem assembly for nanoFramework C# projects.
+This package requires a target with System.IO.FileSystem v$nativeVersion$ (checksum $checksum$).</description>
+    <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.dll" target="lib\System.IO.FileSystem.dll" />
+    <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.pdb" target="lib\System.IO.FileSystem.pdb" />
+    <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.pdbx" target="lib\System.IO.FileSystem.pdbx" />
+    <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.pe" target="lib\System.IO.FileSystem.pe" />
+    <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.xml" target="lib\System.IO.FileSystem.xml" />
+    <file src="assets\readme.txt" target="" />
+    <file src="assets\nf-logo.png" target="images\" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>
