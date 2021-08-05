@@ -4,6 +4,8 @@ VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "System.IO.FileSystem", "System.IO.FileSystem\System.IO.FileSystem.nfproj", "{94C34547-1E2B-4967-8D1F-F3359460BB6D}"
 EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "nanoFramework.Storage", "nanoFramework.Storage\nanoFramework.Storage.nfproj", "{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E837C2C7-F19B-426F-B8AF-3FDF1C12EBBA}"
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "NFUnitTestMemoryStream", "Tests\NFUnitTestMemoryStream\NFUnitTestMemoryStream.nfproj", "{4F7524BC-A956-408E-A36B-59B35A0ACDA1}"
@@ -26,6 +28,12 @@ Global
 		{4F7524BC-A956-408E-A36B-59B35A0ACDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7524BC-A956-408E-A36B-59B35A0ACDA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F7524BC-A956-408E-A36B-59B35A0ACDA1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13ADA4BD-CF0B-47D7-B706-6D0CF3819C6B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
