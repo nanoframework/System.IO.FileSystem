@@ -13,14 +13,10 @@ namespace nanoFramework.Storage
     /// </summary>
     public static class Information
     {    
-        //TODO: List of available storage devices
+        //TODO: List of available storage devices (removable and static)
 
-        //TODO: Current storage device size
+        //TODO: Currently selected storage max space available?
 
-        //TODO: Currently used space on storage size
-
-        //TODO: Current folder size
-
-        //TODO: Current file size
+        //TODO: Currently selected storage device current space available?
     }
 }

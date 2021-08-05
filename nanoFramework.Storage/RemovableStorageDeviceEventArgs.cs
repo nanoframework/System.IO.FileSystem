@@ -10,7 +10,7 @@ namespace nanoFramework.Storage
     /// <summary>
     /// Contains argument values for Removable Storage Device events.
     /// </summary>
-    public class RemovableStorageDeviceEventArgs : EventArgs
+    public class RemovableStorageDeviceEventArgs : EventArgs  //TODO: this was based on https://raw.githubusercontent.com/nanoframework/Windows.Storage/develop/Windows.Storage/RemovableDeviceEventArgs.cs incase of reference.
     {
         private readonly string _path;
         private readonly RemovableStorageDeviceEvent _event;

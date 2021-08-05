@@ -19,7 +19,7 @@ namespace nanoFramework.Storage
     /// <summary>
     /// Event manager for Removable Storage events.
     /// </summary>
-    public static class RemovableStorageEventManager
+    public static class RemovableStorageEventManager //TODO: this was based on https://raw.githubusercontent.com/nanoframework/Windows.Storage/develop/Windows.Storage/StorageEventManager.cs incase of reference.
     {
         [Flags]
         internal enum RemovableStorageEventType : byte

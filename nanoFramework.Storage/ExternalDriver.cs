@@ -8,7 +8,7 @@ namespace nanoFramework.Storage
     /// Class to allow a single SDCard to be mounted on the system.
     /// Only allows for 1 device to be mounted, either via MMC or SPI
     /// </summary>
-    public static class ExternalDriver
+    public static class ExternalDriver //TODO: this was based on https://raw.githubusercontent.com/nanoframework/Windows.Storage/develop/Windows.Storage/StorageDevices.cs incase of reference.
     {
 
 #pragma warning disable 0649
