@@ -96,15 +96,15 @@ namespace nanoFramework.Storage
             EventSink.AddEventListener(EventCategory.Storage, RemovableStorageEventListener);
         }
 
-        internal static void OnRemovableStorageEventCallback(StorageEvent RemovableStorageEvent)
+        internal static void OnRemovableStorageEventCallback(RemovableStorageEvent removableStorageEvent)
         {
-            switch (storageEvent.EventType)
+            switch (removableStorageEvent.EventType)
             {
                 case RemovableStorageEventType.StorageDeviceInserted:
                     {
                         if (RemovableStorageDeviceInserted != null)
                         {
-                            RemovableStorageDeviceEventArgs args = new RemovableStorageDeviceEventArgs(DriveIndexToPath(storageEvent.DriveIndex), RemovableStorageDeviceEvent.Inserted);
+                            RemovableStorageDeviceEventArgs args = new RemovableStorageDeviceEventArgs(DriveIndexToPath(removableStorageEvent.DriveIndex), RemovableStorageDeviceEvent.Inserted);
 
                             RemovableStorageDeviceInserted(null, args);
                         }
@@ -114,7 +114,7 @@ namespace nanoFramework.Storage
                     {
                         if (RemovableStorageDeviceRemoved != null)
                         {
-                            RemovableStorageDeviceEventArgs args = new RemovableStorageDeviceEventArgs(DriveIndexToPath(storageEvent.DriveIndex), RemovableStorageDeviceEvent.Removed);
+                            RemovableStorageDeviceEventArgs args = new RemovableStorageDeviceEventArgs(DriveIndexToPath(removableStorageEvent.DriveIndex), RemovableStorageDeviceEvent.Removed);
 
                             RemovableStorageDeviceRemoved(null, args);
                         }
