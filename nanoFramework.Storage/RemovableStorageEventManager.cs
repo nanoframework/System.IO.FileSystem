@@ -59,7 +59,7 @@ namespace nanoFramework.Storage
             {
                 if (ev is RemovableStorageEvent)
                 {
-                    OnRemovableStorageEventCallback((StorageEvent)ev);
+                    OnRemovableStorageEventCallback((RemovableStorageEvent)ev);
                 }
 
                 return true;
