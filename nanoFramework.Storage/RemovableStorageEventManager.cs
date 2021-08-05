@@ -59,7 +59,7 @@ namespace nanoFramework.Storage
             {
                 if (ev is RemovableStorageEvent)
                 {
-                    OnStorageEventCallback((StorageEvent)ev);
+                    OnRemovableStorageEventCallback((StorageEvent)ev);
                 }
 
                 return true;
@@ -96,7 +96,7 @@ namespace nanoFramework.Storage
             EventSink.AddEventListener(EventCategory.Storage, RemovableStorageEventListener);
         }
 
-        internal static void OnStorageEventCallback(StorageEvent RemovableStorageEvent)
+        internal static void OnRemovableStorageEventCallback(StorageEvent RemovableStorageEvent)
         {
             switch (storageEvent.EventType)
             {
@@ -135,6 +135,7 @@ namespace nanoFramework.Storage
             // Keep the various INDEX0_DRIVE_LETTER in sync with nanoHAL_Windows_Storage.h in native code
             /////////////////////////////////////////////////////////////////////////////////////
 
+//TODO: should just base the drive index (0) against the ASCII letter `D` and continue increasing until `Z` before throwing an exception...
             switch (driveIndex)
             {
                 // INDEX0_DRIVE_LETTER
