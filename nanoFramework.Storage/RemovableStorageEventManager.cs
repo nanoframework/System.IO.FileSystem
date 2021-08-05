@@ -10,14 +10,14 @@ using static nanoFramework.Storage.RemovableStorageDeviceEventArgs;
 namespace nanoFramework.Storage
 {
     /// <summary>
-    /// Provides an event handler that is called when a Removable Device event occurs.
+    /// Provides an event handler that is called when a Removable Storage Device event occurs.
     /// </summary>
     /// <param name="sender">Specifies the object that sent the Removable Device event. </param>
-    /// <param name="e">Contains the Removable Device event arguments. </param>
+    /// <param name="e">Contains the Removable Storage Device event arguments. </param>
     public delegate void RemovableStorageDeviceEventHandler(Object sender, RemovableStorageDeviceEventArgs e);
 
     /// <summary>
-    /// Event manager for Storage events.
+    /// Event manager for Removable Storage events.
     /// </summary>
     public static class RemovableStorageEventManager
     {
@@ -67,10 +67,10 @@ namespace nanoFramework.Storage
         }
 
         /// <summary>
-        /// Event that occurs when a Removable Device is inserted.
+        /// Event that occurs when a Removable Storage Device is inserted.
         /// </summary>
         /// <remarks>
-        /// The <see cref="RemovableStorageEventManager"/> class raises <see cref="RemovableStorageDeviceEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
+        /// The <see cref="RemovableStorageEventManager"/> class raises <see cref="RemovableStorageDeviceEventArgs"/> events when Removable Storage Devices (typically SD Cards and USB mass storage device) are inserted and removed.
         /// 
         /// To have a <see cref="RemovableStorageEventManager"/> object call an event-handling method when a <see cref="RemovableStorageDeviceInserted"/> event occurs, 
         /// you must associate the method with a <see cref="RemovableStorageDeviceEventHandler"/> delegate, and add this delegate to this event. 
@@ -78,10 +78,10 @@ namespace nanoFramework.Storage
         public static event RemovableStorageDeviceEventHandler RemovableStorageDeviceInserted;
 
         /// <summary>
-        /// Event that occurs when a Removable Device is removed.
+        /// Event that occurs when a Removable Storage Device is removed.
         /// </summary>
         /// <remarks>
-        /// The <see cref="RemovableStorageEventManager"/> class raises <see cref="RemovableStorageDeviceEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
+        /// The <see cref="RemovableStorageEventManager"/> class raises <see cref="RemovableStorageDeviceEventArgs"/> events when Removable Storage Devices (typically SD Cards and USB mass storage device) are inserted and removed.
         /// 
         /// To have a <see cref="RemovableStorageEventManager"/> object call an event-handling method when a <see cref="RemovableStorageDeviceRemoved"/> event occurs, 
         /// you must associate the method with a <see cref="RemovableStorageDeviceEventHandler"/> delegate, and add this delegate to this event. 

@@ -8,7 +8,7 @@ using System;
 namespace nanoFramework.Storage
 {
     /// <summary>
-    /// Contains argument values for Removable Devices events.
+    /// Contains argument values for Removable Storage Device events.
     /// </summary>
     public class RemovableStorageDeviceEventArgs : EventArgs
     {
@@ -22,7 +22,7 @@ namespace nanoFramework.Storage
         }
 
         /// <summary>
-        /// The path of the Removable Device.
+        /// The path of the Removable Storage Device.
         /// </summary>
         public string Path
         {
@@ -44,10 +44,10 @@ namespace nanoFramework.Storage
         }
 
         /// <summary>
-        /// Specifies the type of event occurred with the Removable Device specified.
+        /// Specifies the type of event occurred with the Removable Storage Device specified.
         /// </summary>
         /// <remarks>
-        /// This enum is specific to nanoFramework. There is no equivalent in the UWP API.
+        /// This enum is specific to nanoFramework. There is no equivalent in the .Net API.
         /// </remarks>
         public enum RemovableStorageDeviceEvent
         {
