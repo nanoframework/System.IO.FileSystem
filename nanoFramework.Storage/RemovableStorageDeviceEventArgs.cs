@@ -10,12 +10,12 @@ namespace nanoFramework.Storage
     /// <summary>
     /// Contains argument values for Removable Devices events.
     /// </summary>
-    public class RemovableDeviceEventArgs : EventArgs
+    public class RemovableStorageDeviceEventArgs : EventArgs
     {
         private readonly string _path;
-        private readonly RemovableDeviceEvent _event;
+        private readonly RemovableStorageDeviceEvent _event;
 
-        internal RemovableDeviceEventArgs(string path, RemovableDeviceEvent deviceEvent)
+        internal RemovableStorageDeviceEventArgs(string path, RemovableStorageDeviceEvent deviceEvent)
         {
             _path = path;
             _event = deviceEvent;
@@ -33,9 +33,9 @@ namespace nanoFramework.Storage
         }
 
         /// <summary>
-        /// The <see cref="RemovableDeviceEvent"/> occurred.
+        /// The <see cref="RemovableStorageDeviceEvent"/> occurred.
         /// </summary>
-        public RemovableDeviceEvent Event
+        public RemovableStorageDeviceEvent Event
         {
             get
             {
@@ -49,7 +49,7 @@ namespace nanoFramework.Storage
         /// <remarks>
         /// This enum is specific to nanoFramework. There is no equivalent in the UWP API.
         /// </remarks>
-        public enum RemovableDeviceEvent
+        public enum RemovableStorageDeviceEvent
         {
             /// <summary>
             /// A Removable Device has been inserted.
