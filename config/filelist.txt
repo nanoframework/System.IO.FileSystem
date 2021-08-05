@@ -1,1 +1,2 @@
 **/System.IO.FileSystem.*
+**/nanoFramework.Storage.*

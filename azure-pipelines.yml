@@ -35,10 +35,16 @@ steps:
 # all build, update and publish steps
 - template: azure-pipelines-templates/class-lib-build.yml@templates
   parameters:
-    classLibName: $(nugetPackageName)
+    classLibName: 'nanoFramework.System.IO.FileSystem'
     sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
     runUnitTests: true
     unitTestRunsettings: '$(System.DefaultWorkingDirectory)\Tests\NFUnitTestMemoryStream\nano.runsettings'
+
+- template: azure-pipelines-templates/class-lib-build.yml@templates
+  parameters:
+    classLibName: 'nanoFramework.Storage'
+    sonarCloudProject: 'nanoframework_lib-nanoFramework.Storage'
+    runUnitTests: false
 
 # step from template @ nf-tools repo
 # report error

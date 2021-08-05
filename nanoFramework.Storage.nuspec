@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>nanoFramework.Storage</id>
+    <version>$version$</version>
+    <title>nanoFramework.Storage</title>
+    <authors>nanoFramework project contributors</authors>
+    <owners>nanoFramework,dotnetfoundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/nanoframework/System.IO.FileSystem</projectUrl>
+    <icon>images\nf-logo.png</icon>
+    <repository type="git" url="https://github.com/nanoframework/System.IO.FileSystem" commit="$commit$" />
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
+    <description>This package includes the nanoFramework.Storage assembly for nanoFramework C# projects.
+This package requires a target with nanoFramework.Storage v$nativeVersion$ (checksum $checksum$).</description>
+    <tags>nanoFramework C# csharp netmf netnf nanoFramework.Storage</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="nanoFramework.Storage\bin\Release\nanoFramework.Storage.dll" target="lib\nanoFramework.Storage.dll" />
+    <file src="nanoFramework.Storage\bin\Release\nanoFramework.Storage.pdb" target="lib\nanoFramework.Storage.pdb" />
+    <file src="nanoFramework.Storage\bin\Release\nanoFramework.Storage.pdbx" target="lib\nanoFramework.Storage.pdbx" />
+    <file src="nanoFramework.Storage\bin\Release\nanoFramework.Storage.pe" target="lib\nanoFramework.Storage.pe" />
+    <file src="nanoFramework.Storage\bin\Release\nanoFramework.Storage.xml" target="lib\nanoFramework.Storage.xml" />
+    <file src="assets\readme.txt" target="" />
+    <file src="assets\nf-logo.png" target="images\" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>
