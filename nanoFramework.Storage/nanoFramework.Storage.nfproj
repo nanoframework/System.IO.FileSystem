@@ -32,7 +32,7 @@
   </ItemGroup>
   <PropertyGroup Label="nanoFramework">
     <NF_GenerateStubsDirectory>bin\$(Configuration)\Stubs</NF_GenerateStubsDirectory>
-    <NF_GenerateSkeletonProjectName>nf_sys_io_filesystem</NF_GenerateSkeletonProjectName>
+    <NF_GenerateSkeletonProjectName>nf_storage</NF_GenerateSkeletonProjectName>
     <Name>nanoFramework.Storage</Name>
   </PropertyGroup>
   <ItemGroup>
