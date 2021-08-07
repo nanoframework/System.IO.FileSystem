@@ -45,7 +45,6 @@
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Information.cs" />
     <Compile Include="ExternalDriver.cs" />
     <Compile Include="RemovableStorageDeviceEventArgs.cs" />
     <Compile Include="RemovableStorageEventManager.cs" />

@@ -49,12 +49,9 @@ namespace nanoFramework.Storage
         /// If the Card is not present or the card is unable to be read then an exception will be thrown.
         /// </remarks>
         [System.Diagnostics.DebuggerStepThrough]
-        public static void MountSpi(string SpiController, int ChipSelect)
+        public static void MountSpi(int SpiBus, int ChipSelect)
         {
-            // the SpiDevice is an ASCII string with the format 'SPIn'
-            // need to grab 'n' from the string and convert that to the integer value from the ASCII code (do this by subtracting 48 from the char value)
-            int spiBus = SpiController[3] - '0';
-            MountSpiNative(spiBus, ChipSelect);
+            MountSpiNative(SpiBus, ChipSelect);
 
             // If no exception then set mounted flag
             _mounted = true;
