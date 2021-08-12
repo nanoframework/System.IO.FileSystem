@@ -8,21 +8,21 @@ using System;
 namespace System.IO.nanoFramework
 {
     /// <summary>
-    /// Contains argument values for Removable Storage Device events.
+    /// Contains argument values for Removable Devices events.
     /// </summary>
-    public class RemovableStorageDeviceEventArgs : EventArgs  //TODO: this was based on https://raw.githubusercontent.com/nanoframework/Windows.Storage/develop/Windows.Storage/RemovableDeviceEventArgs.cs incase of reference.
+    public class RemovableDeviceEventArgs : EventArgs
     {
         private readonly string _path;
-        private readonly RemovableStorageDeviceEvent _event;
+        private readonly RemovableDeviceEvent _event;
 
-        internal RemovableStorageDeviceEventArgs(string path, RemovableStorageDeviceEvent deviceEvent)
+        internal RemovableDeviceEventArgs(string path, RemovableDeviceEvent deviceEvent)
         {
             _path = path;
             _event = deviceEvent;
         }
 
         /// <summary>
-        /// The path of the Removable Storage Device.
+        /// The path of the Removable Device.
         /// </summary>
         public string Path
         {
@@ -33,9 +33,9 @@ namespace System.IO.nanoFramework
         }
 
         /// <summary>
-        /// The <see cref="RemovableStorageDeviceEvent"/> occurred.
+        /// The <see cref="RemovableDeviceEvent"/> occurred.
         /// </summary>
-        public RemovableStorageDeviceEvent Event
+        public RemovableDeviceEvent Event
         {
             get
             {
@@ -44,12 +44,12 @@ namespace System.IO.nanoFramework
         }
 
         /// <summary>
-        /// Specifies the type of event occurred with the Removable Storage Device specified.
+        /// Specifies the type of event occurred with the Removable Device specified.
         /// </summary>
         /// <remarks>
-        /// This enum is specific to nanoFramework. There is no equivalent in the .Net API.
+        /// This enum is specific to nanoFramework. There is no equivalent in the UWP API.
         /// </remarks>
-        public enum RemovableStorageDeviceEvent
+        public enum RemovableDeviceEvent
         {
             /// <summary>
             /// A Removable Device has been inserted.

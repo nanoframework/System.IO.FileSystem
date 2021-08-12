@@ -53,8 +53,8 @@
     <Compile Include="FileStream.cs" />
     <Compile Include="MemoryStream.cs" />
     <Compile Include="nanoFramework\ExternalDriver.cs" />
-    <Compile Include="nanoFramework\RemovableStorageDeviceEventArgs.cs" />
-    <Compile Include="nanoFramework\RemovableStorageEventManager.cs" />
+    <Compile Include="nanoFramework\RemovableDeviceEventArgs.cs" />
+    <Compile Include="nanoFramework\StorageEventManager.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
