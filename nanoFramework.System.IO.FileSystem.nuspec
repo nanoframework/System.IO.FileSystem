@@ -15,8 +15,7 @@
     <icon>images\nf-logo.png</icon>
     <repository type="git" url="https://github.com/nanoframework/System.IO.FileSystem" commit="$commit$" />
     <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
-    <description>This package includes the System.IO.FileSystem assembly for nanoFramework C# projects.
-This package requires a target with System.IO.FileSystem v$nativeVersion$ (checksum $checksum$).</description>
+    <description>This package includes the System.IO.FileSystem assembly for .NET nanoFramework C# projects.&#10;This package requires a target with System.IO.FileSystem v$nativeVersion$ (checksum $checksum$).</description>
     <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
