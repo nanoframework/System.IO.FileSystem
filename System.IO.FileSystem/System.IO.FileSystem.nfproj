@@ -52,7 +52,7 @@
     <Compile Include="FileShare.cs" />
     <Compile Include="FileStream.cs" />
     <Compile Include="MemoryStream.cs" />
-    <Compile Include="nanoFramework\ExternalDriver.cs" />
+    <Compile Include="nanoFramework\SDCard.cs" />
     <Compile Include="nanoFramework\RemovableDeviceEventArgs.cs" />
     <Compile Include="nanoFramework\StorageEventManager.cs" />
     <Compile Include="Path.cs" />
