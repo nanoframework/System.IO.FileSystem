@@ -5,8 +5,9 @@
 
 using nanoFramework.Runtime.Events;
 using System;
+using static nanoFramework.System.IO.FileSystem.RemovableDeviceEventArgs;
 
-namespace nanoFramework.System.IO
+namespace nanoFramework.System.IO.FileSystem
 {
     /// <summary>
     /// Provides an event handler that is called when a Removable Device event occurs.

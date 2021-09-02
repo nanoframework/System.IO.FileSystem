@@ -3,10 +3,10 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using Diagnostics = System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Diagnostics = System.Diagnostics;
 
-namespace nanoFramework.System.IO
+namespace nanoFramework.System.IO.FileSystem
 {
     /// <summary>
     /// Class to allow a SD memory card to be mounted on the system.

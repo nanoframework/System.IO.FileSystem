@@ -5,7 +5,7 @@
 
 using System;
 
-namespace nanoFramework.System.IO
+namespace nanoFramework.System.IO.FileSystem
 {
     /// <summary>
     /// Contains argument values for Removable Devices events.
