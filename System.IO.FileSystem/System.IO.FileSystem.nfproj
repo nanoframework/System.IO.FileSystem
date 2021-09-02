@@ -37,11 +37,6 @@
     <NF_GenerateSkeletonProjectName>nf_sys_io_filesystem</NF_GenerateSkeletonProjectName>
     <Name>System.IO.FileSystem</Name>
   </PropertyGroup>
-  <ItemGroup>
-    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.CoreLibrary.1.10.5\lib\mscorlib.dll">
-      <InProject>false</InProject>
-    </NFMDP_PE_LoadHints>
-  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Directory.cs" />
