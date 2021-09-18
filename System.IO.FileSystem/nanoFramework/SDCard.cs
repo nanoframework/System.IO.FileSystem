@@ -9,76 +9,166 @@ using Diagnostics = System.Diagnostics;
 namespace nanoFramework.System.IO.FileSystem
 {
     /// <summary>
-    /// Class to allow a SD memory card to be mounted on the system.
-    /// Only allows for one device to be mounted, either using SD or SPI protocols.
+    /// Class to allow a SD memory card to be configured and mounted on the system.
     /// </summary>
-    /// <remarks>
-    /// The system supports a single SD memory card.
-    /// </remarks>
-    public static class SDCard
+    public class SDCard
     {
 
 #pragma warning disable 0649
 
         // this field is set in native code
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private static bool _mounted = false;
+        private bool _mounted = false;
 
 #pragma warning restore 0649
 
+        private SDInterfaceType _sdCardType;
+        private bool _isCardDetectEnabled = false;
+        private int  _cardDetectPin;
+
+        #region Properties
         /// <summary>
-        /// Indcates if the SDscard has been mounted
+        /// Type of interface used by SDCard.
         /// </summary>
-        public static bool IsMounted => _mounted;
+        public SDInterfaceType CardType => _sdCardType;
 
         /// <summary>
-        /// Mount the SD memory card device on MMC using SD protocol. 
+        /// Indicates if the SD card has been mounted
         /// </summary>
-        /// <param name="dataWidth">Setting for the SD protocol data width.</param>
+        public bool IsMounted => _mounted;
+
+        /// <summary>
+        /// Indicates if SD card has been detected if optional cardDetectPin parameter is enabled with a valid GPIO pin.
+        /// If not enabled will always return false.
+        /// </summary>
+        /// <remarks>
+        /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
+        /// </remarks>
+        public bool IsCardDetected
+        {
+            get
+            {
+                if (_isCardDetectEnabled)
+                    return false;
+
+                return PollCardDetectNative(_cardDetectPin);
+            }
+        }
+        #endregion
+
+        #region Parameters
+        /// <summary>
+        /// Parameter used for creating a MMC card instance.
+        /// </summary>
+        public struct SDCardMmcParameters
+        {
+            /// <summary>
+            /// Data width to use on MMC SD protocol.
+            /// </summary>
+            public SDDataWidth dataWidth;
+
+            /// <summary>
+            /// Set true when an Card Detect Pin is used. 
+            /// The cardDetectPin parameter must have a valid GPIO pin.
+            /// </summary>
+            /// <remarks>
+            /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
+            /// </remarks>
+            public bool enableCardDetectPin;
+
+            /// <summary>
+            /// The optional card detect pin when pulled low indicates card is present in slot.
+            /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
+            /// </summary>
+            public uint cardDetectPin;
+        }
+
+        /// <summary>
+        /// Parameter used for creating a SPI card instance.
+        /// </summary>
+        public struct SpiSDCardParameters
+        {
+            /// <summary>
+            /// The SPI bus to use for SD Card.
+            /// </summary>
+            public uint spiBus;
+            /// <summary>
+            /// The chip select pin to use for SD Card.
+            /// </summary>
+            public uint chipSelectPin;
+
+            /// <summary>
+            /// Set true when an Card Detect Pin is used. 
+            /// The cardDetectPin parameter must have a valid GPIO pin.
+            /// </summary>
+            /// <remarks>
+            /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
+            /// </remarks>
+            public bool enableCardDetectPin;
+
+            /// <summary>
+            /// The optional card detect pin. When pulled low indicates card is present in slot.
+            /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
+            /// </summary>
+            public uint cardDetectPin;
+        };
+
+        #endregion
+
+        /// <summary>
+        /// Creates an instance of SDcard where parameters have already been defined in firmware. 
+        /// </summary>
+        public SDCard()
+        {
+            _sdCardType = SDInterfaceType.system;
+            InitSpiNative(-1, -1, false, -1);
+        }
+
+        /// <summary>
+        /// Create an instance of SDCard for a MMC connected SD card.
+        /// </summary>
+        /// <param name="parameters">Connection parameters</param>
+        public SDCard(SDCardMmcParameters parameters)
+        {
+            _sdCardType = SDInterfaceType.mmc;
+            
+            _isCardDetectEnabled = parameters.enableCardDetectPin;
+            _cardDetectPin = (int)parameters.cardDetectPin;
+
+            InitMmcNative(parameters.dataWidth, parameters.enableCardDetectPin, (int)parameters.cardDetectPin);
+        }
+
+        /// <summary>
+        /// Create an instance of SDCard for a SPI connected SD card.
+        /// </summary>
+        /// <param name="parameters">Connection parameters</param>
+        public SDCard(SpiSDCardParameters parameters)
+        {
+            _sdCardType = SDInterfaceType.spi;
+
+            _isCardDetectEnabled = parameters.enableCardDetectPin;
+            _cardDetectPin = (int)parameters.cardDetectPin;
+
+            InitSpiNative((int)parameters.spiBus, (int)parameters.chipSelectPin, parameters.enableCardDetectPin, (int)parameters.cardDetectPin);
+        }
+
+        /// <summary>
+        /// Mount the SD memory card device 
+        /// </summary>
         /// <remarks>
         /// This will try to mount the SD memory card on the specified interface.
         /// If the Card is not present or the card is unable to be read then an exception will be thrown.
         /// </remarks>
-        public static void MountMMC(SDDataWidth dataWidth)
+        public void Mount()
         {
             // upon return, and on successful execution, the native code has updated the _mounted field
-            MountMMCNative(dataWidth);
+            MountNative();
         }
 
-        /// <summary>
-        /// Mount the SD memory card device on SPI bus. The SPI configuration it's fixed and part of the device configuration.
-        /// </summary>
-        /// <remarks>
-        /// This requires that the SPI configuration is fixed in the device configurations.
-        /// This will try to mount the SD memory card on the specified interface.
-        /// If the Card is not present or the card is unable to be read then an exception will be thrown.
-        /// </remarks>
-        public static void MountSpi()
-        {
-            // upon return, and on successful execution, the native code has updated the _mounted field
-            // using -1 (an "impossible" bus number) as SPI bus index to signal that the fixed configuration should be used
-            MountSpiNative(-1, -1);
-        }
-
-        /// <summary>
-        /// Mount the SD memory card device on the specified SPI bus.
-        /// </summary>
-        /// <param name="spiBus">The SPI Bus of the device</param>
-        /// <param name="chipSelectPin">The GPIO pin used for chip select on the card electrical interface.</param>
-        /// <remarks>
-        /// This will try to mount the SD memory card on the specified interface.
-        /// If the Card is not present or the card is unable to be read then an exception will be thrown.
-        /// </remarks>
-        public static void MountSpi(uint spiBus, uint chipSelectPin)
-        {
-            // upon return, and on successful execution, the native code has updated the _mounted field
-            MountSpiNative((int)spiBus, (int)chipSelectPin);
-        }
-
-        /// <summary>
+         /// <summary>
         /// Unmount a mounted SD memory card.
         /// </summary>
-        public static void Unmount()
+        public void Unmount()
         {
             // upon return, and on successful execution, the native code has updated the _mounted field
             UnmountNative();
@@ -88,17 +178,48 @@ namespace nanoFramework.System.IO.FileSystem
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void MountMMCNative(SDDataWidth dataWidth);
+        private extern void InitMmcNative(SDDataWidth dataWidth, bool enableCardDetectPin, int InsertPin);
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void MountSpiNative(int SpiBus, int ChipSelect);
+        private extern void InitSpiNative(int SpiBus, int ChipSelect, bool enableInsertPin, int InsertPin);
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void UnmountNative();
+        private extern void MountNative();
+        
+        [Diagnostics.DebuggerStepThrough]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void UnmountNative();
+
+        [Diagnostics.DebuggerStepThrough]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern bool PollCardDetectNative(int cardDetectPin);
 
         #endregion
+
+        #region Enum
+
+        /// <summary>
+        /// SDCard interface type.
+        /// </summary>
+        public enum SDInterfaceType 
+        { 
+            /// <summary>
+            /// Interface already defined in firmware. 
+            /// </summary>
+            system,
+
+            /// <summary>
+            /// MMC SDcard interface type
+            /// </summary>
+            mmc,
+
+            /// <summary>
+            /// SPI SDCard interface type
+            /// </summary>
+            spi
+        };
 
         /// <summary>
         /// Data width to use on MMC SD protocol.
@@ -115,5 +236,6 @@ namespace nanoFramework.System.IO.FileSystem
             /// </summary>
             _4_bit = 2
         }
+        #endregion
     }
 }
