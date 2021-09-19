@@ -49,9 +49,11 @@ namespace nanoFramework.System.IO.FileSystem
             get
             {
                 if (_isCardDetectEnabled)
-                    return false;
+                {
+                    return PollCardDetectNative(_cardDetectPin);
+                }
 
-                return PollCardDetectNative(_cardDetectPin);
+                return false;
             }
         }
         #endregion
@@ -65,7 +67,7 @@ namespace nanoFramework.System.IO.FileSystem
             /// <summary>
             /// Data width to use on MMC SD protocol.
             /// </summary>
-            public SDDataWidth dataWidth;
+            public SDDataWidth DataWidth;
 
             /// <summary>
             /// Set true when an Card Detect Pin is used. 
@@ -74,13 +76,13 @@ namespace nanoFramework.System.IO.FileSystem
             /// <remarks>
             /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
             /// </remarks>
-            public bool enableCardDetectPin;
+            public bool EnableCardDetectPin;
 
             /// <summary>
-            /// The optional card detect pin when pulled low indicates card is present in slot.
+            /// The optional card detect GPIO pin which must be set to a valid pin if EnableCardDetectPin is true.
             /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
             /// </summary>
-            public uint cardDetectPin;
+            public uint CardDetectPin;
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace nanoFramework.System.IO.FileSystem
             public bool enableCardDetectPin;
 
             /// <summary>
-            /// The optional card detect pin. When pulled low indicates card is present in slot.
+            /// The optional card detect GPIO pin which must be set to a valid pin if EnableCardDetectPin is true.
             /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
             /// </summary>
             public uint cardDetectPin;
@@ -120,7 +122,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// </summary>
         public SDCard()
         {
-            _sdCardType = SDInterfaceType.system;
+            _sdCardType = SDInterfaceType.System;
             InitSpiNative(-1, -1, false, -1);
         }
 
@@ -130,12 +132,12 @@ namespace nanoFramework.System.IO.FileSystem
         /// <param name="parameters">Connection parameters</param>
         public SDCard(SDCardMmcParameters parameters)
         {
-            _sdCardType = SDInterfaceType.mmc;
+            _sdCardType = SDInterfaceType.Mmc;
             
-            _isCardDetectEnabled = parameters.enableCardDetectPin;
-            _cardDetectPin = (int)parameters.cardDetectPin;
+            _isCardDetectEnabled = parameters.EnableCardDetectPin;
+            _cardDetectPin = (int)parameters.CardDetectPin;
 
-            InitMmcNative(parameters.dataWidth, parameters.enableCardDetectPin, (int)parameters.cardDetectPin);
+            InitMmcNative(parameters.DataWidth, parameters.EnableCardDetectPin, (int)parameters.CardDetectPin);
         }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// <param name="parameters">Connection parameters</param>
         public SDCard(SpiSDCardParameters parameters)
         {
-            _sdCardType = SDInterfaceType.spi;
+            _sdCardType = SDInterfaceType.Spi;
 
             _isCardDetectEnabled = parameters.enableCardDetectPin;
             _cardDetectPin = (int)parameters.cardDetectPin;
@@ -208,17 +210,17 @@ namespace nanoFramework.System.IO.FileSystem
             /// <summary>
             /// Interface already defined in firmware. 
             /// </summary>
-            system,
+            System,
 
             /// <summary>
             /// MMC SDcard interface type
             /// </summary>
-            mmc,
+            Mmc,
 
             /// <summary>
             /// SPI SDCard interface type
             /// </summary>
-            spi
+            Spi
         };
 
         /// <summary>
