@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System;
 using System.Runtime.CompilerServices;
 using Diagnostics = System.Diagnostics;
 
@@ -11,7 +12,7 @@ namespace nanoFramework.System.IO.FileSystem
     /// <summary>
     /// Class to allow a SD memory card to be configured and mounted on the system.
     /// </summary>
-    public class SDCard
+    public class SDCard : IDisposable
     {
 
 #pragma warning disable 0649
@@ -22,9 +23,20 @@ namespace nanoFramework.System.IO.FileSystem
 
 #pragma warning restore 0649
 
+        [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
+        private bool _disposed;
+
+
+        // Common parameters
         private SDInterfaceType _sdCardType;
-        private bool _isCardDetectEnabled = false;
-        private int  _cardDetectPin;
+        private bool _enableCardDetectPin;
+        private uint _cardDetectPin;
+        // MMC parameters
+        private SDDataWidth _dataWidth;
+        // SPI parameters
+        private uint _spiBus;
+        private uint _chipSelectPin;
+
 
         #region Properties
         /// <summary>
@@ -38,6 +50,21 @@ namespace nanoFramework.System.IO.FileSystem
         public bool IsMounted => _mounted;
 
         /// <summary>
+        /// Return true if Card detection is enabled
+        /// </summary>
+        public bool CardDetectEnabled => _enableCardDetectPin;
+
+        /// <summary>
+        /// The parameters for a MMC connected SD card.
+        /// </summary>
+        public SDCardMmcParameters MmcParameters { get => new SDCardMmcParameters { dataWidth=_dataWidth, enableCardDetectPin=_enableCardDetectPin, cardDetectPin=_cardDetectPin }; }
+
+        /// <summary>
+        /// The parameters for a SPI connected SD card. 
+        /// </summary>
+        public SDCardSpiParameters SpiParameters { get => new SDCardSpiParameters { spiBus=_spiBus, chipSelectPin=_chipSelectPin, enableCardDetectPin = _enableCardDetectPin, cardDetectPin = _cardDetectPin }; }
+
+        /// <summary>
         /// Indicates if SD card has been detected if optional cardDetectPin parameter is enabled with a valid GPIO pin.
         /// If not enabled will always return false.
         /// </summary>
@@ -48,11 +75,10 @@ namespace nanoFramework.System.IO.FileSystem
         {
             get
             {
-                if (_isCardDetectEnabled)
+                if (_enableCardDetectPin)
                 {
-                    return PollCardDetectNative(_cardDetectPin);
+                    return PollCardDetectNative();
                 }
-
                 return false;
             }
         }
@@ -62,12 +88,12 @@ namespace nanoFramework.System.IO.FileSystem
         /// <summary>
         /// Parameter used for creating a MMC card instance.
         /// </summary>
-        public struct SDCardMmcParameters
+        public class SDCardMmcParameters
         {
             /// <summary>
             /// Data width to use on MMC SD protocol.
             /// </summary>
-            public SDDataWidth DataWidth;
+            public SDDataWidth dataWidth;
 
             /// <summary>
             /// Set true when an Card Detect Pin is used. 
@@ -76,19 +102,19 @@ namespace nanoFramework.System.IO.FileSystem
             /// <remarks>
             /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
             /// </remarks>
-            public bool EnableCardDetectPin;
+            public bool enableCardDetectPin;
 
             /// <summary>
             /// The optional card detect GPIO pin which must be set to a valid pin if EnableCardDetectPin is true.
             /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
             /// </summary>
-            public uint CardDetectPin;
+            public uint cardDetectPin;
         }
 
         /// <summary>
         /// Parameter used for creating a SPI card instance.
         /// </summary>
-        public struct SpiSDCardParameters
+        public class SDCardSpiParameters
         {
             /// <summary>
             /// The SPI bus to use for SD Card.
@@ -123,7 +149,8 @@ namespace nanoFramework.System.IO.FileSystem
         public SDCard()
         {
             _sdCardType = SDInterfaceType.System;
-            InitSpiNative(-1, -1, false, -1);
+
+            InitNative();
         }
 
         /// <summary>
@@ -133,25 +160,26 @@ namespace nanoFramework.System.IO.FileSystem
         public SDCard(SDCardMmcParameters parameters)
         {
             _sdCardType = SDInterfaceType.Mmc;
-            
-            _isCardDetectEnabled = parameters.EnableCardDetectPin;
-            _cardDetectPin = (int)parameters.CardDetectPin;
+            _dataWidth = parameters.dataWidth;
+            _enableCardDetectPin = parameters.enableCardDetectPin;
+            _cardDetectPin = parameters.cardDetectPin;
 
-            InitMmcNative(parameters.DataWidth, parameters.EnableCardDetectPin, (int)parameters.CardDetectPin);
+            InitNative();
         }
 
         /// <summary>
         /// Create an instance of SDCard for a SPI connected SD card.
         /// </summary>
         /// <param name="parameters">Connection parameters</param>
-        public SDCard(SpiSDCardParameters parameters)
+        public SDCard(SDCardSpiParameters parameters)
         {
             _sdCardType = SDInterfaceType.Spi;
+            _spiBus = parameters.spiBus;
+            _chipSelectPin = parameters.chipSelectPin;
+            _enableCardDetectPin = parameters.enableCardDetectPin;
+            _cardDetectPin = parameters.cardDetectPin;
 
-            _isCardDetectEnabled = parameters.enableCardDetectPin;
-            _cardDetectPin = (int)parameters.cardDetectPin;
-
-            InitSpiNative((int)parameters.spiBus, (int)parameters.chipSelectPin, parameters.enableCardDetectPin, (int)parameters.cardDetectPin);
+            InitNative();
         }
 
         /// <summary>
@@ -176,15 +204,48 @@ namespace nanoFramework.System.IO.FileSystem
             UnmountNative();
         }
 
+        #region IDisposable Support
+
+        private void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                NativeDispose();
+
+                _disposed = true;
+            }
+        }
+
+#pragma warning disable 1591
+        ~SDCard()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="IDisposable.Dispose"/>
+        /// </summary>
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                Dispose(true);
+
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        #endregion
+
         #region Native Calls
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void InitMmcNative(SDDataWidth dataWidth, bool enableCardDetectPin, int InsertPin);
+        private extern void InitNative();
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void InitSpiNative(int SpiBus, int ChipSelect, bool enableInsertPin, int InsertPin);
+        private extern void NativeDispose();
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -196,7 +257,7 @@ namespace nanoFramework.System.IO.FileSystem
 
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool PollCardDetectNative(int cardDetectPin);
+        private extern bool PollCardDetectNative();
 
         #endregion
 
