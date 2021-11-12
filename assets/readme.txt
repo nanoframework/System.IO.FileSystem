@@ -6,7 +6,7 @@
                                                                                
 ===================================================================================
 
-API docs: https://docs.nanoframework.net/api/System.IO.FileSystem.html
+API docs: https://docs.nanoframework.net/api/nanoFramework.System.IO.FileSystem.html
 
 Browse our samples repository: https://github.com/nanoframework/samples
 
