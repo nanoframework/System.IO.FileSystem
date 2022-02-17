@@ -558,6 +558,11 @@ namespace System.IO
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern long GetLengthNative(string path, string fileName);
 
+        public override int Read(SpanByte buffer)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
     }

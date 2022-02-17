@@ -18,8 +18,9 @@
     <description>This package includes the System.IO.FileSystem assembly for .NET nanoFramework C# projects.&#10;This package requires a target with System.IO.FileSystem v$nativeVersion$ (checksum $checksum$).</description>
     <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem</tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="1.12.0-preview.5" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.10.0-preview.6" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.12.0-preview.9" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.10.0-preview.8" />
+      <dependency id="nanoFramework.System.IO.Streams" version="1.0.0-preview.12" />
     </dependencies>
   </metadata>
   <files>
