@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.16...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.18...HEAD)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#69](https://github.com/nanoframework/System.IO.FileSystem/pull/69)
+
+## [v1.0.3-preview.18](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.3-preview.18) (2022-03-17)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.16...v1.0.3-preview.18)
 
 **Documentation and other chores:**
 
