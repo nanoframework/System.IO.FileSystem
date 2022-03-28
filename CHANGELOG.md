@@ -1,8 +1,8 @@
 # Changelog
 
-## [v1.0.2-preview.22](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.2-preview.22) (2021-12-03)
+## [v1.0.3-preview.20](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.3-preview.20) (2022-03-28)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.18...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.18...v1.0.3-preview.20)
 
 **Documentation and other chores:**
 
