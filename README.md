@@ -10,7 +10,6 @@
 | Component | Build Status | NuGet Package |
 |:-|---|---|
 | System.IO.FileSystem | [![Build Status](https://dev.azure.com/nanoframework/System.IO.FileSystem/_apis/build/status/System.IO.FileSystem?repoName=nanoframework%2FSystem.IO.FileSystem&branchName=main)](https://dev.azure.com/nanoframework/System.IO.FileSystem/_build/latest?definitionId=62&repoName=nanoframework%2FSystem.IO.FileSystem&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.IO.FileSystem.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.IO.FileSystem/) |
-| System.IO.FileSystem (preview) | [![Build Status](https://dev.azure.com/nanoframework/System.IO.FileSystem/_apis/build/status/System.IO.FileSystem?repoName=nanoframework%2FSystem.IO.FileSystem&branchName=develop)](https://dev.azure.com/nanoframework/System.IO.FileSystem/_build/latest?definitionId=62&repoName=nanoframework%2FSystem.IO.FileSystem&branchName=develop) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.System.IO.FileSystem.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.IO.FileSystem/) |
 
 ## Feedback and documentation
 
