@@ -558,12 +558,6 @@ namespace System.IO
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern long GetLengthNative(string path, string fileName);
 
-        /// <summary>
-        /// Read the buffer. TODO: Not implemented?!
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int Read(SpanByte buffer)
         {
             throw new NotImplementedException();
