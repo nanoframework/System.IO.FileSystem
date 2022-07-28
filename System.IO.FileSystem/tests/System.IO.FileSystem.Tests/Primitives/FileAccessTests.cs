@@ -3,7 +3,7 @@
 
 using nanoFramework.TestFramework;
 
-namespace System.IO.FileSystem.Tests
+namespace System.IO.FileSystem.Tests.Primitives
 {
     [TestClass]
     public static class FileAccessTests

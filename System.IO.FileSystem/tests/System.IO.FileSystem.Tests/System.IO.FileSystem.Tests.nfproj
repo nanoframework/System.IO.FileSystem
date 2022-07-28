@@ -27,10 +27,10 @@
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\nano.runsettings</RunSettingsFilePath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FileAccessTests.cs" />
-    <Compile Include="FileAttributesTests.cs" />
-    <Compile Include="FileModeTests.cs" />
-    <Compile Include="FileShareTests.cs" />
+    <Compile Include="Primitives\FileAccessTests.cs" />
+    <Compile Include="Primitives\FileAttributesTests.cs" />
+    <Compile Include="Primitives\FileModeTests.cs" />
+    <Compile Include="Primitives\FileShareTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
