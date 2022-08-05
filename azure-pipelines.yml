@@ -55,6 +55,12 @@ steps:
     classLibName: $(nugetPackageName)
     sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
 
+# update dependents
+- template: azure-pipelines-templates/update-dependents.yml@templates  
+  parameters:
+    repositoriesToUpdate: |
+      nanoFramework.Logging
+
 # step from template @ nf-tools repo
 # report error
 - template: azure-pipelines-templates/discord-webhook-task.yml@templates  
