@@ -1,5 +1,69 @@
 # Changelog
 
+## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.18...HEAD)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#84](https://github.com/nanoframework/System.IO.FileSystem/pull/84)
+
+## [v1.1.18](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.18) (2022-12-27)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.15...v1.1.18)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#83](https://github.com/nanoframework/System.IO.FileSystem/pull/83)
+
+## [v1.1.15](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.15) (2022-10-28)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.11...v1.1.15)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#81](https://github.com/nanoframework/System.IO.FileSystem/pull/81)
+
+## [v1.1.11](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.11) (2022-10-10)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.9...v1.1.11)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#77](https://github.com/nanoframework/System.IO.FileSystem/pull/77)
+
+## [v1.1.9](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.9) (2022-10-07)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.5...v1.1.9)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#75](https://github.com/nanoframework/System.IO.FileSystem/pull/75)
+
+## [v1.1.5](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.5) (2022-09-16)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.2...v1.1.5)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#74](https://github.com/nanoframework/System.IO.FileSystem/pull/74)
+
+## [v1.1.2](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.2) (2022-08-05)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3...v1.1.2)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#73](https://github.com/nanoframework/System.IO.FileSystem/pull/73)
+
+## [v1.0.3](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.3) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.20...v1.0.3)
+
+**Documentation and other chores:**
+
+- release-v1.0.3 [\#70](https://github.com/nanoframework/System.IO.FileSystem/pull/70)
+
 ## [v1.0.3-preview.20](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.3-preview.20) (2022-03-28)
 
 [Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.3-preview.18...v1.0.3-preview.20)
@@ -72,6 +136,10 @@
 
 [Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.2-preview.22...v1.0.2)
 
+**Documentation and other chores:**
+
+- release-v1.0.2 [\#53](https://github.com/nanoframework/System.IO.FileSystem/pull/53)
+
 ## [v1.0.2-preview.22](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.2-preview.22) (2021-12-03)
 
 [Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.2-preview.20...v1.0.2-preview.22)
@@ -126,11 +194,15 @@
 - Update 1 nuget dependencies [\#46](https://github.com/nanoframework/System.IO.FileSystem/pull/46)
 - Update 1 nuget dependencies [\#42](https://github.com/nanoframework/System.IO.FileSystem/pull/42)
 - Update 1 nuget dependencies [\#40](https://github.com/nanoframework/System.IO.FileSystem/pull/40)
-- Update 1 nuget dependencies [\#38](https://github.com/nanoframework/System.IO.FileSystem/pull/38)
 
 ## [v1.0.1](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.1) (2021-07-15)
 
 [Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.0.1-preview.36...v1.0.1)
+
+**Documentation and other chores:**
+
+- release-v1.0.1 [\#39](https://github.com/nanoframework/System.IO.FileSystem/pull/39)
+- Update 1 nuget dependencies [\#38](https://github.com/nanoframework/System.IO.FileSystem/pull/38)
 
 ## [v1.0.1-preview.36](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.0.1-preview.36) (2021-07-14)
 
