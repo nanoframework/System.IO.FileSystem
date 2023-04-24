@@ -11,12 +11,12 @@ namespace System.IO.FileSystem.Tests.Primitives
         [TestMethod]
         public static void ValueTest()
         {
-            Assert.Equal(0, (int)FileShare.None);
-            Assert.Equal(1, (int)FileShare.Read);
-            Assert.Equal(2, (int)FileShare.Write);
-            Assert.Equal(3, (int)FileShare.ReadWrite);
-            Assert.Equal(4, (int)FileShare.Delete);
-            Assert.Equal(0x10, (int)FileShare.Inheritable);
+            Assert.AreEqual(0, (int)FileShare.None);
+            Assert.AreEqual(1, (int)FileShare.Read);
+            Assert.AreEqual(2, (int)FileShare.Write);
+            Assert.AreEqual(3, (int)FileShare.ReadWrite);
+            Assert.AreEqual(4, (int)FileShare.Delete);
+            Assert.AreEqual(0x10, (int)FileShare.Inheritable);
         }
     }
 }

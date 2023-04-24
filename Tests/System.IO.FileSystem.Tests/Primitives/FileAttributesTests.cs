@@ -11,22 +11,22 @@ namespace System.IO.FileSystem.Tests.Primitives
         [TestMethod]
         public static void ValueTest()
         {
-            Assert.Equal(0x0001, (int)FileAttributes.ReadOnly);
-            Assert.Equal(0x0002, (int)FileAttributes.Hidden);
-            Assert.Equal(0x0004, (int)FileAttributes.System);
-            Assert.Equal(0x0010, (int)FileAttributes.Directory);
-            Assert.Equal(0x0020, (int)FileAttributes.Archive);
-            Assert.Equal(0x0040, (int)FileAttributes.Device);
-            Assert.Equal(0x0080, (int)FileAttributes.Normal);
-            Assert.Equal(0x0100, (int)FileAttributes.Temporary);
-            Assert.Equal(0x0200, (int)FileAttributes.SparseFile);
-            Assert.Equal(0x0400, (int)FileAttributes.ReparsePoint);
-            Assert.Equal(0x0800, (int)FileAttributes.Compressed);
-            Assert.Equal(0x1000, (int)FileAttributes.Offline);
-            Assert.Equal(0x2000, (int)FileAttributes.NotContentIndexed);
-            Assert.Equal(0x4000, (int)FileAttributes.Encrypted);
-            Assert.Equal(0x8000, (int)FileAttributes.IntegrityStream);
-            Assert.Equal(0x20000, (int)FileAttributes.NoScrubData);
+            Assert.AreEqual(0x0001, (int)FileAttributes.ReadOnly);
+            Assert.AreEqual(0x0002, (int)FileAttributes.Hidden);
+            Assert.AreEqual(0x0004, (int)FileAttributes.System);
+            Assert.AreEqual(0x0010, (int)FileAttributes.Directory);
+            Assert.AreEqual(0x0020, (int)FileAttributes.Archive);
+            Assert.AreEqual(0x0040, (int)FileAttributes.Device);
+            Assert.AreEqual(0x0080, (int)FileAttributes.Normal);
+            Assert.AreEqual(0x0100, (int)FileAttributes.Temporary);
+            Assert.AreEqual(0x0200, (int)FileAttributes.SparseFile);
+            Assert.AreEqual(0x0400, (int)FileAttributes.ReparsePoint);
+            Assert.AreEqual(0x0800, (int)FileAttributes.Compressed);
+            Assert.AreEqual(0x1000, (int)FileAttributes.Offline);
+            Assert.AreEqual(0x2000, (int)FileAttributes.NotContentIndexed);
+            Assert.AreEqual(0x4000, (int)FileAttributes.Encrypted);
+            Assert.AreEqual(0x8000, (int)FileAttributes.IntegrityStream);
+            Assert.AreEqual(0x20000, (int)FileAttributes.NoScrubData);
         }
 
     }
