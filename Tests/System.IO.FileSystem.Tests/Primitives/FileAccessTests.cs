@@ -11,9 +11,9 @@ namespace System.IO.FileSystem.Tests.Primitives
         [TestMethod]
         public static void ValueTest()
         {
-            Assert.Equal(1, (int)FileAccess.Read);
-            Assert.Equal(2, (int)FileAccess.Write);
-            Assert.Equal(3, (int)FileAccess.ReadWrite);
+            Assert.AreEqual(1, (int)FileAccess.Read);
+            Assert.AreEqual(2, (int)FileAccess.Write);
+            Assert.AreEqual(3, (int)FileAccess.ReadWrite);
         }
     }
 }

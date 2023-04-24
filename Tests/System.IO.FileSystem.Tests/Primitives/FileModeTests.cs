@@ -11,12 +11,12 @@ namespace System.IO.FileSystem.Tests.Primitives
         [TestMethod]
         public static void ValueTest()
         {
-            Assert.Equal(1, (int)FileMode.CreateNew);
-            Assert.Equal(2, (int)FileMode.Create);
-            Assert.Equal(3, (int)FileMode.Open);
-            Assert.Equal(4, (int)FileMode.OpenOrCreate);
-            Assert.Equal(5, (int)FileMode.Truncate);
-            Assert.Equal(6, (int)FileMode.Append);
+            Assert.AreEqual(1, (int)FileMode.CreateNew);
+            Assert.AreEqual(2, (int)FileMode.Create);
+            Assert.AreEqual(3, (int)FileMode.Open);
+            Assert.AreEqual(4, (int)FileMode.OpenOrCreate);
+            Assert.AreEqual(5, (int)FileMode.Truncate);
+            Assert.AreEqual(6, (int)FileMode.Append);
         }
     }
 }
