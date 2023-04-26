@@ -20,10 +20,6 @@ trigger:
       - config/*
       - .github/*
 
-  tags:
-    include: 
-      - v*
-
 # PR always trigger build
 pr:
   autoCancel: true
@@ -53,16 +49,8 @@ steps:
 - template: azure-pipelines-templates/class-lib-build.yml@templates
   parameters:
     sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
-
-# update dependents
-- template: azure-pipelines-templates/update-dependents.yml@templates  
-  parameters:
-    ${{ if eq(variables['UPDATE_DEPENDENTS'], 'true') }}:
-      waitBeforeUpdate: false
-    ${{ else }}:
-      waitBeforeUpdate: true
-    repositoriesToUpdate: |
-      nanoFramework.Logging
+    runUnitTests: true
+    unitTestRunsettings: '$(System.DefaultWorkingDirectory)\.runsettings'
 
 # step from template @ nf-tools repo
 # report error
