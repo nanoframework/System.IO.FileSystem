@@ -21,6 +21,7 @@ This package requires a target with System.IO.FileSystem v$nativeVersion$ (check
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
       <dependency id="nanoFramework.Runtime.Events" version="1.11.6" />
+      <dependency id="nanoFramework.System.Text" version="1.2.37" />
       <dependency id="nanoFramework.System.IO.Streams" version="1.1.38" />
     </dependencies>
   </metadata>
@@ -32,7 +33,7 @@ This package requires a target with System.IO.FileSystem v$nativeVersion$ (check
     <file src="System.IO.FileSystem\bin\Release\System.IO.FileSystem.xml" target="lib\System.IO.FileSystem.xml" />
     <file src="assets\readme.txt" target="" />
     <file src="README.md" target="docs\" />
-    <file src="assets\nf-logo.png" target="images\" />
+    <file src="assets\nf-logo.png" target="images\nf-logo.png" />
     <file src="LICENSE.md" target="" />
   </files>
 </package>
