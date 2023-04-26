@@ -243,15 +243,7 @@ namespace System.IO
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
-            // TODO: better handle bitwise combinations
-            if ((byte)fileAttributes > 0x24) // nF definitely does not support it!
-            {
-              throw new NotSupportedException("Unexpected FileAttribute combination.");
-            }
-            else
-            {
-                SetAttributesNative(path, (byte)fileAttributes);
-            }
+            SetAttributesNative(path, (byte)fileAttributes);
         }
 
         /// <summary>
