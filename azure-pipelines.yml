@@ -52,6 +52,16 @@ steps:
     runUnitTests: true
     unitTestRunsettings: '$(System.DefaultWorkingDirectory)\.runsettings'
 
+# # update dependents
+# - template: azure-pipelines-templates/update-dependents.yml@templates  
+#   parameters:
+#     ${{ if eq(variables['UPDATE_DEPENDENTS'], 'true') }}:
+#       waitBeforeUpdate: false
+#     ${{ else }}:
+#       waitBeforeUpdate: true
+#     repositoriesToUpdate: |
+#       nanoFramework.Logging
+
 # step from template @ nf-tools repo
 # report error
 - template: azure-pipelines-templates/discord-webhook-task.yml@templates  
