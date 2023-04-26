@@ -38,23 +38,6 @@ namespace System.IO
         /// is not specified, any request to open the file for writing or reading (by
         /// this process or another process) will fail until the file is closed.
         /// </summary>
-        ReadWrite = 0x03,
-
-
-        // NOTE: the following file attibutes are not currently supported
-        // in .NET nanoFramework so are left commented out.
-        // They are left as comments as should align with .NET if ever required.
-
-        ///// <summary>
-        ///// Open the file, but allow someone else to delete the file.
-        ///// </summary>
-        //Delete = 0x04,
-        ///// <summary>
-        ///// Whether the file handle should be inheritable by child processes.
-        ///// </summary>
-        ///// <remarks>
-        ///// Note this is not directly supported like this by nanoFramework.
-        ///// </remarks>
-        //Inheritable = 0x10
+        ReadWrite = 0x03
     }
 }
