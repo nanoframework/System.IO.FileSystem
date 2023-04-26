@@ -7,7 +7,7 @@ namespace System.IO
 {
     /// <summary>
     /// Contains constants for controlling file sharing options while
-    /// opening files.  You can specify what access other processes trying
+    /// opening files. You can specify what access other processes trying
     /// to open the same file concurrently can have.
     /// </summary>
     [Flags]
@@ -39,6 +39,11 @@ namespace System.IO
         /// this process or another process) will fail until the file is closed.
         /// </summary>
         ReadWrite = 0x03,
+
+
+        // NOTE: the following file attibutes are not currently supported
+        // in .NET nanoFramework so are left commented out.
+        // They are left as comments as should align with .NET if ever required.
 
         ///// <summary>
         ///// Open the file, but allow someone else to delete the file.
