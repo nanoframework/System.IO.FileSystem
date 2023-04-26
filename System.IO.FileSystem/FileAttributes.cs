@@ -37,6 +37,11 @@ namespace System.IO
         /// </summary>
         Archive = 0x0020,
 
+
+        // NOTE: the following file attibutes are not currently supported
+        // in .NET nanoFramework so are left commented out.
+        // They are left as comments as should align with .NET if ever required.
+
         ///// <summary>
         ///// Reserved for future use.
         ///// </summary>

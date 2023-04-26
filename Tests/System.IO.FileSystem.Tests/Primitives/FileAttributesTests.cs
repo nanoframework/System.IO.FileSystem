@@ -16,6 +16,8 @@ namespace System.IO.FileSystem.Tests.Primitives
             Assert.AreEqual(0x0004, (int)FileAttributes.System);
             Assert.AreEqual(0x0010, (int)FileAttributes.Directory);
             Assert.AreEqual(0x0020, (int)FileAttributes.Archive);
+
+            // NOTE: The following attributes are not currently supported by nF
             //Assert.AreEqual(0x0040, (int)FileAttributes.Device);
             //Assert.AreEqual(0x0080, (int)FileAttributes.Normal);
             //Assert.AreEqual(0x0100, (int)FileAttributes.Temporary);

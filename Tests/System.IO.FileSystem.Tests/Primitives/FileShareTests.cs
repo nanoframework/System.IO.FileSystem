@@ -15,6 +15,8 @@ namespace System.IO.FileSystem.Tests.Primitives
             Assert.AreEqual(1, (int)FileShare.Read);
             Assert.AreEqual(2, (int)FileShare.Write);
             Assert.AreEqual(3, (int)FileShare.ReadWrite);
+
+            // NOTE: The following attributes are not currently supported by nF
             //Assert.AreEqual(4, (int)FileShare.Delete);
             //Assert.AreEqual(0x10, (int)FileShare.Inheritable);
         }

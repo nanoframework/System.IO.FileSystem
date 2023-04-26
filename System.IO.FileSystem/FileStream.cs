@@ -561,7 +561,7 @@ namespace System.IO
         /// <summary>
         /// Reads bytes from the file stream.
         /// </summary>
-        /// <param name="value">Bytes to read from the stream.</param>
+        /// <param name="buffer">Bytes to read from the stream.</param>
         public override int Read(SpanByte buffer)
         {
             throw new NotImplementedException();
