@@ -40,16 +40,16 @@ namespace System.IO
         /// </summary>
         ReadWrite = 0x03,
 
-        /// <summary>
-        /// Open the file, but allow someone else to delete the file.
-        /// </summary>
-        Delete = 0x04,
-        /// <summary>
-        /// Whether the file handle should be inheritable by child processes.
-        /// </summary>
-        /// <remarks>
-        /// Note this is not directly supported like this by nanoFramework.
-        /// </remarks>
-        Inheritable = 0x10
+        ///// <summary>
+        ///// Open the file, but allow someone else to delete the file.
+        ///// </summary>
+        //Delete = 0x04,
+        ///// <summary>
+        ///// Whether the file handle should be inheritable by child processes.
+        ///// </summary>
+        ///// <remarks>
+        ///// Note this is not directly supported like this by nanoFramework.
+        ///// </remarks>
+        //Inheritable = 0x10
     }
 }
