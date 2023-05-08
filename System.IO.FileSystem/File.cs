@@ -66,7 +66,7 @@ namespace System.IO
                 using (FileStream writer = new FileStream(destFileName, writerMode, FileAccess.Write))
                 {
                     long fileLength = reader.Length;
-                    //writer.SetLength(fileLength);
+                    ////writer.SetLength(fileLength);
 
                     byte[] buffer = new byte[_defaultCopyBufferSize];
 
@@ -198,12 +198,12 @@ namespace System.IO
 #pragma warning restore S112 // General exceptions should never be thrown
             }
 
-            // TODO: File Handling missing
+            // FIXME: File Handling missing
 
             // Check the volume of files
             if (Path.GetPathRoot(sourceFileName) != Path.GetPathRoot(destFileName))
             {
-                // Cross Volume move (FAT_FS move not working)
+                // FIXME: Cross Volume move (FAT_FS move not working)
                 Copy(sourceFileName, destFileName);
                 Delete(sourceFileName);
             }
@@ -249,7 +249,7 @@ namespace System.IO
         /// <summary>
         /// Determines the time of the last write/modification to file under given path.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The path to the file.</param>
         /// <returns>Time of the last write/modification.</returns>
         /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
         public static DateTime GetLastWriteTime(string path)

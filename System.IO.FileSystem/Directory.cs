@@ -17,7 +17,7 @@ namespace System.IO
         /// <summary>
         /// Determines a list of available logical drives.
         /// </summary>
-        /// <returns>String[] of available drives, ex. "D:\\"</returns>
+        /// <returns>A String[] of available storage drive letters."</returns>
         public static string[] GetLogicalDrives()
         {
             return GetLogicalDrivesNative();

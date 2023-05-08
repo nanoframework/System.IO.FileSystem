@@ -297,7 +297,7 @@ namespace System.IO
         }
         
         /// <summary>
-        /// Destructor
+        /// Destructor.
         /// </summary>
         ~FileStream()
         {
@@ -345,7 +345,7 @@ namespace System.IO
         /// </summary>
         public override void Flush()
         {
-            // Already everything flushed/sync after every Read/Write operation, nothing to do here.
+            // Everything is flushed/sync already after every Read/Write operation, nothing to do here.
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace System.IO
 
             if (buffer.Length < offset + count)
             {
-                throw new IndexOutOfRangeException("Buffer size is smaller then offset + byteCount.");
+                throw new IndexOutOfRangeException("Buffer size is smaller than 'offset' + 'byteCount'.");
             }
 
             // Create buffer for read Data
@@ -405,7 +405,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads a byte from the file and advances the read position one byte.
+        /// Reads a byte from the file and advances the read position by one byte.
         /// </summary>
         /// <returns></returns>
         public override int ReadByte()
