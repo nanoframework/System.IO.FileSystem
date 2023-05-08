@@ -82,7 +82,7 @@ namespace System.IO
         /// <summary>
         /// List directories from the specified folder.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The specified folder.</param>
         /// <returns> 
         /// When this method completes successfully, it returns an array of absolute paths to the subfolders in the specified directory.
         /// </returns>

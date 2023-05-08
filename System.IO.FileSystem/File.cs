@@ -215,7 +215,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Gets the FileAttributes of the file on the path.
+        /// Gets the <see cref="FileAttributes"/> of the file on the path.
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <returns>The FileAttributes of the file on the path.</returns>
@@ -237,7 +237,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Sets the specified FileAttributes of the file on the specified path.
+        /// Sets the specified <see cref="FileAttributes"/> of the file on the specified path.
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
