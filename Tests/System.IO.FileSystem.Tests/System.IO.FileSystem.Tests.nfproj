@@ -4,9 +4,9 @@
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props')" />
-   <PropertyGroup>
+  <PropertyGroup>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\nano.runsettings</RunSettingsFilePath>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <ProjectCapability Include="TestContainer" />
   </ItemGroup>
@@ -34,6 +34,7 @@
     <Compile Include="Primitives\FileModeTests.cs" />
     <Compile Include="Primitives\FileShareTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WriteFileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.14.3.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
