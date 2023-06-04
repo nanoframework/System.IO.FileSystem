@@ -17,7 +17,7 @@ namespace System.IO
         /// <summary>
         /// Determines a list of available logical drives.
         /// </summary>
-        /// <returns>String[] of available drives, ex. "D:\\"</returns>
+        /// <returns>A String[] of available storage drive letters."</returns>
         public static string[] GetLogicalDrives()
         {
             return GetLogicalDrivesNative();
@@ -82,7 +82,7 @@ namespace System.IO
         /// <summary>
         /// List directories from the specified folder.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The specified folder.</param>
         /// <returns> 
         /// When this method completes successfully, it returns an array of absolute paths to the subfolders in the specified directory.
         /// </returns>
