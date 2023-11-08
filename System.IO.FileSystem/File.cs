@@ -228,8 +228,6 @@ namespace System.IO
                 return;
             }
 
-            // TODO: File Handling missing // <-- Leaving this here for not but not sure what it is indicating -- Cory
-
             // Check the volume of files
             if (Path.GetPathRoot(sourceFileName) != Path.GetPathRoot(destFileName))
             {
