@@ -35,7 +35,8 @@ namespace System.IO
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
         /// <param name="overwrite"><see langword="true"/> if the destination file can be overwritten; otherwise, <see langword="false"/>.</param>
 
-        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is <see langword="null"/> or empty.</exception>
+
         public static void Copy(string sourceFileName, string destFileName, bool overwrite)
         {
             if (string.IsNullOrEmpty(sourceFileName))
