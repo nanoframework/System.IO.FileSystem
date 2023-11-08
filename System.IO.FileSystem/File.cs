@@ -13,14 +13,8 @@ namespace System.IO
     /// </summary>
     public static class File
     {
-        #region Constants
-
-        private const int _defaultCopyBufferSize = 2048;
-
-        #endregion
-
-
-        #region Static Methods
+        private const int ChunkSize = 2048;
+        private static readonly byte[] EmptyBytes = new byte[0];
 
         /// <summary>
         /// Copies an existing file to a new file. Overwriting a file of the same name is not allowed.
@@ -28,24 +22,16 @@ namespace System.IO
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory or an existing file.</param>
         /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
-        public static void Copy(
-            string sourceFileName,
-            string destFileName)
-        {
-            Copy(sourceFileName, destFileName, false);
-        }
+        public static void Copy(string sourceFileName, string destFileName) => Copy(sourceFileName, destFileName, overwrite: false);
 
         /// <summary>
         /// Copies an existing file to a new file. Overwriting a file of the same name is allowed.
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
-        /// <param name="overwrite">true if the destination file can be overwritten; otherwise, false.</param>
+        /// <param name="overwrite"><c>true&lt;/c&gt; if the destination file can be overwritten; otherwise, <c>false</c>.</param>
         /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
-        public static void Copy(
-            string sourceFileName,
-            string destFileName,
-            bool overwrite)
+        public static void Copy(string sourceFileName, string destFileName, bool overwrite)
         {
             if (string.IsNullOrEmpty(sourceFileName))
             {
@@ -54,49 +40,35 @@ namespace System.IO
 
             if (string.IsNullOrEmpty(destFileName))
             {
-                throw new ArgumentException(nameof(sourceFileName));
+                throw new ArgumentException(nameof(destFileName));
             }
 
-            FileMode writerMode = overwrite ? FileMode.Create : FileMode.CreateNew;
-
-            FileStream reader = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read);
-
-            try
+            if (sourceFileName == destFileName)
             {
-                using (FileStream writer = new FileStream(destFileName, writerMode, FileAccess.Write))
-                {
-                    long fileLength = reader.Length;
-                    //writer.SetLength(fileLength);
-
-                    byte[] buffer = new byte[_defaultCopyBufferSize];
-
-                    while (true)
-                    {
-                        int readSize = reader.Read(buffer, 0, _defaultCopyBufferSize);
-
-                        if (readSize <= 0)
-                        {
-                            break;
-                        }
-
-                        writer.Write(buffer, 0, readSize);
-                    }
-
-                    // Copy the attributes too
-                    SetAttributes(destFileName, GetAttributes(sourceFileName));
-                }
+                throw new ArgumentException();
             }
-            finally
+
+            var destMode = overwrite ? FileMode.Create : FileMode.CreateNew;
+
+            using var sourceStream = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read);
+            using var destStream = new FileStream(destFileName, destMode, FileAccess.Write);
+
+            var buffer = new byte[ChunkSize];
+            var bytesRead = 0;
+
+            while ((bytesRead = sourceStream.Read(buffer, 0, ChunkSize)) > 0)
             {
-                reader.Dispose();
+                destStream.Write(buffer, 0, bytesRead);
             }
+
+            // Copy the attributes too
+            SetAttributes(destFileName, GetAttributes(sourceFileName));
         }
 
         /// <summary>
         /// Creates or overwrites a file in the specified path.
         /// </summary>
         /// <param name="path">The path and name of the file to create.</param>
-        /// <returns></returns>
         public static FileStream Create(string path)
         {
             return new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
@@ -257,9 +229,11 @@ namespace System.IO
             return GetLastWriteTimeNative(path);
         }
 
-        #endregion
-
-        #region Stubs (Native Calls)
+        #region Native Methods
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void DeleteNative(string path);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
@@ -269,28 +243,22 @@ namespace System.IO
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void MoveNative(string pathSrc, string pathDest);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void DeleteNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern byte GetAttributesNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void SetAttributesNative(string path, byte attributes);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern DateTime GetLastWriteTimeNative(string path);
 
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void MoveNative(string pathSrc, string pathDest);
+
+        [Diagnostics.DebuggerStepThrough]
+        [Diagnostics.DebuggerHidden]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern void SetAttributesNative(string path, byte attributes);
         #endregion
     }
 }

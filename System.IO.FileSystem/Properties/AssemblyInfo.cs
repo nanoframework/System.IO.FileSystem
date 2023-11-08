@@ -17,5 +17,5 @@ using System.Runtime.InteropServices;
 
 ////////////////////////////////////////////////////////////////
 // update this whenever the native assembly signature changes //
-[assembly: AssemblyNativeVersion("1.0.0.0")]
+[assembly: AssemblyNativeVersion("1.0.0.1")]
 ////////////////////////////////////////////////////////////////
