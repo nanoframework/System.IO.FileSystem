@@ -168,13 +168,22 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Determines the time of the last write/modification to file under given path.
+        /// Returns the date and time the specified file or directory was last written to.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns>Time of the last write/modification.</returns>
-        /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
+        /// <param name="path">
+        /// The file or directory for which to obtain write date and time information.
+        /// </param>
+        /// <returns>
+        /// A <see cref="DateTime" /> structure set to the last write date and time for the specified file or directory.
+        /// </returns>
         public static DateTime GetLastWriteTime(string path)
         {
+            // Adding this check because on my device the GetLastWriteTimeNative call throws an Exception instead of IOException if the file is not found
+            if (!Exists(path))
+            {
+                throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
+            }
+
             return GetLastWriteTimeNative(path);
         }
 

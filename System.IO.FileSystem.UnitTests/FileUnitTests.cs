@@ -235,9 +235,10 @@ namespace System.IO.FileSystem.UnitTests
             {
                 CreateFile(Source, BinaryContent);
 
-                var attributes = File.GetAttributes(Source);
+                var fileAttributes = File.GetAttributes(Source);
 
-                Assert.IsNotNull(attributes, "Failed to get attributes.");
+                // TODO: Set an attribute to a non-default value for better assertion?
+                Assert.AreEqual(false, fileAttributes.HasFlag(FileAttributes.Directory), "File has directory attribute");
             });
         }
 
@@ -247,6 +248,28 @@ namespace System.IO.FileSystem.UnitTests
             ExecuteTestAndTearDown(() =>
             {
                 Assert.ThrowsException(typeof(IOException), () => { File.GetAttributes(Source); });
+            });
+        }
+
+        [TestMethod]
+        public void GetLastWriteTime_returns_DateTime()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                var actual = File.GetLastWriteTime(Source);
+
+                Assert.IsTrue(actual != default, "Failed to get last write time.");
+            });
+        }
+
+        [TestMethod]
+        public void GetLastWriteTime_throws_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.GetLastWriteTime(Source); });
             });
         }
     }
