@@ -77,14 +77,14 @@ namespace System.IO
         /// <summary>
         /// Deletes the specified file.
         /// </summary>
-        /// <param name="path">The name of the file to be deleted. Wild-card characters are not supported.</param>
-        /// <exception cref="ArgumentNullException">Path must be defined.</exception>
-        /// <exception cref="IOException">Directory not found. or Not allowed to delete ReadOnly Files. or Not allowed to delete Directories.</exception>
+        /// <param name="path">The name of the file to be deleted. Wildcard characters are not supported.</param>
+        /// <exception cref="ArgumentException"><paramref name="path"/> is null or empty.</exception>
+        /// <exception cref="IOException">Directory is not found or <paramref name="path"/> is read-only or a directory.</exception>
         public static void Delete(string path)
         {
-            if (path == null)
+            if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException(nameof(path));
+                throw new ArgumentException(nameof(path));
             }
 
             Path.CheckInvalidPathChars(path);
@@ -92,17 +92,17 @@ namespace System.IO
             try
             {
                 byte attributes;
-                string folderPath = Path.GetDirectoryName(path);
+                var directoryName = Path.GetDirectoryName(path);
 
                 // Only check folder if its not the Root
-                if (folderPath != Path.GetPathRoot(path))
+                if (directoryName != Path.GetPathRoot(path))
                 {
-                    attributes = GetAttributesNative(folderPath);
+                    attributes = GetAttributesNative(directoryName);
 
                     // Check if Directory existing
                     if (attributes == 0xFF)
                     {
-                        throw new IOException("", (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+                        throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                     }
                 }
 
@@ -115,15 +115,15 @@ namespace System.IO
                     return;
                 }
 
-                // Check if file is ReadOnly or Directory (then not allowed to delete)
-                if ((attributes & (byte)(FileAttributes.ReadOnly)) != 0)
+                // Check if file is director or read-only (then not allowed to delete)
+                if ((attributes & (byte)FileAttributes.Directory) != 0)
                 {
-                    throw new IOException("ReadOnly Files.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                    throw new IOException("Cannot delete directory.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
-                if ((attributes & (byte)(FileAttributes.Directory)) != 0)
+                if ((attributes & (byte)FileAttributes.ReadOnly) != 0)
                 {
-                    throw new IOException("Not allowed to delete Directories.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                    throw new IOException("File is read-only", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
                 DeleteNative(path);

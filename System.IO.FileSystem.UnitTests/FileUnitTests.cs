@@ -23,7 +23,7 @@ namespace System.IO.FileSystem.UnitTests
 
         private static void AssertContentEquals(Stream stream, byte[] expected)
         {
-            Assert.AreEqual(expected.Length, stream.Length, "File is not the correct length.");
+            Assert.AreEqual(expected!.Length, stream.Length, "File is not the correct length.");
 
             var content = new byte[stream.Length];
             stream.Read(content, 0, content.Length);
@@ -51,7 +51,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             File.Create(path);
 
-            if (content.Length > 0)
+            if (content!.Length > 0)
             {
                 using var outputStream = new FileStream(path, FileMode.Open, FileAccess.Write);
                 outputStream.Write(content, 0, content.Length);
@@ -174,6 +174,41 @@ namespace System.IO.FileSystem.UnitTests
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(string.Empty, Destination, overwrite: false));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(null, Destination, overwrite: true));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(string.Empty, Destination, overwrite: true));
+        }
+
+        [TestMethod]
+        public void Create_creates_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                using var stream = File.Create(Destination);
+
+                AssertFileExists(Destination);
+                AssertContentEquals(stream, EmptyContent);
+            });
+
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Destination, new byte[100]);
+
+                using var stream = File.Create(Destination);
+
+                AssertFileExists(Destination);
+                AssertContentEquals(stream, EmptyContent);
+            });
+        }
+
+        [TestMethod]
+        public void Delete_deletes_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                File.Delete(Source);
+
+                AssertFileDoesNotExist(Source);
+            });
         }
     }
 }
