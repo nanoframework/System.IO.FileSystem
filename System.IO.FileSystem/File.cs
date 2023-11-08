@@ -201,6 +201,9 @@ namespace System.IO
         /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is <see langword="null"/> or empty.</exception>
 
         /// <exception cref="IOException"><paramref name="sourceFileName"/> does not exist or <paramref name="destFileName"/> exists.</exception>
+        /// <remarks>
+        /// .NET nanoFramework implementation differs from the full framework as it requires that <paramref name="sourceFileName"/> be an absolute path. This is a limitation coming from the platform.
+        /// </remarks>
         public static void Move(string sourceFileName, string destFileName)
         {
             if (string.IsNullOrEmpty(sourceFileName))
