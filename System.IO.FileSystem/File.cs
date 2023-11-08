@@ -33,7 +33,8 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
-        /// <param name="overwrite"><c>true</c>; if the destination file can be overwritten; otherwise, <c>false</c>.</param>
+        /// <param name="overwrite"><see langword="true"/> if the destination file can be overwritten; otherwise, <see langword="false"/>.</param>
+
         /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
         public static void Copy(string sourceFileName, string destFileName, bool overwrite)
         {
