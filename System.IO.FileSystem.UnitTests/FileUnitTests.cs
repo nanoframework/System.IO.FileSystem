@@ -6,6 +6,12 @@ namespace System.IO.FileSystem.UnitTests
     [TestClass]
     public class FileUnitTests
     {
+        [Setup]
+        public void Setup()
+        {
+            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+        }
+
         private const string Root = @"I:\";
         private static readonly string Destination = $"{Root}{nameof(FileUnitTests)}-Destination.test";
         private static readonly string Source = $"{Root}{nameof(FileUnitTests)}-Source.test";
@@ -34,6 +40,11 @@ namespace System.IO.FileSystem.UnitTests
             }
         }
 
+        private void AssertContentEquals(string path, string content)
+        {
+            AssertContentEquals(path, Encoding.UTF8.GetBytes(content));
+        }
+
         private static void AssertFileDoesNotExist(string path)
         {
             Assert.IsFalse(File.Exists(path), $"'{path}' exists when it shouldn't.");
@@ -59,6 +70,14 @@ namespace System.IO.FileSystem.UnitTests
 
             AssertFileExists(path);
             AssertContentEquals(path, content);
+        }
+
+        /// <summary>
+        /// Creates a file and verifies that <paramref name="content"/> was written to it.
+        /// </summary>
+        private static void CreateFile(string path, string content)
+        {
+            CreateFile(path, Encoding.UTF8.GetBytes(content));
         }
 
         private static void DeleteFile(string path)
@@ -321,6 +340,166 @@ namespace System.IO.FileSystem.UnitTests
         {
             Assert.ThrowsException(typeof(ArgumentException), () => File.Move(null, Destination));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Move(string.Empty, Destination));
+        }
+
+        [TestMethod]
+        public void OpenRead_should_open_existing_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                using var actual = File.OpenRead(Source);
+
+                AssertContentEquals(actual, BinaryContent);
+            });
+        }
+
+        [TestMethod]
+        public void OpenRead_should_throw_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.OpenRead(Source); });
+            });
+        }
+
+        [TestMethod]
+        public void OpenText_should_open_existing_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, TextContent);
+
+                using var actual = File.OpenText(Source);
+
+                Assert.AreEqual(TextContent, actual.ReadToEnd());
+            });
+        }
+
+        [TestMethod]
+        public void OpenText_should_throw_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.OpenText(Source); });
+            });
+        }
+
+        [TestMethod]
+        public void ReadAllBytes_should_read_all_content_from_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                var actual = File.ReadAllBytes(Source);
+
+                AssertContentEquals(Source, actual);
+            });
+        }
+
+        [TestMethod]
+        public void ReadAllBytes_should_throw_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.ReadAllBytes(Source); });
+            });
+        }
+
+        [TestMethod]
+        public void ReadAllText_should_read_all_content_from_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, TextContent);
+
+                var actual = File.ReadAllText(Source);
+
+                Assert.AreEqual(TextContent, actual);
+            });
+        }
+
+        [TestMethod]
+        public void ReadAllText_should_throw_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.ReadAllText(Source); });
+            });
+        }
+
+        [TestMethod]
+        public void SetAttributes_sets_FileAttributes()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                File.SetAttributes(Source, FileAttributes.Hidden);
+
+                var fileAttributes = File.GetAttributes(Source);
+
+                Assert.AreEqual(false, fileAttributes.HasFlag(FileAttributes.Hidden), "File does not have hidden attribute");
+            });
+        }
+
+        [TestMethod]
+        public void SetAttributes_throws_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.SetAttributes(Source, FileAttributes.Hidden); });
+            });
+        }
+
+        [TestMethod]
+        public void WriteAllBytes_should_create_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                File.WriteAllBytes(Source, EmptyContent);
+
+                AssertFileExists(Source);
+            });
+        }
+
+        [TestMethod]
+        public void WriteAllBytes_should_overwrite_existing_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, new byte[100]);
+
+                File.WriteAllBytes(Source, BinaryContent);
+
+                AssertContentEquals(Source, BinaryContent);
+            });
+        }
+
+        [TestMethod]
+        public void WriteAllText_should_create_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                File.WriteAllText(Source, string.Empty);
+
+                AssertFileExists(Source);
+            });
+        }
+
+        [TestMethod]
+        public void WriteAllText_should_overwrite_existing_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, EmptyContent);
+
+                File.WriteAllText(Source, TextContent);
+
+                AssertContentEquals(Source, TextContent);
+            });
         }
     }
 }
