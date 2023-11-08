@@ -198,7 +198,8 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The name of the file to move. Must be an absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
-        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is <see langword="null"/> or empty.</exception>
+
         /// <exception cref="IOException"><paramref name="sourceFileName"/> does not exist or <paramref name="destFileName"/> exists.</exception>
         public static void Move(string sourceFileName, string destFileName)
         {
