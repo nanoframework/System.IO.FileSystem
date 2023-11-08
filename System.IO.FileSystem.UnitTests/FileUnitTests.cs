@@ -7,8 +7,8 @@ namespace System.IO.FileSystem.UnitTests
     public class FileUnitTests
     {
         private const string Root = @"I:\";
-        private static readonly string Destination = $@"{Root}{nameof(FileUnitTests)}-Destination.test";
-        private static readonly string Source = $@"{Root}{nameof(FileUnitTests)}-Source.test";
+        private static readonly string Destination = $"{Root}{nameof(FileUnitTests)}-Destination.test";
+        private static readonly string Source = $"{Root}{nameof(FileUnitTests)}-Source.test";
 
         private static readonly byte[] BinaryContent = Encoding.UTF8.GetBytes(TextContent);
         private static readonly byte[] EmptyContent = new byte[0];
@@ -208,6 +208,45 @@ namespace System.IO.FileSystem.UnitTests
                 File.Delete(Source);
 
                 AssertFileDoesNotExist(Source);
+            });
+        }
+
+        [TestMethod]
+        public void Exists_returns_false_if_file_does_not_exist()
+        {
+            Assert.IsFalse(File.Exists($@"I:\file_does_not_exist-{nameof(FileUnitTests)}.pretty_sure"));
+        }
+
+        [TestMethod]
+        public void Exists_returns_true_if_file_exists()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                Assert.IsTrue(File.Exists(Source));
+            });
+        }
+
+        [TestMethod]
+        public void GetAttributes_returns_FileAttributes()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+
+                var attributes = File.GetAttributes(Source);
+
+                Assert.IsNotNull(attributes, "Failed to get attributes.");
+            });
+        }
+
+        [TestMethod]
+        public void GetAttributes_throws_if_file_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => { File.GetAttributes(Source); });
             });
         }
     }

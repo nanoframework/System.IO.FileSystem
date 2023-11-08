@@ -138,10 +138,44 @@ namespace System.IO
         /// Determines whether the specified file exists.
         /// </summary>
         /// <param name="path">The file to check.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the file exists; otherwise <c>false</c>.</returns>
         public static bool Exists(string path)
         {
             return ExistsNative(Path.GetDirectoryName(path), Path.GetFileName(path));
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FileAttributes"/> of the file on the path.
+        /// </summary>
+        /// <param name="path">The path to the file.</param>
+        /// <exception cref="IOException">File not found.</exception>
+        public static FileAttributes GetAttributes(string path)
+        {
+            // Adding this check because on my device the GetAttributesNative call throws an Exception instead of IOException if the file is not found
+            if (!Exists(path))
+            {
+                throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
+            }
+
+            var attributes = GetAttributesNative(path);
+
+            if (attributes == 0xFF)
+            {
+                throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
+            }
+
+            return (FileAttributes)attributes;
+        }
+
+        /// <summary>
+        /// Determines the time of the last write/modification to file under given path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>Time of the last write/modification.</returns>
+        /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
+        public static DateTime GetLastWriteTime(string path)
+        {
+            return GetLastWriteTimeNative(path);
         }
 
         /// <summary>
@@ -186,27 +220,7 @@ namespace System.IO
             }
         }
 
-        /// <summary>
-        /// Gets the FileAttributes of the file on the path.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        /// <returns>The FileAttributes of the file on the path.</returns>
-        /// <exception cref="IOException">File not found.</exception>
-        public static FileAttributes GetAttributes(string path)
-        {
-            byte attributes;
 
-            attributes = GetAttributesNative(path);
-
-            if (attributes == 0xFF)
-            {
-                throw new IOException("", (int)IOException.IOExceptionErrorCode.FileNotFound);
-            }
-            else
-            {
-                return (FileAttributes)attributes;
-            }
-        }
 
         /// <summary>
         /// Sets the specified FileAttributes of the file on the specified path.
@@ -216,17 +230,6 @@ namespace System.IO
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
             SetAttributesNative(path, (byte)fileAttributes);
-        }
-
-        /// <summary>
-        /// Determines the time of the last write/modification to file under given path.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>Time of the last write/modification.</returns>
-        /// <exception cref="IOException"> Logical drive or a file under given path does not exist. </exception>
-        public static DateTime GetLastWriteTime(string path)
-        {
-            return GetLastWriteTimeNative(path);
         }
 
         #region Native Methods
