@@ -190,30 +190,36 @@ namespace System.IO
         /// <summary>
         /// Moves a specified file to a new location, providing the option to specify a new file name.
         /// </summary>
-        /// <param name="sourceFileName">The name of the file to move. Absolute path.</param>
+        /// <param name="sourceFileName">The name of the file to move. Must be an absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
-        /// <exception cref="Exception">Source File not existing or Destination File already existing.</exception>
-        public static void Move(
-            string sourceFileName,
-            string destFileName)
+        public static void Move(string sourceFileName, string destFileName)
         {
-            // Src File must exists!
+            if (string.IsNullOrEmpty(sourceFileName))
+            {
+                throw new ArgumentException(nameof(sourceFileName));
+            }
+
+            if (string.IsNullOrEmpty(destFileName))
+            {
+                throw new ArgumentException(nameof(destFileName));
+            }
+
             if (!Exists(sourceFileName))
             {
-#pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception(nameof(sourceFileName));
-#pragma warning restore S112 // General exceptions should never be thrown
+                throw new IOException(nameof(sourceFileName));
             }
 
-            // Dest must not exist!
             if (Exists(destFileName))
             {
-#pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception(nameof(destFileName));
-#pragma warning restore S112 // General exceptions should never be thrown
+                throw new IOException(nameof(destFileName));
             }
 
-            // TODO: File Handling missing
+            if (sourceFileName == destFileName)
+            {
+                return;
+            }
+
+            // TODO: File Handling missing // <-- Leaving this here for not but not sure what it is indicating -- Cory
 
             // Check the volume of files
             if (Path.GetPathRoot(sourceFileName) != Path.GetPathRoot(destFileName))
@@ -228,8 +234,6 @@ namespace System.IO
                 MoveNative(sourceFileName, destFileName);
             }
         }
-
-
 
         /// <summary>
         /// Sets the specified FileAttributes of the file on the specified path.

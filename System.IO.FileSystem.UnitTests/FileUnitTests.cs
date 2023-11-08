@@ -135,7 +135,7 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void Copy_throws_if_destFileName_is_null_or_empty()
+        public void Copy_throws_if_destination_is_null_or_empty()
         {
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, null));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, string.Empty));
@@ -146,7 +146,7 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void Copy_throws_if_destFileName_equals_sourceFileName()
+        public void Copy_throws_if_destination_equals_source()
         {
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, Source));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, Source, overwrite: false));
@@ -166,7 +166,7 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void Copy_throws_if_sourceFileName_is_null_or_empty()
+        public void Copy_throws_if_source_is_null_or_empty()
         {
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(null, Destination));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(string.Empty, Destination));
@@ -265,12 +265,62 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void GetLastWriteTime_throws_if_file_does_not_exist()
+        public void GetLastWriteTime_throws_if_path_does_not_exist()
         {
             ExecuteTestAndTearDown(() =>
             {
                 Assert.ThrowsException(typeof(IOException), () => { File.GetLastWriteTime(Source); });
             });
+        }
+
+        [TestMethod]
+        public void Move_moves_to_destination()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                var content = BinaryContent;
+
+                CreateFile(Source, content);
+
+                File.Move(Source, Destination);
+
+                AssertFileDoesNotExist(Source);
+                AssertContentEquals(Destination, content);
+            });
+        }
+
+        [TestMethod]
+        public void Move_throws_if_destination_exists()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(Source, BinaryContent);
+                CreateFile(Destination, BinaryContent);
+
+                Assert.ThrowsException(typeof(IOException), () => File.Move(Source, Destination));
+            });
+        }
+
+        [TestMethod]
+        public void Move_throws_if_destination_is_null_or_empty()
+        {
+            Assert.ThrowsException(typeof(ArgumentException), () => File.Move(Source, null));
+            Assert.ThrowsException(typeof(ArgumentException), () => File.Move(Source, string.Empty));
+        }
+
+        public void Move_throws_if_source_does_not_exist()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                Assert.ThrowsException(typeof(IOException), () => File.Move(Source, Destination));
+            });
+        }
+
+        [TestMethod]
+        public void Move_throws_if_source_is_null_or_empty()
+        {
+            Assert.ThrowsException(typeof(ArgumentException), () => File.Move(null, Destination));
+            Assert.ThrowsException(typeof(ArgumentException), () => File.Move(string.Empty, Destination));
         }
     }
 }
