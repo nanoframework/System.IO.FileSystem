@@ -22,31 +22,34 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory or an existing file.</param>
-        /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
-        public static void Copy(string sourceFileName, string destFileName) => Copy(sourceFileName, destFileName, overwrite: false);
+        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
+        public static void Copy(string sourceFileName, string destFileName)
+        {
+            Copy(sourceFileName, destFileName, overwrite: false);
+        }
 
         /// <summary>
         /// Copies an existing file to a new file. Overwriting a file of the same name is allowed.
         /// </summary>
         /// <param name="sourceFileName">The file to copy.</param>
         /// <param name="destFileName">The name of the destination file. This cannot be a directory.</param>
-        /// <param name="overwrite"><c>true&lt;/c&gt; if the destination file can be overwritten; otherwise, <c>false</c>.</param>
-        /// <exception cref="ArgumentException">sourceFileName or destFileName is null or empty</exception>
+        /// <param name="overwrite"><c>true</c>; if the destination file can be overwritten; otherwise, <c>false</c>.</param>
+        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
         public static void Copy(string sourceFileName, string destFileName, bool overwrite)
         {
             if (string.IsNullOrEmpty(sourceFileName))
             {
-                throw new ArgumentException(nameof(sourceFileName));
+                throw new ArgumentException();
             }
 
             if (string.IsNullOrEmpty(destFileName))
             {
-                throw new ArgumentException(nameof(destFileName));
+                throw new ArgumentException();
             }
 
             if (sourceFileName == destFileName)
             {
-                throw new ArgumentException();
+                return;
             }
 
             var destMode = overwrite ? FileMode.Create : FileMode.CreateNew;
@@ -85,7 +88,7 @@ namespace System.IO
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentException(nameof(path));
+                throw new ArgumentException();
             }
 
             Path.CheckInvalidPathChars(path);
@@ -116,15 +119,15 @@ namespace System.IO
                     return;
                 }
 
-                // Check if file is director or read-only (then not allowed to delete)
+                // Check if file is directory or read-only (then not allowed to delete)
                 if ((attributes & (byte)FileAttributes.Directory) != 0)
                 {
-                    throw new IOException("Cannot delete directory.", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                    throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
                 if ((attributes & (byte)FileAttributes.ReadOnly) != 0)
                 {
-                    throw new IOException("File is read-only", (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                    throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
                 DeleteNative(path);
@@ -149,10 +152,9 @@ namespace System.IO
         /// Gets the <see cref="FileAttributes"/> of the file on the path.
         /// </summary>
         /// <param name="path">The path to the file.</param>
-        /// <exception cref="IOException">File not found.</exception>
+        /// <exception cref="IOException"><paramref name="path"/> cannot be not found.</exception>
         public static FileAttributes GetAttributes(string path)
         {
-            // Adding this check because on my device the GetAttributesNative call throws an Exception instead of IOException if the file is not found
             if (!Exists(path))
             {
                 throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
@@ -177,9 +179,9 @@ namespace System.IO
         /// <returns>
         /// A <see cref="DateTime" /> structure set to the last write date and time for the specified file or directory.
         /// </returns>
+        /// <exception cref="IOException"><paramref name="path"/> cannot be not found.</exception>
         public static DateTime GetLastWriteTime(string path)
         {
-            // Adding this check because on my device the GetLastWriteTimeNative call throws an Exception instead of IOException if the file is not found
             if (!Exists(path))
             {
                 throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
@@ -193,26 +195,28 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceFileName">The name of the file to move. Must be an absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
+        /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is null or empty.</exception>
+        /// <exception cref="IOException"><paramref name="sourceFileName"/> does not exist or <paramref name="destFileName"/> exists.</exception>
         public static void Move(string sourceFileName, string destFileName)
         {
             if (string.IsNullOrEmpty(sourceFileName))
             {
-                throw new ArgumentException(nameof(sourceFileName));
+                throw new ArgumentException();
             }
 
             if (string.IsNullOrEmpty(destFileName))
             {
-                throw new ArgumentException(nameof(destFileName));
+                throw new ArgumentException();
             }
 
             if (!Exists(sourceFileName))
             {
-                throw new IOException(nameof(sourceFileName));
+                throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);
             }
 
             if (Exists(destFileName))
             {
-                throw new IOException(nameof(destFileName));
+                throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
             }
 
             if (sourceFileName == destFileName)
@@ -260,6 +264,7 @@ namespace System.IO
         /// Opens a binary file, reads the contents of the file into a byte array, and then closes the file.
         /// </summary>
         /// <param name="path">The file to open for reading.</param>
+        /// <exception cref="IOException">The end of the file was unexpectedly reached.</exception>
         public static byte[] ReadAllBytes(string path)
         {
             using var stream = OpenRead(path);
@@ -273,7 +278,7 @@ namespace System.IO
                 var read = stream.Read(bytes, index, count > ChunkSize ? ChunkSize : count);
                 if (read <= 0)
                 {
-                    throw new IOException("Unexpected end of file");
+                    throw new IOException();
                 }
 
                 index += read;
@@ -300,7 +305,6 @@ namespace System.IO
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
-            // Adding this check because on my device the SetAttributesNative call throws an Exception instead of IOException if the file is not found
             if (!Exists(path))
             {
                 throw new IOException(string.Empty, (int)IOException.IOExceptionErrorCode.FileNotFound);

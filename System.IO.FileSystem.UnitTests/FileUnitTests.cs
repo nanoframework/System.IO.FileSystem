@@ -9,7 +9,7 @@ namespace System.IO.FileSystem.UnitTests
         [Setup]
         public void Setup()
         {
-            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
         }
 
         private const string Root = @"I:\";
@@ -162,14 +162,6 @@ namespace System.IO.FileSystem.UnitTests
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, string.Empty, overwrite: false));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, null, overwrite: true));
             Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, string.Empty, overwrite: true));
-        }
-
-        [TestMethod]
-        public void Copy_throws_if_destination_equals_source()
-        {
-            Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, Source));
-            Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, Source, overwrite: false));
-            Assert.ThrowsException(typeof(ArgumentException), () => File.Copy(Source, Source, overwrite: true));
         }
 
         [TestMethod]
