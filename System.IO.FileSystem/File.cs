@@ -84,7 +84,8 @@ namespace System.IO
         /// Deletes the specified file.
         /// </summary>
         /// <param name="path">The name of the file to be deleted. Wildcard characters are not supported.</param>
-        /// <exception cref="ArgumentException"><paramref name="path"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="path"/> is <see langword="null"/> or empty.</exception>
+
         /// <exception cref="IOException">Directory is not found or <paramref name="path"/> is read-only or a directory.</exception>
         public static void Delete(string path)
         {
