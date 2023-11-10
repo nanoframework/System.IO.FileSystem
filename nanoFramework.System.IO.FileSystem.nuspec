@@ -20,8 +20,10 @@ This package requires a target with System.IO.FileSystem v$nativeVersion$ (check
     <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.11.15" />
-      <dependency id="nanoFramework.System.IO.Streams" version="1.1.52" />
+	  <dependency id="nanoFramework.Runtime.Events" version="1.11.15" />
+	  <dependency id="nanoFramework.System.IO.Streams" version="1.1.52" />
+	  <dependency id="nanoFramework.System.Runtime" version="1.0.6" />
+	  <dependency id="nanoFramework.System.Text" version="1.2.54" />
     </dependencies>
   </metadata>
   <files>
