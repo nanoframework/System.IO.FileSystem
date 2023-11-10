@@ -234,7 +234,7 @@ namespace System.IO
         /// If <paramref name="path"/> is <see langword="null"/>, this method returns <see langword="null"/>.
         /// </returns>
         [return: NotNullIfNotNull("path")]
-        public static string GetFileName(string path) // TODO: Unit test
+        public static string GetFileName(string path)
         {
             if (path is null)
             {
@@ -263,7 +263,7 @@ namespace System.IO
         /// <param name="path">The path of the file.</param>
         /// <returns>The string returned by <see cref="GetFileName(string)"/>, minus the last period (.) and all characters following it.</returns>
         [return: NotNullIfNotNull("path")]
-        public static string GetFileNameWithoutExtension(string path) // TODO: Unit test
+        public static string GetFileNameWithoutExtension(string path)
         {
             if (path is null)
             {
@@ -271,8 +271,11 @@ namespace System.IO
             }
 
             var fileName = GetFileName(path);
-            var lastPeriod = fileName.LastIndexOf('.');
-            
+            Console.WriteLine($"Filename: '{fileName}'");
+            // TODO: Fix this in string as it should just automatically return -1 for a zero length string
+            var lastPeriod = fileName.Length > 0 ? fileName.LastIndexOf('.') : -1;
+            Console.WriteLine($"Last period: {lastPeriod}");
+
             return lastPeriod < 0 ?
                 fileName : // No extension was found
                 fileName.Substring(0, lastPeriod);
@@ -319,7 +322,7 @@ namespace System.IO
         /// 
         /// <see langword="null"/> if <paramref name="path"/> is <see langword="null"/> or is effectively empty.
         /// </returns>
-        public static string GetPathRoot(string path) // TODO: Unit test
+        public static string GetPathRoot(string path)
         {
             if (PathInternal.IsEffectivelyEmpty(path))
             {
@@ -340,7 +343,7 @@ namespace System.IO
         /// <see langword="true"/> if the characters that follow the last directory separator (\ or /) or volume separator (:)
         /// in the path include a period (.) followed by one or more characters; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool HasExtension([NotNullWhen(true)] string path) // TODO: Unit test
+        public static bool HasExtension([NotNullWhen(true)] string path)
         {
             if (path is null)
             {
