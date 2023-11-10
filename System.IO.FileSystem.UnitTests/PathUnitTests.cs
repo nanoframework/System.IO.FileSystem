@@ -101,6 +101,66 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
+        public void GetDirectoryName_returns_directory()
+        {
+            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext", @"\\server\share\", @"\\server\share\file.ext" };
+            var answers = new[] { @"I:\", @"I:\directory", @"I:\directory", @"\\server\share", @"\\server\share", @"\\server\share" };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                var expected = answers[i];
+
+                Assert.AreEqual(expected, Path.GetDirectoryName(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void GetDirectoryName_returns_null()
+        {
+            Assert.IsNull(Path.GetDirectoryName(null), $"Case: 'null'");
+
+            // TODO: Would like to add '(string) null' to these cases but for some reason this crashes. Investigate further and open defect 
+            var tests = new[] { string.Empty, " ", @"\", "C:", @"C:\", @"\\server\share" };
+            foreach (var test in tests)
+            {
+                var actual = Path.GetDirectoryName(test);
+                var message = $"Actual: '{actual}'. Case: '{test}'";
+
+                Assert.IsNull(Path.GetDirectoryName(test), message);
+            }
+        }
+  
+        [TestMethod]
+        public void GetExtension_returns_empty_string()
+        {
+            Assert.AreEqual(string.Empty, Path.GetExtension(string.Empty));
+            Assert.AreEqual(string.Empty, Path.GetExtension("file"));
+            Assert.AreEqual(string.Empty, Path.GetExtension("file."));
+        }
+
+        [TestMethod]
+        public void GetExtension_returns_extension()
+        {
+            var file = "file.ext";
+            var expect = ".ext";
+
+            Assert.AreEqual(expect, Path.GetExtension(file));
+            Assert.AreEqual(expect, Path.GetExtension($"I:{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"I:\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"I:\directory\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"\\server\share\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"\\server\share\directory\{file}"));
+        }
+
+        [TestMethod]
+        public void GetExtension_returns_null()
+        {
+            Assert.IsNull(Path.GetExtension(null));
+        }
+
+        [TestMethod]
         public void GetFilename_returns_empty_string()
         {
             Assert.AreEqual(string.Empty, Path.GetFileName("I:"));
@@ -167,44 +227,69 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetPathRoot_returns_root()
         {
-            Assert.AreEqual(@"\\server\share", Path.GetPathRoot(@"\\server\share\directory\file"));
-            Assert.AreEqual(@"\\server\share", Path.GetPathRoot(@"\\server\share\directory\file.ext"));
-            Assert.AreEqual("I:", Path.GetPathRoot("I:"));
-            Assert.AreEqual(@"I:\", Path.GetPathRoot(@"I:\directory\file"));
-            Assert.AreEqual(@"I:\", Path.GetPathRoot(@"I:\directory\file.ext"));
-            Assert.AreEqual(@"I:\", Path.GetPathRoot(@"I:\file"));
-            Assert.AreEqual(@"I:\", Path.GetPathRoot(@"I:\file.ext"));
+            var tests = new[]
+            {
+                @"\\server\share\directory\file", @"\\server\share\directory\file.ext", "I:", @"I:\directory\file",
+                @"I:\directory\file.ext", @"I:\file", @"I:\file.ext"
+            };
+
+            var answers = new[] { @"\\server\share", @"\\server\share", "I:", @"I:\", @"I:\", @"I:\", @"I:\" };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                var expected = answers[i];
+
+                Assert.AreEqual(expected, Path.GetPathRoot(test), $"Case: {test}");
+            }
         }
 
         [TestMethod]
         public void HasExtension_returns_false()
         {
-            Assert.IsFalse(Path.HasExtension("file"), "file");
-            Assert.IsFalse(Path.HasExtension("file."), "file.");
-            Assert.IsFalse(Path.HasExtension(@"\"), @"\");
-            Assert.IsFalse(Path.HasExtension("/"), "/");
-            Assert.IsFalse(Path.HasExtension("I:"), "I:");
-            Assert.IsFalse(Path.HasExtension(@"I:\"), @"I:\");
+            var tests = new[]
+            {
+                "file", @"\file.", @"\", "/", "I:", @"I:\", @"I:\directory\", @"\\server\share\file.",
+                @"\\server\share\directory\file"
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsFalse(Path.HasExtension(test), $"Case: {test}");
+            }
         }
 
         [TestMethod]
         public void HasExtension_returns_true()
         {
-            Assert.IsTrue(Path.HasExtension("file.ext"), "file.ext");
-            Assert.IsTrue(Path.HasExtension(@"\file.ext"), @"\file.ext");
-            Assert.IsTrue(Path.HasExtension("/file.ext"), "/file.ext");
-            Assert.IsTrue(Path.HasExtension("I:file.ext"), "I:file.ext");
-            Assert.IsTrue(Path.HasExtension(@"I:\file.ext"), @"I:\file.ext");
+            var tests = new[]
+            {
+                "file.ext", @"\file.ext", "/file.ext", "I:file.ext", @"I:\file.ext", @"I:\directory\file.ext",
+                @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsTrue(Path.HasExtension(test), $"Case: {test}");
+            }
         }
 
         [TestMethod]
         public void IsPathRooted_returns_true()
         {
-            Assert.IsTrue(Path.IsPathRooted(@"\"));
-            Assert.IsTrue(Path.IsPathRooted("/"));
-            Assert.IsTrue(Path.IsPathRooted("I:"));
-            Assert.IsTrue(Path.IsPathRooted(@"I:\"));
-            Assert.IsTrue(Path.IsPathRooted(@"I:\file.ext"));
+            var tests = new[]
+            {
+                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext", @"\\server\share",
+                @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsTrue(Path.IsPathRooted(test), $"Case: {test}");
+            }
         }
     }
 }

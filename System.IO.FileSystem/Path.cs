@@ -149,7 +149,7 @@ namespace System.IO
         /// <remarks>
         /// Directory separators are normalized in the returned string.
         /// </remarks>
-        public static string GetDirectoryName(string path) // TODO: Unit test
+        public static string GetDirectoryName(string path)
         {
             if (path is null || PathInternal.IsEffectivelyEmpty(path))
             {
@@ -192,7 +192,7 @@ namespace System.IO
         /// If <paramref name="path"/> is <see langword="null"/>, <see cref="GetExtension(string)"/> returns <see langword="null"/>.
         /// If path does not have extension information, <see cref="GetExtension(string)"/> returns <see cref="string.Empty"/>.</returns>
         [return: NotNullIfNotNull("path")]
-        public static string GetExtension(string path) // TODO: Unit test
+        public static string GetExtension(string path)
         {
             if (path is null)
             {
@@ -271,10 +271,7 @@ namespace System.IO
             }
 
             var fileName = GetFileName(path);
-            Console.WriteLine($"Filename: '{fileName}'");
-            // TODO: Fix this in string as it should just automatically return -1 for a zero length string
-            var lastPeriod = fileName.Length > 0 ? fileName.LastIndexOf('.') : -1;
-            Console.WriteLine($"Last period: {lastPeriod}");
+            var lastPeriod = fileName.LastIndexOf('.');
 
             return lastPeriod < 0 ?
                 fileName : // No extension was found
