@@ -5,7 +5,6 @@
 
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO.FileSystem;
 
 namespace System.IO
 {

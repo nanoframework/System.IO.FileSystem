@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace System.IO.FileSystem
+namespace System.IO
 {
     /// <summary>Contains internal path helpers that are shared between many projects.</summary>
     internal static class PathInternal
