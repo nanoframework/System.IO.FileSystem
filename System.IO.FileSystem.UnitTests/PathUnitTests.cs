@@ -54,7 +54,7 @@ namespace System.IO.FileSystem.UnitTests
 
             var actual = Path.Combine(path1, path2);
 
-            Assert.AreEqual(actual, path1);
+            Assert.AreEqual(path1, actual);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace System.IO.FileSystem.UnitTests
 
             var actual = Path.Combine(path1, path2);
 
-            Assert.AreEqual(actual, path2);
+            Assert.AreEqual(path2, actual);
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace System.IO.FileSystem.UnitTests
 
             var actual = Path.Combine(path1, path2);
 
-            Assert.AreEqual(actual, path2);
+            Assert.AreEqual(path2, actual);
         }
 
         [TestMethod]
