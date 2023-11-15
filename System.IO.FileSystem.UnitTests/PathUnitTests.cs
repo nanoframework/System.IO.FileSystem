@@ -149,6 +149,7 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetDirectoryName_returns_null_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
 
             var tests = new[] { @"\\server\share" };
             foreach (var test in tests)
@@ -292,6 +293,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetPathRoot_returns_root_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             var tests = new[]
             {
                 @"\\server\share\directory\file", @"\\server\share\directory\file.ext"

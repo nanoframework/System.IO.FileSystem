@@ -15,12 +15,15 @@ namespace System.IO
 
         internal const int MaxShortPath = 260;
         internal const int MaxShortDirectoryPath = 248;
+
+#if PATH_SUPPORTS_UNC
         // \\?\, \\.\, \??\
         internal const int DevicePrefixLength = 4;
         // \\
         internal const int UncPrefixLength = 2;
         // \\?\UNC\, \\.\UNC\
         internal const int UncExtendedPrefixLength = 8;
+#endif
 
         /// <summary>
         /// Gets the length of the root of the path (drive, share, etc.).
@@ -30,6 +33,7 @@ namespace System.IO
             var pathLength = path.Length;
             var i = 0;
 
+#if PATH_SUPPORTS_UNC
             var deviceSyntax = IsDevice(path);
             var deviceUnc = deviceSyntax && IsDeviceUNC(path);
 
@@ -84,10 +88,29 @@ namespace System.IO
                     i++;
                 }
             }
+#else
+            if (pathLength >= 2 && path[1] == VolumeSeparatorChar && IsValidDriveChar(path[0]))
+            {
+                // Valid drive specified path ("C:", "D:", etc.)
+                i = 2;
+
+                // If the colon is followed by a directory separator, move past it (e.g "C:\")
+                if (pathLength > 2 && IsDirectorySeparator(path[2]))
+                {
+                    i++;
+                }
+            }
+            else if (pathLength == 1 && IsDirectorySeparator(path[0]))
+            {
+                // Current drive rooted (e.g. "\foo")
+                i = 1;
+            }
+#endif
 
             return i;
         }
 
+#if PATH_SUPPORTS_UNC
         /// <summary>
         /// Returns true if the path uses any of the DOS device path syntaxes. ("\\.\", "\\?\", or "\??\")
         /// </summary>
@@ -118,6 +141,7 @@ namespace System.IO
                    && path[5] == 'N'
                    && path[6] == 'C';
         }
+#endif
 
         /// <summary>
         /// True if the given character is a directory separator.
@@ -151,6 +175,7 @@ namespace System.IO
             return true;
         }
 
+#if PATH_SUPPORTS_UNC
         /// <summary>
         /// Returns true if the path uses the canonical form of extended syntax ("\\?\" or "\??\"). If the
         /// path matches exactly (cannot use alternate directory separators) Windows will skip normalization
@@ -166,6 +191,7 @@ namespace System.IO
                    && path[2] == '?'
                    && path[3] == '\\';
         }
+#endif
 
         /// <summary>
         /// Returns true if the given character is a valid drive letter

@@ -392,32 +392,5 @@ namespace System.IO
                 string.Concat(first, second) :
                 string.Concat(first, PathInternal.DirectorySeparatorCharAsString, second);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // TODO: Remove these after review
-
-        // From FS_decl.h
-        // Was used in NormalizePath (now called NormalizeDirectorySeparators). The new method does not constrain the length because that is not a concern of the method
-        //private const int FSMaxPathLength = 260 - 2;
-        // Was used in NormalizePath (now called NormalizeDirectorySeparators). The new method does not constrain the length because that is not a concern of the method
-        //private const int FSMaxFilenameLength = 256;
-        // Was used in NormalizePath (now called NormalizeDirectorySeparators). The new method does not constrain the length because that is not a concern of the method
-        //private const int FSNameMaxLength = 7 + 1;
-
-        // Windows API definitions
-        // Was used in NormalizePath (now called NormalizeDirectorySeparators). The new method does not constrain the length because that is not a concern of the method
-        //internal const int MAX_PATH = 260;  // From WinDef.h
     }
 }
