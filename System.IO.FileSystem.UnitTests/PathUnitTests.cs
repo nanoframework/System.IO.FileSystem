@@ -103,8 +103,23 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetDirectoryName_returns_directory()
         {
-            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext", @"\\server\share\", @"\\server\share\file.ext" };
-            var answers = new[] { @"I:\", @"I:\directory", @"I:\directory", @"\\server\share", @"\\server\share", @"\\server\share" };
+            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext"  };
+            var answers = new[] { @"I:\", @"I:\directory", @"I:\directory" };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                var expected = answers[i];
+
+                Assert.AreEqual(expected, Path.GetDirectoryName(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void GetDirectoryName_returns_directory_UNC_paths()
+        {
+            var tests = new[] { @"\\server\share\", @"\\server\share\file.ext" };
+            var answers = new[] { @"\\server\share", @"\\server\share" };
 
             for (var i = 0; i < tests.Length; i++)
             {
@@ -121,7 +136,7 @@ namespace System.IO.FileSystem.UnitTests
             Assert.IsNull(Path.GetDirectoryName(null), $"Case: 'null'");
 
             // TODO: Would like to add '(string) null' to these cases but for some reason this crashes. Investigate further and open defect 
-            var tests = new[] { string.Empty, " ", @"\", "C:", @"C:\", @"\\server\share" };
+            var tests = new[] { string.Empty, " ", @"\", "C:", @"C:\" };
             foreach (var test in tests)
             {
                 var actual = Path.GetDirectoryName(test);
@@ -130,7 +145,20 @@ namespace System.IO.FileSystem.UnitTests
                 Assert.IsNull(Path.GetDirectoryName(test), message);
             }
         }
-  
+
+        [TestMethod]
+        public void GetDirectoryName_returns_null_UNC_paths()
+        {
+
+            var tests = new[] { @"\\server\share" };
+            foreach (var test in tests)
+            {
+                var actual = Path.GetDirectoryName(test);
+                var message = $"Actual: '{actual}'. Case: '{test}'";
+
+                Assert.IsNull(Path.GetDirectoryName(test), message);
+            }
+        }
         [TestMethod]
         public void GetExtension_returns_empty_string()
         {
@@ -150,6 +178,14 @@ namespace System.IO.FileSystem.UnitTests
             Assert.AreEqual(expect, Path.GetExtension(@$"I:\{file}"));
             Assert.AreEqual(expect, Path.GetExtension(@$"I:\directory\{file}"));
             Assert.AreEqual(expect, Path.GetExtension(@$"\{file}"));
+        }
+
+        [TestMethod]
+        public void GetExtension_returns_extension_UNC_paths()
+        {
+            var file = "file.ext";
+            var expect = ".ext";
+
             Assert.AreEqual(expect, Path.GetExtension(@$"\\server\share\{file}"));
             Assert.AreEqual(expect, Path.GetExtension(@$"\\server\share\directory\{file}"));
         }
@@ -170,12 +206,17 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilename_returns_filename_without_extension()
         {
-            Assert.AreEqual("file", Path.GetFileName(@"\\server\share\directory\file"));
-            Assert.AreEqual("file.ext", Path.GetFileName(@"\\server\share\directory\file.ext"));
             Assert.AreEqual("file", Path.GetFileName(@"I:\directory\file"));
             Assert.AreEqual("file.ext", Path.GetFileName(@"I:\directory\file.ext"));
             Assert.AreEqual("file", Path.GetFileName(@"I:\file"));
             Assert.AreEqual("file.ext", Path.GetFileName(@"I:\file.ext"));
+        }
+
+        [TestMethod]
+        public void GetFilename_returns_filename_without_extension_UNC_paths()
+        {
+            Assert.AreEqual("file", Path.GetFileName(@"\\server\share\directory\file"));
+            Assert.AreEqual("file.ext", Path.GetFileName(@"\\server\share\directory\file.ext"));
         }
 
         [TestMethod]
@@ -194,12 +235,17 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilenameWithoutExtension_returns_filename_without_extension()
         {
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file"));
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file.ext"));
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\directory\file"));
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\directory\file.ext"));
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\file"));
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\file.ext"));
+        }
+
+        [TestMethod]
+        public void GetFilenameWithoutExtension_returns_filename_without_extension_UNC_paths()
+        {
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file"));
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file.ext"));
         }
 
         [TestMethod]
@@ -229,11 +275,29 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                @"\\server\share\directory\file", @"\\server\share\directory\file.ext", "I:", @"I:\directory\file",
-                @"I:\directory\file.ext", @"I:\file", @"I:\file.ext"
+                "I:", @"I:\directory\file", @"I:\directory\file.ext", @"I:\file", @"I:\file.ext"
             };
 
-            var answers = new[] { @"\\server\share", @"\\server\share", "I:", @"I:\", @"I:\", @"I:\", @"I:\" };
+            var answers = new[] { "I:", @"I:\", @"I:\", @"I:\", @"I:\" };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                var expected = answers[i];
+
+                Assert.AreEqual(expected, Path.GetPathRoot(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void GetPathRoot_returns_root_UNC_paths()
+        {
+            var tests = new[]
+            {
+                @"\\server\share\directory\file", @"\\server\share\directory\file.ext"
+            };
+
+            var answers = new[] { @"\\server\share", @"\\server\share" };
 
             for (var i = 0; i < tests.Length; i++)
             {
@@ -249,8 +313,22 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                "file", @"\file.", @"\", "/", "I:", @"I:\", @"I:\directory\", @"\\server\share\file.",
-                @"\\server\share\directory\file"
+                "file", @"\file.", @"\", "/", "I:", @"I:\", @"I:\directory\"
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsFalse(Path.HasExtension(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void HasExtension_returns_false_UNC_paths()
+        {
+            var tests = new[]
+            {
+                @"\\server\share\file.", @"\\server\share\directory\file"
             };
 
             for (var i = 0; i < tests.Length; i++)
@@ -265,7 +343,21 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                "file.ext", @"\file.ext", "/file.ext", "I:file.ext", @"I:\file.ext", @"I:\directory\file.ext",
+                "file.ext", @"\file.ext", "/file.ext", "I:file.ext", @"I:\file.ext", @"I:\directory\file.ext"
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsTrue(Path.HasExtension(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void HasExtension_returns_true_UNC_paths()
+        {
+            var tests = new[]
+            {
                 @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
             };
 
@@ -281,8 +373,22 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext", @"\\server\share",
-                @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
+                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext" 
+            };
+
+            for (var i = 0; i < tests.Length; i++)
+            {
+                var test = tests[i];
+                Assert.IsTrue(Path.IsPathRooted(test), $"Case: {test}");
+            }
+        }
+
+        [TestMethod]
+        public void IsPathRooted_returns_true_UNC_paths()
+        {
+            var tests = new[]
+            {
+                @"\\server\share", @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
             };
 
             for (var i = 0; i < tests.Length; i++)
