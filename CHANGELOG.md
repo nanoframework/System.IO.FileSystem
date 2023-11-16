@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.28...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.30...HEAD)
+
+**Implemented enhancements:**
+
+- Refactor `System.IO.Path` [\#91](https://github.com/nanoframework/System.IO.FileSystem/pull/91)
+
+## [v1.1.30](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.30) (2023-11-09)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.28...v1.1.30)
 
 **Documentation and other chores:**
 
