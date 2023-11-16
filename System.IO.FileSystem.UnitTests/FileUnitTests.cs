@@ -9,7 +9,7 @@ namespace System.IO.FileSystem.UnitTests
         [Setup]
         public void Setup()
         {
-            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
         }
 
         private const string Root = @"I:\";
