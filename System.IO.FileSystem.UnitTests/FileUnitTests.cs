@@ -9,10 +9,10 @@ namespace System.IO.FileSystem.UnitTests
         [Setup]
         public void Setup()
         {
-            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
         }
 
-        private const string Root = @"I:\";
+        private const string Root = @"D:\";
         private static readonly string Destination = $"{Root}{nameof(FileUnitTests)}-Destination.test";
         private static readonly string Source = $"{Root}{nameof(FileUnitTests)}-Source.test";
 
