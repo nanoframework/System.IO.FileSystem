@@ -546,12 +546,12 @@ namespace System.IO
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern int ReadNative(string path, string fileName, long actualPosition, byte[] buffer, int length);
+        private extern int ReadNative(string path, string fileName, long actualPosition, byte[] buffer, long length);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void WriteNative(string path, string fileName, long actualPosition, byte[] buffer, int length);
+        private extern void WriteNative(string path, string fileName, long actualPosition, byte[] buffer, long length);
 
         [Diagnostics.DebuggerStepThrough]
         [Diagnostics.DebuggerHidden]
