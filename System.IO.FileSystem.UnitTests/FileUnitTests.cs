@@ -9,10 +9,10 @@ namespace System.IO.FileSystem.UnitTests
         [Setup]
         public void Setup()
         {
-            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
         }
 
-        private const string Root = @"I:\";
+        private const string Root = @"D:\";
         private static readonly string Destination = $"{Root}{nameof(FileUnitTests)}-Destination.test";
         private static readonly string Source = $"{Root}{nameof(FileUnitTests)}-Source.test";
 
@@ -225,7 +225,7 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Exists_returns_false_if_file_does_not_exist()
         {
-            Assert.IsFalse(File.Exists($@"I:\file_does_not_exist-{nameof(FileUnitTests)}.pretty_sure"));
+            Assert.IsFalse(File.Exists($@"D:\file_does_not_exist-{nameof(FileUnitTests)}.pretty_sure"));
         }
 
         [TestMethod]
