@@ -18,6 +18,7 @@ namespace System.IO
         /// Determines a list of available logical drives.
         /// </summary>
         /// <returns>String[] of available drives, ex. "D:\\"</returns>
+        [Obsolete("Use DriveInfo.GetDrives() instead.")]
         public static string[] GetLogicalDrives()
         {
             return GetLogicalDrivesNative();
