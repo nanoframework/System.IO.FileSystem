@@ -8,8 +8,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void ChangeExtension_adds_extension()
         {
-            const string path = @"I:\file";
-            const string expect = @"I:\file.new";
+            const string path = @"D:\file";
+            const string expect = @"D:\file.new";
 
             Assert.AreEqual(expect, Path.ChangeExtension(path, "new"));
             Assert.AreEqual(expect, Path.ChangeExtension(path, ".new"));
@@ -18,8 +18,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void ChangeExtension_changes_extension()
         {
-            const string path = @"I:\file.old";
-            const string expect = @"I:\file.new";
+            const string path = @"D:\file.old";
+            const string expect = @"D:\file.new";
 
             Assert.AreEqual(expect, Path.ChangeExtension(path, "new"));
             Assert.AreEqual(expect, Path.ChangeExtension(path, ".new"));
@@ -28,8 +28,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void ChangeExtension_removes_extension()
         {
-            const string path = @"I:\file.old";
-            const string expect = @"I:\file";
+            const string path = @"D:\file.old";
+            const string expect = @"D:\file";
 
             Assert.AreEqual(expect, Path.ChangeExtension(path, null));
         }
@@ -60,17 +60,17 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Combine_combines_paths()
         {
-            var expect = @"I:\Path1\Path2\File.ext";
+            var expect = @"D:\Path1\Path2\File.ext";
 
-            Assert.AreEqual(expect, Path.Combine(@"I:\Path1", @"Path2\File.ext"));
-            Assert.AreEqual(expect, Path.Combine(@"I:\Path1\", @"Path2\File.ext"));
+            Assert.AreEqual(expect, Path.Combine(@"D:\Path1", @"Path2\File.ext"));
+            Assert.AreEqual(expect, Path.Combine(@"D:\Path1\", @"Path2\File.ext"));
         }
 
         [TestMethod]
         public void Combine_returns_path2_if_it_is_an_absolute_path()
         {
-            var path1 = @"I:\Directory";
-            var path2 = @"I:\Absolute\Path";
+            var path1 = @"D:\Directory";
+            var path2 = @"D:\Absolute\Path";
 
             var actual = Path.Combine(path1, path2);
 
@@ -97,14 +97,14 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Combine_throws_if_path2_is_null()
         {
-            Assert.ThrowsException(typeof(ArgumentNullException), () => { Path.Combine(@"I:\Directory", null); });
+            Assert.ThrowsException(typeof(ArgumentNullException), () => { Path.Combine(@"D:\Directory", null); });
         }
 
         [TestMethod]
         public void GetDirectoryName_returns_directory()
         {
-            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext"  };
-            var answers = new[] { @"I:\", @"I:\directory", @"I:\directory" };
+            var tests = new[] { @"D:\directory", @"D:\directory\", @"D:\directory\file.ext"  };
+            var answers = new[] { @"D:\", @"D:\directory", @"D:\directory" };
 
             for (var i = 0; i < tests.Length; i++)
             {
@@ -175,9 +175,9 @@ namespace System.IO.FileSystem.UnitTests
             var expect = ".ext";
 
             Assert.AreEqual(expect, Path.GetExtension(file));
-            Assert.AreEqual(expect, Path.GetExtension($"I:{file}"));
-            Assert.AreEqual(expect, Path.GetExtension(@$"I:\{file}"));
-            Assert.AreEqual(expect, Path.GetExtension(@$"I:\directory\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension($"D:{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"D:\{file}"));
+            Assert.AreEqual(expect, Path.GetExtension(@$"D:\directory\{file}"));
             Assert.AreEqual(expect, Path.GetExtension(@$"\{file}"));
         }
 
@@ -200,17 +200,17 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilename_returns_empty_string()
         {
-            Assert.AreEqual(string.Empty, Path.GetFileName("I:"));
-            Assert.AreEqual(string.Empty, Path.GetFileName(@"I:\"));
+            Assert.AreEqual(string.Empty, Path.GetFileName("D:"));
+            Assert.AreEqual(string.Empty, Path.GetFileName(@"D:\"));
         }
 
         [TestMethod]
         public void GetFilename_returns_filename_without_extension()
         {
-            Assert.AreEqual("file", Path.GetFileName(@"I:\directory\file"));
-            Assert.AreEqual("file.ext", Path.GetFileName(@"I:\directory\file.ext"));
-            Assert.AreEqual("file", Path.GetFileName(@"I:\file"));
-            Assert.AreEqual("file.ext", Path.GetFileName(@"I:\file.ext"));
+            Assert.AreEqual("file", Path.GetFileName(@"D:\directory\file"));
+            Assert.AreEqual("file.ext", Path.GetFileName(@"D:\directory\file.ext"));
+            Assert.AreEqual("file", Path.GetFileName(@"D:\file"));
+            Assert.AreEqual("file.ext", Path.GetFileName(@"D:\file.ext"));
         }
 
         [TestMethod]
@@ -229,17 +229,17 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilenameWithoutExtension_returns_empty_string()
         {
-            Assert.AreEqual(string.Empty, Path.GetFileNameWithoutExtension("I:"));
-            Assert.AreEqual(string.Empty, Path.GetFileNameWithoutExtension(@"I:\"));
+            Assert.AreEqual(string.Empty, Path.GetFileNameWithoutExtension("D:"));
+            Assert.AreEqual(string.Empty, Path.GetFileNameWithoutExtension(@"D:\"));
         }
 
         [TestMethod]
         public void GetFilenameWithoutExtension_returns_filename_without_extension()
         {
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\directory\file"));
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\directory\file.ext"));
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\file"));
-            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"I:\file.ext"));
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"D:\directory\file"));
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"D:\directory\file.ext"));
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"D:\file"));
+            Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"D:\file.ext"));
         }
 
         [TestMethod]
@@ -276,10 +276,10 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                "I:", @"I:\directory\file", @"I:\directory\file.ext", @"I:\file", @"I:\file.ext"
+                "D:", @"D:\directory\file", @"D:\directory\file.ext", @"D:\file", @"D:\file.ext"
             };
 
-            var answers = new[] { "I:", @"I:\", @"I:\", @"I:\", @"I:\" };
+            var answers = new[] { "D:", @"D:\", @"D:\", @"D:\", @"D:\" };
 
             for (var i = 0; i < tests.Length; i++)
             {
@@ -316,7 +316,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                "file", @"\file.", @"\", "/", "I:", @"I:\", @"I:\directory\"
+                "file", @"\file.", @"\", "/", "D:", @"D:\", @"D:\directory\"
             };
 
             for (var i = 0; i < tests.Length; i++)
@@ -346,7 +346,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                "file.ext", @"\file.ext", "/file.ext", "I:file.ext", @"I:\file.ext", @"I:\directory\file.ext"
+                "file.ext", @"\file.ext", "/file.ext", "D:file.ext", @"D:\file.ext", @"D:\directory\file.ext"
             };
 
             for (var i = 0; i < tests.Length; i++)
@@ -376,7 +376,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext" 
+                @"\", "/", "D:", @"D:\", @"D:\file.ext", @"D:\directory\file.ext" 
             };
 
             for (var i = 0; i < tests.Length; i++)
