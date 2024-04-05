@@ -91,7 +91,7 @@ namespace System.IO
             }
 
             var subPath = path.Substring(0, subLength);
-            
+
             return extension.StartsWith(ExtensionSeparatorString) ?
                 string.Concat(subPath, extension) :
                 string.Concat(subPath, ExtensionSeparatorString, extension);
@@ -163,7 +163,7 @@ namespace System.IO
         {
             var rootLength = PathInternal.GetRootLength(path);
             var end = path.Length;
-            
+
             if (end <= rootLength)
             {
                 return -1;
@@ -203,14 +203,14 @@ namespace System.IO
             for (var i = length - 1; i >= 0; i--)
             {
                 var ch = path[i];
-                
+
                 if (ch == '.')
                 {
                     if (i != length - 1)
                     {
                         return path.Substring(i, length - i);
                     }
-                        
+
                     return string.Empty;
                 }
 
@@ -349,7 +349,7 @@ namespace System.IO
             for (var i = path.Length - 1; i >= 0; i--)
             {
                 var ch = path[i];
-                
+
                 if (ch == '.')
                 {
                     return i != path.Length - 1;
