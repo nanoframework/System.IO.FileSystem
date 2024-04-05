@@ -119,15 +119,8 @@ namespace System.IO
 
         private static string CombineInternal(string first, string second)
         {
-            if (string.IsNullOrEmpty(first))
-            {
-                return second;
-            }
-
-            if (string.IsNullOrEmpty(second))
-            {
-                return first;
-            }
+            ValidateNullOrEmpty(first);
+            ValidateNullOrEmpty(second);
 
             if (IsPathRooted(second))
             {
@@ -193,10 +186,7 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetExtension(string path)
         {
-            if (path is null)
-            {
-                return null;
-            }
+            ValidateNullOrEmpty(path);
 
             var length = path.Length;
 
@@ -235,10 +225,7 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetFileName(string path)
         {
-            if (path is null)
-            {
-                return null;
-            }
+            ValidateNullOrEmpty(path);
 
             var root = GetPathRoot(path).Length;
 
@@ -264,10 +251,7 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetFileNameWithoutExtension(string path)
         {
-            if (path is null)
-            {
-                return null;
-            }
+            ValidateNullOrEmpty(path);
 
             var fileName = GetFileName(path);
             var lastPeriod = fileName.LastIndexOf('.');
@@ -275,6 +259,26 @@ namespace System.IO
             return lastPeriod < 0 ?
                 fileName : // No extension was found
                 fileName.Substring(0, lastPeriod);
+        }
+
+        /// <summary>
+        /// Returns the absolute path for the specified path string.
+        /// </summary>
+        /// <param name="path">The file or directory for which to obtain absolute path information.</param>
+        /// <returns>The fully qualified location of <paramref name="path"/>, such as "C:\MyFile.txt".</returns>
+        public static string GetFullPath(string path)
+        {
+            ValidateNullOrEmpty(path);
+
+            if (!IsPathRooted(path))
+            {
+                string currDir = Directory.GetCurrentDirectory();
+                path = Combine(currDir, path);
+            }
+
+            return Combine(
+                GetDirectoryName(path),
+                GetFileName(path));
         }
 
         /// <summary>
@@ -391,6 +395,19 @@ namespace System.IO
             return hasSeparator ?
                 string.Concat(first, second) :
                 string.Concat(first, PathInternal.DirectorySeparatorCharAsString, second);
+        }
+
+        private static void ValidateNullOrEmpty(string str)
+        {
+            if (str == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (str.Length == 0)
+            {
+                throw new ArgumentException();
+            }
         }
     }
 }
