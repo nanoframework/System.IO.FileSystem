@@ -2,7 +2,20 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.32...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.36...HEAD)
+
+**Implemented enhancements:**
+
+- Improvement in Path [\#96](https://github.com/nanoframework/System.IO.FileSystem/pull/96)
+- Add DriveInfo class [\#94](https://github.com/nanoframework/System.IO.FileSystem/pull/94)
+
+**Documentation and other chores:**
+
+- Update 2 NuGet dependencies [\#97](https://github.com/nanoframework/System.IO.FileSystem/pull/97)
+
+## [v1.1.36](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.36) (2024-04-04)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.32...v1.1.36)
 
 **Documentation and other chores:**
 
