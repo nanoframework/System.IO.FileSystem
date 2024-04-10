@@ -14,7 +14,7 @@ namespace nanoFramework.System.IO.FileSystem
     /// </summary>
     /// <param name="sender">Specifies the object that sent the Removable Device event. </param>
     /// <param name="e">Contains the Removable Device event arguments. </param>
-    public delegate void RemovableDeviceEventHandler(Object sender, RemovableDeviceEventArgs e);
+    public delegate void RemovableDeviceEventHandler(object sender, RemovableDeviceEventArgs e);
 
     /// <summary>
     /// Event manager for Storage events.

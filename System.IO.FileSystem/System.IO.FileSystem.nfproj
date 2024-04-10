@@ -42,18 +42,26 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="DirectoryInfo.cs" />
     <Compile Include="DriveInfo.cs" />
     <Compile Include="Directory.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileAccess.cs" />
     <Compile Include="FileAttributes.cs" />
     <Compile Include="DriveType .cs" />
+    <Compile Include="FileInfo.cs" />
     <Compile Include="FileMode.cs" />
     <Compile Include="FileShare.cs" />
     <Compile Include="FileStream.cs" />
+    <Compile Include="NativeFindFile.cs" />
+    <Compile Include="FileSystemInfo.cs" />
+    <Compile Include="FileSystemManager.cs" />
     <Compile Include="nanoFramework\SDCard.cs" />
     <Compile Include="nanoFramework\RemovableDeviceEventArgs.cs" />
     <Compile Include="nanoFramework\StorageEventManager.cs" />
+    <Compile Include="NativeFileInfo.cs" />
+    <Compile Include="NativeFileStream.cs" />
+    <Compile Include="NativeIO.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="PathInternal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

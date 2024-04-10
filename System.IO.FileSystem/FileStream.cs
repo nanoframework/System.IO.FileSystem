@@ -139,7 +139,7 @@ namespace System.IO
             : this(
                   path,
                   mode,
-                  (mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite))
+                  mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite)
         {
         }
 
