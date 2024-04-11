@@ -134,7 +134,7 @@ namespace System.IO
                 uint attributes = NativeIO.GetAttributes(folderPath);
 
                 // in case the folder does not exist or is invalid we throw DirNotFound Exception
-                if (attributes == 0xFFFFFFFF)
+                if (attributes == NativeIO.EmptyAttribute)
                 {
                     throw new IOException(
                         string.Empty,
@@ -143,7 +143,7 @@ namespace System.IO
 
                 // folder exists, lets verify whether the file itself exists
                 attributes = NativeIO.GetAttributes(path);
-                if (attributes == 0xFFFFFFFF)
+                if (attributes == NativeIO.EmptyAttribute)
                 {
                     // No-op on file not found
                     return;
@@ -191,7 +191,7 @@ namespace System.IO
                 {
                     uint attributes = NativeIO.GetAttributes(path);
 
-                    if (attributes == 0xFFFFFFFF)
+                    if (attributes == NativeIO.EmptyAttribute)
                     {
                         // this means not found
                         return false;
@@ -225,7 +225,7 @@ namespace System.IO
 
             uint attributes = NativeIO.GetAttributes(fullPath);
 
-            if (attributes == 0xFFFFFFFF)
+            if (attributes == NativeIO.EmptyAttribute)
             {
                 throw new IOException(
                     string.Empty,

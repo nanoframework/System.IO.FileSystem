@@ -62,7 +62,7 @@ namespace System.IO
             {
                 uint attributes = NativeIO.GetAttributes(path);
 
-                if (attributes == 0xFFFFFFFF)
+                if (attributes == NativeIO.EmptyAttribute)
                 {
                     throw new IOException(
                         string.Empty,
@@ -120,7 +120,7 @@ namespace System.IO
                 {
                     uint attributes = NativeIO.GetAttributes(path);
 
-                    if (attributes == 0xFFFFFFFF)
+                    if (attributes == NativeIO.EmptyAttribute)
                     {
                         // this means not found
                         return false;

@@ -12,6 +12,8 @@ namespace System.IO
     {
         internal const string FSRoot = @"\";
 
+        internal const uint EmptyAttribute = 0xFFFFFFFF;
+
         // all these values are from FS_decl.h
         internal const int FSMaxPathLength = 260 - 2;
         internal const int FSMaxFilenameLength = 256;

@@ -243,7 +243,7 @@ namespace System.IO
             try
             {
                 uint attributes = NativeIO.GetAttributes(_fileName);
-                bool exists = attributes != 0xFFFFFFFF;
+                bool exists = attributes != NativeIO.EmptyAttribute;
                 bool isReadOnly = exists && (((FileAttributes)attributes) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
 
                 // if the path specified is an existing directory, fail
