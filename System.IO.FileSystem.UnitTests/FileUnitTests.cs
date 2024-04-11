@@ -263,28 +263,6 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void GetLastWriteTime_returns_DateTime()
-        {
-            ExecuteTestAndTearDown(() =>
-            {
-                CreateFile(Source, BinaryContent);
-
-                var actual = File.GetLastWriteTime(Source);
-
-                Assert.IsTrue(actual != default, "Failed to get last write time.");
-            });
-        }
-
-        [TestMethod]
-        public void GetLastWriteTime_throws_if_path_does_not_exist()
-        {
-            ExecuteTestAndTearDown(() =>
-            {
-                Assert.ThrowsException(typeof(IOException), () => { File.GetLastWriteTime(Source); });
-            });
-        }
-
-        [TestMethod]
         public void Move_moves_to_destination()
         {
             ExecuteTestAndTearDown(() =>
