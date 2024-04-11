@@ -76,7 +76,7 @@ namespace System.IO
                     if (IsInDirectory(fullName, (string)_lockedDirs[i]))
                     {
                         throw new IOException(
-                            "",
+                            string.Empty,
                             (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                     }
                 }
@@ -110,7 +110,7 @@ namespace System.IO
                             || ((current.Share & access) != access))
                         {
                             throw new IOException(
-                                "",
+                                string.Empty,
                                 (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                         }
                     }
@@ -145,7 +145,7 @@ namespace System.IO
                         directory))
                     {
                         throw new IOException(
-                            "",
+                            string.Empty,
                             (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                     }
                 }
@@ -157,7 +157,7 @@ namespace System.IO
                     if (((string)_lockedDirs[i]) == directory)
                     {
                         throw new IOException(
-                            "",
+                            string.Empty,
                             (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                     }
                 }

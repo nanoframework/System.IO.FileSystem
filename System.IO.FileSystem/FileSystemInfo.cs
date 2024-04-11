@@ -95,7 +95,7 @@ namespace System.IO
                         IOException.IOExceptionErrorCode errorCode = (this is FileInfo) ? IOException.IOExceptionErrorCode.FileNotFound : IOException.IOExceptionErrorCode.DirectoryNotFound;
                         
                         throw new IOException(
-                            "",
+                            string.Empty,
                             (int)errorCode);
                     }
                 }

@@ -73,7 +73,7 @@ namespace System.IO
                 if (attributes == 0xFFFFFFFF)
                 {
                     throw new IOException(
-                        "",
+                        string.Empty,
                         (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
@@ -82,7 +82,7 @@ namespace System.IO
                 {
                     // it's readonly or not a directory
                     throw new IOException(
-                        "",
+                        string.Empty,
                         (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
@@ -90,7 +90,7 @@ namespace System.IO
                 if (!Exists(path))
                 {
                     throw new IOException(
-                        "",
+                        string.Empty,
                         (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
@@ -206,7 +206,7 @@ namespace System.IO
                 if (!Exists(sourceDirName))
                 {
                     throw new IOException(
-                        "",
+                        string.Empty,
                         (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
@@ -236,7 +236,7 @@ namespace System.IO
                 if (!Exists(path))
                 {
                     throw new IOException(
-                        "",
+                        string.Empty,
                         (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
