@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 namespace System.IO
 {
     /// <summary>
-    /// Class for managing directories
+    /// Exposes static methods for creating, moving, and enumerating through directories and subdirectories. This class cannot be inherited.
     /// </summary>
     public static class Directory
     {
@@ -20,7 +20,7 @@ namespace System.IO
         [Obsolete("Use DriveInfo.GetDrives() instead.")]
         public static string[] GetLogicalDrives()
         {
-            return GetLogicalDrivesNative();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace System.IO
         /// <exception cref="IOException"> The directory specified by path is a file.</exception>
         public static DirectoryInfo CreateDirectory(string path)
         {
-            // path validation in Path.GetFullPath()
+            // path validation happening in the call
             path = Path.GetFullPath(path);
 
             // According to the .NET API, Directory.CreateDirectory on an existing directory returns the DirectoryInfo object for the existing directory.
@@ -47,7 +47,9 @@ namespace System.IO
         /// <exception cref="IOException">The directory specified by path is not empty.</exception>
         public static void Delete(string path)
         {
-            Delete(path, false);
+            Delete(
+                path,
+                false);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace System.IO
             string path,
             bool recursive)
         {
-            // path validation in Path.GetFullPath()
+            // path validation happening in the call
             path = Path.GetFullPath(path);
 
             object record = FileSystemManager.LockDirectory(path);
@@ -106,18 +108,18 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Determines whether the specified directory exists.
+        /// Determines whether the given path refers to an existing directory on disk.
         /// </summary>
-        /// <param name="path">Path to the directory.</param>
-        /// <returns>True if directory under given path exists, otherwise it returns false.</returns>
+        /// <param name="path">The path to test.</param>
+        /// <returns><see langword="true"/> if <paramref name="path"/> refers to an existing directory; <see langword="false"/> if the directory does not exist or an error occurs when trying to determine if the specified directory exists.</returns>
         /// <exception cref="ArgumentNullException">Path must be defined.</exception>
         /// <exception cref="IOException">Invalid drive or path to the parent folder doesn't exist.</exception>
         public static bool Exists(string path)
         {
-            // path validation in Path.GetFullPath()
+            // path validation happening in the call
             path = Path.GetFullPath(path);
 
-            // Is this the absolute root? this always exists.
+            // is this the absolute root? this always exists.
             if (path == NativeIO.FSRoot)
             {
                 return true;
@@ -128,15 +130,16 @@ namespace System.IO
                 {
                     uint attributes = NativeIO.GetAttributes(path);
 
-                    // This is essentially file not found.
                     if (attributes == 0xFFFFFFFF)
                     {
+                        // this means not found
                         return false;
                     }
 
-                    if ((((FileAttributes)attributes) & FileAttributes.Directory) == FileAttributes.Directory)
+                    if ((((FileAttributes)attributes)
+                         & FileAttributes.Directory) == FileAttributes.Directory)
                     {
-                        // this is a directory.
+                        // this is a directory
                         return true;
                     }
                 }
@@ -150,32 +153,6 @@ namespace System.IO
         }
 
         /// <summary>
-        /// List files from the specified folder.
-        /// </summary>
-        /// <param name="path">Path to the directory to list files from.</param>
-        /// <returns>
-        /// When this method completes successfully, it returns a array of paths of the files in the given folder. 
-        /// </returns>
-        /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
-        public static string[] GetFiles(string path)
-        {
-            return GetChildren(path, "*", false);
-        }
-
-        /// <summary>
-        /// List directories from the specified folder.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns> 
-        /// When this method completes successfully, it returns an array of absolute paths to the subfolders in the specified directory.
-        /// </returns>
-        /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
-        public static string[] GetDirectories(string path)
-        {
-            return GetChildren(path, "*", true);
-        }
-
-        /// <summary>
         /// Gets the current working directory of the application.
         /// </summary>
         /// <returns></returns>
@@ -185,7 +162,39 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Moves directory from specified path to a new location.
+        /// Returns the names of files (including their paths) in the specified directory.
+        /// </summary>
+        /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+        /// <returns>
+        /// An array of the full names (including paths) for the files in the specified directory, or an empty array if no files are found. 
+        /// </returns>
+        /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
+        public static string[] GetFiles(string path)
+        {
+            return GetChildren(
+                path,
+                "*",
+                false);
+        }
+
+        /// <summary>
+        /// Returns the names of subdirectories (including their paths) in the specified directory.
+        /// </summary>
+        /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+        /// <returns> 
+        /// An array of the full names (including paths) of subdirectories in the specified path, or an empty array if no directories are found.
+        /// </returns>
+        /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
+        public static string[] GetDirectories(string path)
+        {
+            return GetChildren(
+                path,
+                "*",
+                true);
+        }
+
+        /// <summary>
+        /// Moves a file or a directory and its contents to a new location.
         /// </summary>
         /// <param name="sourceDirName">The path of the file or directory to move.</param>
         /// <param name="destDirName">The path to the new location for <paramref name="sourceDirName"/> or its contents. If <paramref name="sourceDirName"/> is a file, then <paramref name="destDirName"/> must also be a file name.</param>
@@ -194,7 +203,7 @@ namespace System.IO
             string sourceDirName,
             string destDirName)
         {
-            // sourceDirName and destDirName validation in Path.GetFullPath()
+            // sourceDirName and destDirName validation happening in the call
             sourceDirName = Path.GetFullPath(sourceDirName);
             destDirName = Path.GetFullPath(destDirName);
 
@@ -202,7 +211,7 @@ namespace System.IO
 
             try
             {
-                // Make sure sourceDir is actually a directory
+                // make sure is actually a directory
                 if (!Exists(sourceDirName))
                 {
                     throw new IOException(
@@ -221,11 +230,11 @@ namespace System.IO
         /// <summary>
         /// Sets the application's current working directory to the specified directory.
         /// </summary>
-        /// <param name="path">he path to which the current working directory is set.</param>
+        /// <param name="path">The path to which the current working directory is set.</param>
         /// <exception cref="IOException">An I/O error occurred.</exception>
         public static void SetCurrentDirectory(string path)
         {
-            // path validation in Path.GetFullPath()
+            // path validation happening in the call
             path = Path.GetFullPath(path);
 
             // lock the directory for read-access first, to ensure path won't get deleted
@@ -255,15 +264,18 @@ namespace System.IO
             string searchPattern,
             bool isDirectory)
         {
-            // path and searchPattern validation in Path.GetFullPath() and Path.NormalizePath()
+            // path and searchPattern validation happening in the call
 
             path = Path.GetFullPath(path);
 
-            if (!Exists(path)) throw new IOException(
-                "",
+            if (!Exists(path))
+            {
+                throw new IOException(
+                string.Empty,
                 (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+            }
 
-            ArrayList fileNames = new ArrayList();
+            ArrayList fileNames = new();
 
             object record = FileSystemManager.AddToOpenListForRead(path);
 
@@ -295,49 +307,5 @@ namespace System.IO
 
             return (string[])fileNames.ToArray(typeof(string));
         }
-
-        #region Stubs (Native Calls)
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern bool ExistsNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void MoveNative(string pathSrc, string pathDest);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void DeleteNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void CreateNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern string[] GetFilesNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern string[] GetDirectoriesNative(string path);
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern string[] GetLogicalDrivesNative();
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern DateTime GetLastWriteTimeNative(string path);
-
-        #endregion
     }
 }

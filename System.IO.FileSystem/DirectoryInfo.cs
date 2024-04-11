@@ -73,7 +73,7 @@ namespace System.IO
         /// <param name="path"></param>
         public DirectoryInfo(string path)
         {
-            // path validation in GetFullPath()
+            // path validation happening in the call
             _fullPath = Path.GetFullPath(path);
         }
 
@@ -92,8 +92,10 @@ namespace System.IO
         /// <returns></returns>
         public DirectoryInfo CreateSubdirectory(string path)
         {
-            // path validatation in Path.Combine()
-            string subDirPath = Path.Combine(_fullPath, path);
+            // path validatation happening in the call
+            string subDirPath = Path.Combine(
+                _fullPath,
+                path);
 
             // This will also ensure "path" is valid.
             subDirPath = Path.GetFullPath(subDirPath);
@@ -128,7 +130,7 @@ namespace System.IO
         /// <returns>An array of <see cref="DirectoryInfo"/> objects.</returns>
         public DirectoryInfo[] GetDirectories()
         {
-            // searchPattern validation in Directory.GetDirectories()
+            // searchPattern validation happening in the call
             string[] dirNames = Directory.GetDirectories(_fullPath);
 
             DirectoryInfo[] dirs = new DirectoryInfo[dirNames.Length];
@@ -145,12 +147,14 @@ namespace System.IO
         /// Moves a <see cref="DirectoryInfo"/> instance and its contents to a new path.
         /// </summary>
         /// <param name="destDirName">The name and path to which to move this directory. The destination cannot be another disk volume or a directory with the identical name. It can be an existing directory to which you want to add this directory as a subdirectory.</param>
-        /// <exception cref="IOException">An attempt was made to move a directory to a different volume. -or- destDirName already exists. -or- The source directory does not exist. -or- The source or destination directory name is null.</exception>"
+        /// <exception cref="IOException">An attempt was made to move a directory to a different volume. -or- <paramref name="destDirName"/> already exists. -or- The source directory does not exist. -or- The source or destination directory name is <see langword="null"/>.</exception>"
         /// <exception cref="ArgumentNullException"><paramref name="destDirName"/> is <see langword="null"/>.</exception>"
         public void MoveTo(string destDirName)
         {
-            // destDirName validation in Directory.Move()
-            Directory.Move(_fullPath, destDirName);
+            // destDirName validation happening in the call
+            Directory.Move(
+                _fullPath,
+                destDirName);
         }
 
         /// <inheritdoc/>
@@ -165,7 +169,9 @@ namespace System.IO
         /// <param name="recursive"><see langword="true"/> to delete this directory, its subdirectories, and all files; otherwise, <see langword="false"/>.</param>
         public void Delete(bool recursive)
         {
-            Directory.Delete(_fullPath, recursive);
+            Directory.Delete(
+                _fullPath,
+                recursive);
         }
 
         /// <summary>

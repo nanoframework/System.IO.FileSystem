@@ -93,7 +93,10 @@ namespace System.IO
             }
         }
 
-        ///<inheritdoc/>
+        /// <summary>
+        /// Returns the original path that was passed to the FileInfo constructor. Use the <see cref="FileSystemInfo.FullName"/> or <see cref="Name"/> property for the full path or file name.
+        /// </summary>
+        /// <returns>A string representing the path.</returns>
         public override string ToString()
         {
             return _fullPath;
