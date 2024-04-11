@@ -14,16 +14,6 @@ namespace System.IO
     public static class Directory
     {
         /// <summary>
-        /// Determines a list of available logical drives.
-        /// </summary>
-        /// <returns>String[] of available drives, ex. "D:\\"</returns>
-        [Obsolete("Use DriveInfo.GetDrives() instead.")]
-        public static string[] GetLogicalDrives()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Creates all directories and subdirectories in the specified path unless they already exist.
         /// </summary>
         /// <param name="path">The directory to create.</param>
