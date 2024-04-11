@@ -63,10 +63,6 @@ namespace System.IO
             }
         }
 
-        private DirectoryInfo()
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryInfo"/> class on the specified path.
         /// </summary>
