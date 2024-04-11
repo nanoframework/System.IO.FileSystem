@@ -3,9 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System.IO.System.IO;
-using System.Runtime.CompilerServices;
-
 namespace System.IO
 {
     /// <summary>
