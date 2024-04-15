@@ -14,17 +14,12 @@ namespace System.IO
 
         internal const uint EmptyAttribute = 0xFFFFFFFF;
 
-        // all these values are from FS_decl.h
+        /////////////////////////////////////////////////////////////////////////////////////
+        // !!! KEEP IN SYNC WITH src\PAL\Include\nanoPAL_FileSystem.h (in native code) !!! //
+        /////////////////////////////////////////////////////////////////////////////////////
         internal const int FSMaxPathLength = 260 - 2;
         internal const int FSMaxFilenameLength = 256;
         internal const int FSNameMaxLength = 7 + 1;
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void Format(
-            string nameSpace,
-            string fileSystem,
-            string volumeLabel,
-            uint parameter);
 
         [DebuggerNonUserCode]
         [MethodImpl(MethodImplOptions.InternalCall)]
