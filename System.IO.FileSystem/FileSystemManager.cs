@@ -198,7 +198,7 @@ namespace System.IO
 
         public static void ForceRemoveNameSpace(string nameSpace)
         {
-            string root = "\\" + nameSpace.ToUpper();
+            string root = NativeIO.FSRoot + nameSpace.ToUpper();
 
             FileRecord record;
 
