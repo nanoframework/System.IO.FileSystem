@@ -3,7 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace System.IO
@@ -440,7 +439,7 @@ namespace System.IO
                     (int)IOException.IOExceptionErrorCode.FileNotFound);
             }
 
-            SetAttributesNative(path, (byte)fileAttributes);
+            NativeIO.SetAttributes(path, (byte)fileAttributes);
         }
 
         /// <summary>
@@ -559,14 +558,5 @@ namespace System.IO
                 }
             }
         }
-
-        #region Native Methods
-
-        [Diagnostics.DebuggerStepThrough]
-        [Diagnostics.DebuggerHidden]
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void SetAttributesNative(string path, byte attributes);
-
-        #endregion
     }
 }
