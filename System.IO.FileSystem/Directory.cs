@@ -114,29 +114,20 @@ namespace System.IO
             {
                 return true;
             }
-            else
+
+            uint attributes = NativeIO.GetAttributes(path);
+
+            if (attributes == NativeIO.EmptyAttribute)
             {
-                try
-                {
-                    uint attributes = NativeIO.GetAttributes(path);
+                // this means not found
+                return false;
+            }
 
-                    if (attributes == NativeIO.EmptyAttribute)
-                    {
-                        // this means not found
-                        return false;
-                    }
-
-                    if ((((FileAttributes)attributes)
-                         & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        // this is a directory
-                        return true;
-                    }
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
+            if ((((FileAttributes)attributes)
+                 & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                // this is a directory
+                return true;
             }
 
             return false;
@@ -261,8 +252,8 @@ namespace System.IO
             if (!Exists(path))
             {
                 throw new IOException(
-                string.Empty,
-                (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+                    string.Empty,
+                    (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
             }
 
             ArrayList fileNames = new();

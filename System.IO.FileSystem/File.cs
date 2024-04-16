@@ -186,25 +186,23 @@ namespace System.IO
                 {
                     return false;
                 }
-                else
+
+                uint attributes = NativeIO.GetAttributes(path);
+
+                if (attributes == NativeIO.EmptyAttribute)
                 {
-                    uint attributes = NativeIO.GetAttributes(path);
+                    // this means not found
+                    return false;
+                }
 
-                    if (attributes == NativeIO.EmptyAttribute)
-                    {
-                        // this means not found
-                        return false;
-                    }
-
-                    if ((attributes
-                         & (uint)FileAttributes.Directory) == 0)
-                    {
-                        // not a directory, it must be a file.
-                        return true;
-                    }
+                if ((attributes
+                        & (uint)FileAttributes.Directory) == 0)
+                {
+                    // not a directory, it must be a file.
+                    return true;
                 }
             }
-            catch (Exception)
+            catch
             {
                 // like the full .NET this does not throw exception in a number of cases, instead returns false.
             }
