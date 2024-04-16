@@ -148,7 +148,8 @@ namespace System.IO
                     return;
                 }
 
-                if ((attributes & (uint)(FileAttributes.Directory | FileAttributes.ReadOnly)) != 0)
+                if ((attributes
+                     & (uint)(FileAttributes.Directory | FileAttributes.ReadOnly)) != 0)
                 {
                     // it's a readonly file or an directory
                     throw new IOException(
