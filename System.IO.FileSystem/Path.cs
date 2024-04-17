@@ -114,20 +114,22 @@ namespace System.IO
                 throw new ArgumentNullException();
             }
 
-            return CombineInternal(path1, path2);
-        }
-
-        private static string CombineInternal(string first, string second)
-        {
-            ValidateNullOrEmpty(first);
-            ValidateNullOrEmpty(second);
-
-            if (IsPathRooted(second))
+            if (string.IsNullOrEmpty(path1))
             {
-                return second;
+                return path2;
             }
 
-            return JoinInternal(first, second);
+            if (string.IsNullOrEmpty(path2))
+            {
+                return path1;
+            }
+
+            if (IsPathRooted(path2))
+            {
+                return path2;
+            }
+
+            return JoinInternal(path1, path2);
         }
 
         /// <summary>
@@ -186,7 +188,10 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetExtension(string path)
         {
-            ValidateNullOrEmpty(path);
+            if (path is null)
+            {
+                return null;
+            }
 
             var length = path.Length;
 
@@ -225,7 +230,10 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetFileName(string path)
         {
-            ValidateNullOrEmpty(path);
+            if (path is null)
+            {
+                return null;
+            }
 
             var root = GetPathRoot(path).Length;
 
@@ -251,7 +259,10 @@ namespace System.IO
         [return: NotNullIfNotNull("path")]
         public static string GetFileNameWithoutExtension(string path)
         {
-            ValidateNullOrEmpty(path);
+            if (path is null)
+            {
+                return null;
+            }
 
             var fileName = GetFileName(path);
             var lastPeriod = fileName.LastIndexOf('.');
@@ -392,6 +403,11 @@ namespace System.IO
 
             var hasSeparator = PathInternal.IsDirectorySeparator(first[first.Length - 1])
                                || PathInternal.IsDirectorySeparator(second[0]);
+
+            if (first.Equals(PathInternal.DirectorySeparatorCharAsString))
+            {
+                first = string.Empty;
+            }
 
             return hasSeparator ?
                 string.Concat(first, second) :
