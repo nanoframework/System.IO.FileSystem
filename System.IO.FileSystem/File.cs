@@ -137,7 +137,7 @@ namespace System.IO
                 {
                     throw new IOException(
                         string.Empty,
-                        (int)IOException.IOExceptionErrorCode.FileNotFound);
+                        (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
                 // folder exists, lets verify whether the file itself exists
