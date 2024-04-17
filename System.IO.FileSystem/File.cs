@@ -151,7 +151,7 @@ namespace System.IO
                 if ((attributes
                      & (uint)(FileAttributes.Directory | FileAttributes.ReadOnly)) != 0)
                 {
-                    // it's a readonly file or an directory
+                    // it's a readonly file or a directory
                     throw new IOException(
                         string.Empty,
                         (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
