@@ -5,8 +5,6 @@ namespace System.IO.FileSystem.UnitTests
     [TestClass]
     internal class PathUnitTests
     {
-        private string RootDirectory => "\\";
-
         [TestMethod]
         public void ChangeExtension_adds_extension()
         {
@@ -318,21 +316,21 @@ namespace System.IO.FileSystem.UnitTests
         {
             string fullPath = Path.GetFullPath(@"dir1\dir2\file.ext");
 
-            Assert.AreEqual(RootDirectory + @"\dir1\dir2\file.ext", fullPath);
+            Assert.AreEqual(@"dir1\dir2\file.ext", fullPath);
          }
 
         [TestMethod]
         public void GetFullPath1()
         {
-            string fullPath = Path.GetFullPath(RootDirectory + @"\dir1\dir2\file.ext");
-            Assert.AreEqual(RootDirectory + @"\dir1\dir2\file.ext", fullPath);
+            string fullPath = Path.GetFullPath(@"\dir1\dir2\file.ext");
+            Assert.AreEqual(@"\dir1\dir2\file.ext", fullPath);
          }
 
         [TestMethod]
         public void GetFullPath2()
         {
-            string fullPath = Path.GetFullPath(RootDirectory + @"\dir1\..\dir2\file.ext");
-            Assert.AreEqual(RootDirectory + @"\dir1\dir2\file.ext", fullPath);
+            string fullPath = Path.GetFullPath(@"\dir1\..\dir2\file.ext");
+            Assert.AreEqual(@"\dir1\..\dir2\file.ext", fullPath);
         }
 
         [TestMethod]
