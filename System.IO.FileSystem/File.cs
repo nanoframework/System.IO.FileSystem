@@ -537,14 +537,14 @@ namespace System.IO
 
                     writer.Write(buffer, 0, readSize);
                 }
-
+            }
+            finally
+            {
                 // copy the attributes too
                 NativeIO.SetAttributes(
                     destFileName,
                     NativeIO.GetAttributes(sourceFileName));
-            }
-            finally
-            {
+                
                 if (deleteOriginal)
                 {
                     reader.DisposeAndDelete();
