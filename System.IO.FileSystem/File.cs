@@ -393,22 +393,36 @@ namespace System.IO
         /// <exception cref="IOException">The end of the file was unexpectedly reached.</exception>
         public static byte[] ReadAllBytes(string path)
         {
-            using var stream = OpenRead(path);
+            byte[] bytes;
 
-            var index = 0;
-            var count = (int)stream.Length;
-            var bytes = new byte[count];
+            using var fs = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                NativeFileStream.BufferSizeDefault);
+
+            // blocking read
+            int index = 0;
+            long fileLength = fs.Length;
+
+            if (fileLength > int.MaxValue)
+            {
+                throw new IOException();
+            }
+
+            int count = (int)fileLength;
+            bytes = new byte[count];
 
             while (count > 0)
             {
-                var read = stream.Read(bytes, index, count > ChunkSize ? ChunkSize : count);
-                if (read <= 0)
-                {
-                    throw new IOException();
-                }
+                int n = fs.Read(
+                    bytes,
+                    index,
+                    count);
 
-                index += read;
-                count -= read;
+                index += n;
+                count -= n;
             }
 
             return bytes;
@@ -448,38 +462,22 @@ namespace System.IO
         /// <param name="bytes">The bytes to write to the file.</param>
         public static void WriteAllBytes(string path, byte[] bytes)
         {
-            if (string.IsNullOrEmpty(path))
+            if (bytes == null)
             {
-                throw new ArgumentException(nameof(path));
+                throw new ArgumentNullException();
             }
 
-            if (bytes is null)
-            {
-                throw new ArgumentException(nameof(bytes));
-            }
-
-            Create(path);
-
-            if (bytes.Length <= 0)
-            {
-                return;
-            }
-
-            using var stream = new FileStream(
+            using var fs = new FileStream(
                 path,
-                FileMode.Open,
-                FileAccess.Write);
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.Read,
+                NativeFileStream.BufferSizeDefault);
 
-            for (var bytesWritten = 0L; bytesWritten < bytes.Length;)
-            {
-                var bytesToWrite = bytes.Length - bytesWritten;
-                bytesToWrite = bytesToWrite < ChunkSize ? bytesToWrite : ChunkSize;
-
-                stream.Write(bytes, (int)bytesWritten, (int)bytesToWrite);
-                stream.Flush();
-
-                bytesWritten += bytesToWrite;
-            }
+            fs.Write(
+                bytes,
+                0,
+                bytes.Length);
         }
 
         /// <summary>
