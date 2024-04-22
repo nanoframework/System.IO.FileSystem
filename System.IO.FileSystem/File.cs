@@ -505,7 +505,7 @@ namespace System.IO
 
             FileMode writerMode = (overwrite) ? FileMode.Create : FileMode.CreateNew;
 
-            FileStream reader = new FileStream(
+            var reader = new FileStream(
                 sourceFileName,
                 FileMode.Open,
                 FileAccess.Read,
@@ -514,7 +514,7 @@ namespace System.IO
 
             try
             {
-                using FileStream writer = new FileStream(
+                using var writer = new FileStream(
                     destFileName,
                     writerMode,
                     FileAccess.Write,
@@ -545,7 +545,7 @@ namespace System.IO
                 NativeIO.SetAttributes(
                     destFileName,
                     NativeIO.GetAttributes(sourceFileName));
-                
+
                 if (deleteOriginal)
                 {
                     reader.DisposeAndDelete();
