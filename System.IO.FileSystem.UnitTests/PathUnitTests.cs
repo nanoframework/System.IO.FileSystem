@@ -316,7 +316,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             string fullPath = Path.GetFullPath(@"dir1\dir2\file.ext");
 
-            Assert.AreEqual(@"\dir1\dir2\file.ext", fullPath);
+            Assert.AreEqual(@"dir1\dir2\file.ext", fullPath);
          }
 
         [TestMethod]
