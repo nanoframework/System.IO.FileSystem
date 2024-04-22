@@ -273,7 +273,8 @@ namespace System.IO
                         (int)IOException.IOExceptionErrorCode.FileNotFound);
                 }
 
-                tryCopyAndDelete = NativeIO.Move(
+                // flag to try copy and delete ahead, in case this Move call returns false
+                tryCopyAndDelete = !NativeIO.Move(
                     sourceFileName,
                     destFileName);
             }
