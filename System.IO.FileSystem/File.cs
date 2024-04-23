@@ -245,7 +245,6 @@ namespace System.IO
         /// <param name="sourceFileName">The name of the file to move. Must be an absolute path.</param>
         /// <param name="destFileName">The new path and name for the file.</param>
         /// <exception cref="ArgumentException"><paramref name="sourceFileName"/> or <paramref name="destFileName"/> is <see langword="null"/> or empty.</exception>
-
         /// <exception cref="IOException"><paramref name="sourceFileName"/> does not exist or <paramref name="destFileName"/> exists.</exception>
         /// <remarks>
         /// .NET nanoFramework implementation differs from the full framework as it requires that <paramref name="sourceFileName"/> be an absolute path. This is a limitation coming from the platform.
@@ -271,6 +270,13 @@ namespace System.IO
                     throw new IOException(
                         string.Empty,
                         (int)IOException.IOExceptionErrorCode.FileNotFound);
+                }
+
+                if (Exists(destFileName))
+                {
+                    throw new IOException(
+                        string.Empty,
+                        (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
                 }
 
                 // flag to try copy and delete ahead, in case this Move call returns false
