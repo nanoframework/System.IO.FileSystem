@@ -453,7 +453,7 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Exists_returns_false_if_file_does_not_exist()
         {
-            Assert.IsFalse(File.Exists($@"I:\file_does_not_exist-{nameof(DirectoryUnitTests)}.pretty_sure"));
+            Assert.IsFalse(File.Exists($@"I:\file_does_not_exist-{nameof(FileUnitTests)}.pretty_sure"));
         }
 
         [TestMethod]
