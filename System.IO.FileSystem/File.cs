@@ -450,6 +450,7 @@ namespace System.IO
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <param name="fileAttributes">A bitwise combination of the enumeration values.</param>
+        /// <exception cref="IOException"><paramref name="path"/> cannot be not found.</exception>"
         public static void SetAttributes(string path, FileAttributes fileAttributes)
         {
             if (!Exists(path))
@@ -459,7 +460,9 @@ namespace System.IO
                     (int)IOException.IOExceptionErrorCode.FileNotFound);
             }
 
-            NativeIO.SetAttributes(path, (byte)fileAttributes);
+            NativeIO.SetAttributes(
+                path,
+                (byte)fileAttributes);
         }
 
         /// <summary>
