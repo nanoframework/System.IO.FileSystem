@@ -1,4 +1,8 @@
-﻿using nanoFramework.TestFramework;
+//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+
+using nanoFramework.TestFramework;
 
 namespace System.IO.FileSystem.UnitTests
 {
@@ -103,7 +107,7 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetDirectoryName_returns_directory()
         {
-            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext"  };
+            var tests = new[] { @"I:\directory", @"I:\directory\", @"I:\directory\file.ext" };
             var answers = new[] { @"I:\", @"I:\directory", @"I:\directory" };
 
             for (var i = 0; i < tests.Length; i++)
@@ -311,26 +315,27 @@ namespace System.IO.FileSystem.UnitTests
             }
         }
 
+        [DataRow(@"\dir1\dir2\file.ext")]
+        [DataRow(@"\dir1\dir2\file.ext")]
+        [DataRow(@"\dir1\..\dir2\file.ext")]
+        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext")]
         [TestMethod]
-        public void GetFullPath0()
+        public void GetFullPathWithFiles(string pathToTest)
         {
-            string fullPath = Path.GetFullPath(@"dir1\dir2\file.ext");
+            string fullPath = Path.GetFullPath(pathToTest);
+            Assert.AreEqual(pathToTest, fullPath);
+        }
 
-            Assert.AreEqual(@"\dir1\dir2\file.ext", fullPath);
-         }
-
+        [DataRow(@"\dir1\..\..\dir2\", @"\dir1\..\..\dir2\")]
+        [DataRow(@"\dir1\..\..\dir2", @"\dir1\..\..\dir2")]
+        [DataRow(@"dir1\dir2\", @"dir1\dir2\")]
+        [DataRow(@"dir1\dir2", @"dir1\dir2")]
+        [DataRow(@"\dir1\dir2\", @"\dir1\dir2\")]
         [TestMethod]
-        public void GetFullPath1()
+        public void GetFullPathWithDirectories(string pathToTest, string expectedPath)
         {
-            string fullPath = Path.GetFullPath(@"\dir1\dir2\file.ext");
-            Assert.AreEqual(@"\dir1\dir2\file.ext", fullPath);
-         }
-
-        [TestMethod]
-        public void GetFullPath2()
-        {
-            string fullPath = Path.GetFullPath(@"\dir1\..\dir2\file.ext");
-            Assert.AreEqual(@"\dir1\..\dir2\file.ext", fullPath);
+            string fullPath = Path.GetFullPath(pathToTest);
+            Assert.AreEqual(expectedPath, fullPath);
         }
 
         [TestMethod]
@@ -398,7 +403,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext" 
+                @"\", "/", "I:", @"I:\", @"I:\file.ext", @"I:\directory\file.ext"
             };
 
             for (var i = 0; i < tests.Length; i++)
