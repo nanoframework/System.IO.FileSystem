@@ -49,7 +49,17 @@ namespace System.IO
         {
             get
             {
-                string parentDirPath = Path.GetDirectoryName(_fullPath);
+                // FullPath might be either "c:\bar" or "c:\bar\". Handle 
+                // those cases, as well as avoiding mangling "c:\".
+                string s = _fullPath;
+
+                if (s.Length > 3
+                    && s.EndsWith(PathInternal.DirectorySeparatorCharAsString))
+                {
+                    s = _fullPath.Substring(0, _fullPath.Length - 1);
+                }
+
+                string parentDirPath = Path.GetDirectoryName(s);
 
                 if (parentDirPath == null)
                 {
