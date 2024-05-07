@@ -288,9 +288,7 @@ namespace System.IO
                 // path = Combine(currDir, path);
             }
 
-            return Combine(
-                GetDirectoryName(path),
-                GetFileName(path));
+            return PathInternal.NormalizeDirectorySeparators(path);
         }
 
         /// <summary>
