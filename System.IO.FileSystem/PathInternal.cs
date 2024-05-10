@@ -241,56 +241,34 @@ namespace System.IO
                 return path;
             }
 
-            char current;
+            var components = path.Split(DirectorySeparatorChar, AltDirectorySeparatorChar);
+            var resultComponents = new string[components.Length];
+            var resultIndex = 0;
 
-            // Make a pass to see if we need to normalize so we can potentially skip allocating
-            var normalized = true;
-
-            for (var i = 0; i < path.Length; i++)
+            foreach (var component in components)
             {
-                current = path[i];
-                if (IsDirectorySeparator(current)
-                    && (current != DirectorySeparatorChar
-                        // Check for sequential separators past the first position (we need to keep initial two for UNC/extended)
-                        || (i > 0 && i + 1 < path.Length && IsDirectorySeparator(path[i + 1]))))
+                if (component == "..")
                 {
-                    normalized = false;
-                    break;
-                }
-            }
-
-            if (normalized)
-            {
-                return path;
-            }
-
-            var builder = new StringBuilder(MaxShortPath);
-            var start = 0;
-            
-            if (IsDirectorySeparator(path[start]))
-            {
-                start++;
-                builder.Append(DirectorySeparatorChar);
-            }
-
-            for (var i = start; i < path.Length; i++)
-            {
-                current = path[i];
-
-                // If we have a separator
-                if (IsDirectorySeparator(current))
-                {
-                    // If the next is a separator, skip adding this
-                    if (i + 1 < path.Length && IsDirectorySeparator(path[i + 1]))
+                    if (resultIndex > 0)
                     {
-                        continue;
+                        resultIndex--; // Go up one directory level
                     }
-
-                    // Ensure it is the primary separator
-                    current = DirectorySeparatorChar;
                 }
+                else if (component != ".")
+                {
+                    resultComponents[resultIndex] = component; // Add the directory to the result
+                    resultIndex++;
+                }
+            }
 
-                builder.Append(current);
+            var builder = new StringBuilder();
+            for (var i = 0; i < resultIndex; i++)
+            {
+                if (i > 0)
+                {
+                    builder.Append(DirectorySeparatorChar);
+                }
+                builder.Append(resultComponents[i]);
             }
 
             return builder.ToString();
