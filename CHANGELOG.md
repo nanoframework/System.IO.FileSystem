@@ -2,7 +2,17 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.FileSystem/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.36...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.41...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#101](https://github.com/nanoframework/System.IO.FileSystem/pull/101)
+- Fix Path.GetFullPath\(\) [\#100](https://github.com/nanoframework/System.IO.FileSystem/pull/100)
+- Several fixes for `Path` [\#99](https://github.com/nanoframework/System.IO.FileSystem/pull/99)
+
+## [v1.1.41](https://github.com/nanoframework/System.IO.FileSystem/tree/v1.1.41) (2024-04-10)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.FileSystem/compare/v1.1.36...v1.1.41)
 
 **Implemented enhancements:**
 
