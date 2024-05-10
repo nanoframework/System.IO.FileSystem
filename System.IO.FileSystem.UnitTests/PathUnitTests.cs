@@ -317,15 +317,26 @@ namespace System.IO.FileSystem.UnitTests
             }
         }
 
-        [DataRow(@"\dir1\dir2\file.ext")]
-        [DataRow(@"\dir1\dir2\file.ext")]
-        [DataRow(@"\dir1\..\dir2\file.ext")]
-        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext")]
+        [DataRow(@"\dir1\dir2\file.ext", @"\dir1\dir2\file.ext", false)]
+        [DataRow(@"\dir1\..\dir2\file.ext", @"\dir2\file.ext", false)]
+        [DataRow(@"dir1\..\dir2\file.ext", @"dir2\file.ext", true)]
+        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext", @"\dir3\file.ext", false)]
         [TestMethod]
-        public void GetFullPathWithFiles(string pathToTest)
+        public void GetFullPathWithFiles(
+            string pathToTest,
+            string expectedPath,
+            bool hasRoot)
         {
             string fullPath = Path.GetFullPath(pathToTest);
-            Assert.AreEqual(pathToTest, fullPath);
+
+            if (hasRoot)
+            {
+                Assert.AreEqual($@"{Root}{expectedPath}", fullPath);
+            }
+            else
+            {
+                Assert.AreEqual(expectedPath, fullPath);
+            }
         }
 
         [DataRow(@"\dir1\..\..\dir2\", @"dir2\", false)]
@@ -334,9 +345,13 @@ namespace System.IO.FileSystem.UnitTests
         [DataRow(@"dir1\dir2", @"dir1\dir2", true)]
         [DataRow(@"\dir1\dir2\", @"\dir1\dir2\", false)]
         [TestMethod]
-        public void GetFullPathWithDirectories(string pathToTest, string expectedPath, bool hasRoot)
+        public void GetFullPathWithDirectories(
+            string pathToTest,
+            string expectedPath,
+            bool hasRoot)
         {
             string fullPath = Path.GetFullPath(pathToTest);
+
             if (hasRoot)
             {
                 Assert.AreEqual($@"{Root}{expectedPath}", fullPath);
@@ -412,7 +427,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             var tests = new[]
             {
-                @"\", "/", "I:", @"{Root}", @"{Root}file.ext", @"{Root}directory\file.ext"
+                @"\", "/", $"{Root.Substring(0, 2)}", @$"{Root}", @$"{Root}file.ext", @$"{Root}directory\file.ext"
             };
 
             for (var i = 0; i < tests.Length; i++)
