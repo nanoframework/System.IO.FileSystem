@@ -179,7 +179,7 @@ namespace System.IO
         /// </summary>
         /// <param name="sourceDirName">The path of the file or directory to move.</param>
         /// <param name="destDirName">The path to the new location for <paramref name="sourceDirName"/> or its contents. If <paramref name="sourceDirName"/> is a file, then <paramref name="destDirName"/> must also be a file name.</param>
-        /// <exception cref="IOException">n attempt was made to move a directory to a different volume. -or- destDirName already exists.See the note in the Remarks section. -or- The source directory does not exist. -or- The source or destination directory name is null. -or- The sourceDirName and destDirName parameters refer to the same file or directory. -or- The directory or a file within it is being used by another process.</exception>
+        /// <exception cref="IOException">n attempt was made to move a directory to a different volume. -or- destDirName already exists. See the note in the Remarks section. -or- The source directory does not exist. -or- The source or destination directory name is <see langword="null"/>. -or- The <paramref name="sourceDirName"/> and <paramref name="destDirName"/> parameters refer to the same file or directory. -or- The directory or a file within it is being used by another process.</exception>
         public static void Move(
             string sourceDirName,
             string destDirName)
@@ -188,6 +188,7 @@ namespace System.IO
             sourceDirName = Path.GetFullPath(sourceDirName);
             destDirName = Path.GetFullPath(destDirName);
 
+            bool tryCopyAndDelete = false;
             object srcRecord = FileSystemManager.AddToOpenList(sourceDirName);
 
             try
@@ -200,11 +201,17 @@ namespace System.IO
                         (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
                 }
 
-                NativeIO.Move(sourceDirName, destDirName);
+                // If Move() returns false, we'll try doing copy and delete to accomplish the move
+                tryCopyAndDelete = !NativeIO.Move(sourceDirName, destDirName);
             }
             finally
             {
                 FileSystemManager.RemoveFromOpenList(srcRecord);
+            }
+
+            if (tryCopyAndDelete)
+            {
+                RecursiveCopyAndDelete(sourceDirName, destDirName);
             }
         }
 
@@ -287,6 +294,70 @@ namespace System.IO
             }
 
             return (string[])fileNames.ToArray(typeof(string));
+        }
+
+        private static void RecursiveCopyAndDelete(string sourceDirName,
+                                                   string destDirName)
+        {
+            string[] files;
+            int filesCount, i;
+
+            // relative path starts after the sourceDirName and a path seperator
+            int relativePathIndex = sourceDirName.Length + 1; 
+            
+            // make sure no other thread/process can modify it (for example, delete the directory and create a file of the same name) while we're moving
+            object recordSrc = FileSystemManager.AddToOpenList(sourceDirName);
+
+            try
+            {
+                // check that ake sure sourceDir is actually a directory
+                if (!Exists(sourceDirName))
+                {
+                    throw new IOException(
+                        "",
+                        (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+                }
+
+                // make sure destDir does not yet exist
+                if (Exists(destDirName))
+                {
+                    throw new IOException(
+                        "",
+                        (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
+                }
+
+                NativeIO.CreateDirectory(destDirName);
+
+                files = GetFiles(sourceDirName);
+                filesCount = files.Length;
+
+                for (i = 0; i < filesCount; i++)
+                {
+                    File.Copy(
+                        files[i],
+                        Path.Combine(destDirName, files[i].Substring(relativePathIndex)),
+                        false,
+                        true);
+                }
+
+                files = GetDirectories(sourceDirName);
+                filesCount = files.Length;
+
+                for (i = 0; i < filesCount; i++)
+                {
+                    RecursiveCopyAndDelete(
+                        files[i],
+                        Path.Combine(destDirName, files[i].Substring(relativePathIndex)));
+                }
+
+                NativeIO.Delete(
+                    sourceDirName,
+                    true);
+            }
+            finally
+            {
+                FileSystemManager.RemoveFromOpenList(recordSrc);
+            }
         }
     }
 }
