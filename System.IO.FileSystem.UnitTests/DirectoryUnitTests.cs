@@ -67,280 +67,264 @@ namespace System.IO.FileSystem.UnitTests
 
             Directory.CreateDirectory(path);
 
-            File.Create($@"{path}\file1.txt").Close();
-            File.Create($@"{path}\file2.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
 
-            Directory.CreateDirectory($@"{path}\subdir\");
+            Directory.CreateDirectory($@"{path}subdir\");
 
-            File.Create($@"{path}\subdir\file3.txt").Close();
-            File.Create($@"{path}\subdir\file4.txt").Close();
+            File.Create($@"{path}subdir\file3.txt").Close();
+            File.Create($@"{path}subdir\file4.txt").Close();
 
             Directory.Delete(path, true);
 
             Assert.IsFalse(Directory.Exists(path));
         }
 
-        //[TestMethod]
-        //public void TestEnumerateDirectories()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestEnumerateDirectories()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
-        //    Directory.CreateDirectory($@"{path}\subdir1\");
-        //    Directory.CreateDirectory($@"{path}\subdir2\");
-        //    Directory.CreateDirectory($@"{path}\subdir3\");
+            Directory.CreateDirectory(path);
+            Directory.CreateDirectory($@"{path}subdir1\");
+            Directory.CreateDirectory($@"{path}subdir2\");
+            Directory.CreateDirectory($@"{path}subdir3\");
 
-        //    var directories = Directory.GetDirectories(path);
+            var directories = Directory.GetDirectories(path);
 
-        //    Assert.AreEqual(3, directories.Length);
+            Assert.AreEqual(3, directories.Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(path, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(path, true);
+        }
 
-        //[TestMethod]
-        //public void TestEnumerateFiles()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestEnumerateFiles()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
 
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
 
-        //    var files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
 
-        //    Assert.AreEqual(3, files.Length);
+            Assert.AreEqual(3, files.Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(path, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(path, true);
+        }
 
-        //[TestMethod]
-        //public void TestMoveDirectory()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
-        //    string newPath = @$"{Root}temp\testdir2\";
+        [TestMethod]
+        public void TestMoveDirectory()
+        {
+            string path = @$"{Root}temp\testdir\";
+            string newPath = @$"{Root}temp\testdir2\";
 
-        //    // make sure both directories doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
-        //    if(Directory.Exists(newPath))
-        //    {
-        //        Directory.Delete(newPath, true);
-        //    }
+            // make sure both directories doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+            if (Directory.Exists(newPath))
+            {
+                Directory.Delete(newPath, true);
+            }
 
-        //    // create the directory and some files
-        //    Directory.CreateDirectory(path);
+            // create the directory and some files
+            Directory.CreateDirectory(path);
 
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
 
-        //    // create the new directory
-        //    Directory.CreateDirectory(newPath);
+            // create the new directory
+            Directory.CreateDirectory(newPath);
 
-        //    // perform the move
-        //    Directory.Move(path, newPath);
+            // perform the move
+            Directory.Move(path, newPath);
 
-        //    // check if the directory was moved
-        //    Assert.IsFalse(Directory.Exists(path));
-        //    // check if the directory exists in the new location
-        //    Assert.IsTrue(Directory.Exists(newPath));
-        //    // check if the files were moved
-        //    Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
+            // check if the directory was moved
+            Assert.IsFalse(Directory.Exists(path));
+            // check if the directory exists in the new location
+            Assert.IsTrue(Directory.Exists(newPath));
+            // check if the files were moved
+            Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(newPath, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(newPath, true);
+        }
 
-        //[TestMethod]
-        //public void TestMoveDirectoryWithFiles()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestMoveDirectoryWithFiles()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
 
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
 
-        //    string newPath = @$"{Root}temp\testdir2\";
-        //    Directory.CreateDirectory(newPath);
+            string newPath = @$"{Root}temp\testdir2\";
+            Directory.CreateDirectory(newPath);
 
-        //    Directory.Move(path, newPath);
+            Directory.Move(path, newPath);
 
-        //    Assert.IsFalse(Directory.Exists(path));
-        //    Assert.IsTrue(Directory.Exists(newPath));
-        //    Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
+            Assert.IsFalse(Directory.Exists(path));
+            Assert.IsTrue(Directory.Exists(newPath));
+            Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(newPath, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(newPath, true);
+        }
 
-        //[TestMethod]
-        //public void TestMoveDirectoryWithSubdirectories()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestMoveDirectoryWithSubdirectories()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
 
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
 
-        //    Directory.CreateDirectory($@"{path}\subdir1\");
-        //    Directory.CreateDirectory($@"{path}\subdir2\");
-        //    Directory.CreateDirectory($@"{path}\subdir3\");
+            Directory.CreateDirectory($@"{path}subdir1\");
+            Directory.CreateDirectory($@"{path}subdir2\");
+            Directory.CreateDirectory($@"{path}subdir3\");
 
-        //    string newPath = @$"{Root}temp\testdir2\";
-        //    Directory.CreateDirectory(newPath);
+            string newPath = @$"{Root}temp\testdir2\";
+            Directory.CreateDirectory(newPath);
 
-        //    Directory.Move(path, newPath);
+            Directory.Move(path, newPath);
 
-        //    Assert.IsFalse(Directory.Exists(path));
-        //    Assert.IsTrue(Directory.Exists(newPath));
-        //    Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
-        //    Assert.AreEqual(3, Directory.GetDirectories(newPath).Length);
+            Assert.IsFalse(Directory.Exists(path));
+            Assert.IsTrue(Directory.Exists(newPath));
+            Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
+            Assert.AreEqual(3, Directory.GetDirectories(newPath).Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(newPath, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(newPath, true);
+        }
 
-        //[TestMethod]
-        //public void TestMoveDirectoryWithSubdirectoriesAndFiles()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestMoveDirectoryWithSubdirectoriesAndFiles()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
 
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
 
-        //    Directory.CreateDirectory($@"{path}\subdir1\");
-        //    Directory.CreateDirectory($@"{path}\subdir2\");
-        //    Directory.CreateDirectory($@"{path}\subdir3\");
+            Directory.CreateDirectory($@"{path}subdir1\");
+            Directory.CreateDirectory($@"{path}subdir2\");
+            Directory.CreateDirectory($@"{path}subdir3\");
 
-        //    File.Create($@"{path}\subdir1\file1.txt").Close();
-        //    File.Create($@"{path}\subdir1\file2.txt").Close();
-        //    File.Create($@"{path}\subdir1\file3.txt").Close();
-        //    File.Create($@"{path}\subdir2\file1.txt").Close();
-        //    File.Create($@"{path}\subdir2\file2.txt").Close();
-        //    File.Create($@"{path}\subdir2\file3.txt").Close();
-        //    File.Create($@"{path}\subdir3\file1.txt").Close();
-        //    File.Create($@"{path}\subdir3\file2.txt").Close();
-        //    File.Create($@"{path}\subdir3\file3.txt").Close();
+            File.Create($@"{path}subdir1\file1.txt").Close();
+            File.Create($@"{path}subdir1\file2.txt").Close();
+            File.Create($@"{path}subdir1\file3.txt").Close();
+            File.Create($@"{path}subdir2\file1.txt").Close();
+            File.Create($@"{path}subdir2\file2.txt").Close();
+            File.Create($@"{path}subdir2\file3.txt").Close();
+            File.Create($@"{path}subdir3\file1.txt").Close();
+            File.Create($@"{path}subdir3\file2.txt").Close();
+            File.Create($@"{path}subdir3\file3.txt").Close();
 
-        //    string newPath = @$"{Root}temp\testdir2\";
-        //    Directory.CreateDirectory(newPath);
+            string newPath = @$"{Root}temp\testdir2\";
+            Directory.CreateDirectory(newPath);
 
-        //    Directory.Move(path, newPath);
+            Directory.Move(path, newPath);
 
-        //    Assert.IsFalse(Directory.Exists(path));
-        //    Assert.IsTrue(Directory.Exists(newPath));
-        //    Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
-        //    Assert.AreEqual(3, Directory.GetDirectories(newPath).Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir1").Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir2").Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir3").Length);
+            Assert.IsFalse(Directory.Exists(path));
+            Assert.IsTrue(Directory.Exists(newPath));
+            Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
+            Assert.AreEqual(3, Directory.GetDirectories(newPath).Length);
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir1").Length);
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir2").Length);
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir3").Length);
 
-        //    // Clean up after the test
-        //    Directory.Delete(newPath, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(newPath, true);
+        }
 
-        //[TestMethod]
-        //public void TestMoveDirectoryWithSubdirectoriesAndFilesAndOverwrite()
-        //{
-        //    string path = @$"{Root}temp\testdir\";
+        [TestMethod]
+        public void TestMoveDirectoryWithSubdirectoriesAndFilesAndOverwrite()
+        {
+            string path = @$"{Root}temp\testdir\";
 
-        //    // make sure the directory doesn't exist
-        //    if (Directory.Exists(path))
-        //    {
-        //        Directory.Delete(path, true);
-        //    }
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
 
-        //    Directory.CreateDirectory(path);
-        //    File.Create($@"{path}\file1.txt").Close();
-        //    File.Create($@"{path}\file2.txt").Close();
-        //    File.Create($@"{path}\file3.txt").Close();
-        //    Directory.CreateDirectory($@"{path}\subdir1\");
-        //    Directory.CreateDirectory($@"{path}\subdir2\");
-        //    Directory.CreateDirectory($@"{path}\subdir3\");
-        //    File.Create($@"{path}\subdir1\file1.txt").Close();
-        //    File.Create($@"{path}\subdir1\file2.txt").Close();
-        //    File.Create($@"{path}\subdir1\file3.txt").Close();
-        //    File.Create($@"{path}\subdir2\file1.txt").Close();
-        //    File.Create($@"{path}\subdir2\file2.txt").Close();
-        //    File.Create($@"{path}\subdir2\file3.txt").Close();
-        //    File.Create($@"{path}\subdir3\file1.txt").Close();
-        //    File.Create($@"{path}\subdir3\file2.txt").Close();
-        //    File.Create($@"{path}\subdir3\file3.txt").Close();
+            Directory.CreateDirectory(path);
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+            File.Create($@"{path}file3.txt").Close();
+            Directory.CreateDirectory($@"{path}subdir1\");
+            Directory.CreateDirectory($@"{path}subdir2\");
+            Directory.CreateDirectory($@"{path}subdir3\");
+            File.Create($@"{path}subdir1\file1.txt").Close();
+            File.Create($@"{path}subdir1\file2.txt").Close();
+            File.Create($@"{path}subdir1\file3.txt").Close();
+            File.Create($@"{path}subdir2\file1.txt").Close();
+            File.Create($@"{path}subdir2\file2.txt").Close();
+            File.Create($@"{path}subdir2\file3.txt").Close();
+            File.Create($@"{path}subdir3\file1.txt").Close();
+            File.Create($@"{path}subdir3\file2.txt").Close();
+            File.Create($@"{path}subdir3\file3.txt").Close();
 
-        //    string newPath = @$"{Root}temp\testdir2\";
-        //    Directory.CreateDirectory(newPath);
-        //    File.Create($@"{newPath}\file1.txt").Close();
-        //    File.Create($@"{newPath}\file2.txt").Close();
-        //    File.Create($@"{newPath}\file3.txt").Close();
-        //    Directory.CreateDirectory($@"{newPath}\subdir1\");
-        //    Directory.CreateDirectory($@"{newPath}\subdir2\");
-        //    Directory.CreateDirectory($@"{newPath}\subdir3\");
-        //    File.Create($@"{newPath}\subdir1\file1.txt").Close();
-        //    File.Create($@"{newPath}\subdir1\file2.txt").Close();
-        //    File.Create($@"{newPath}\subdir1\file3.txt").Close();
-        //    File.Create($@"{newPath}\subdir2\file1.txt").Close();
-        //    File.Create($@"{newPath}\subdir2\file2.txt").Close();
-        //    File.Create($@"{newPath}\subdir2\file3.txt").Close();
-        //    File.Create($@"{newPath}\subdir3\file1.txt").Close();
-        //    File.Create($@"{newPath}\subdir3\file2.txt").Close();
-        //    File.Create($@"{newPath}\subdir3\file3.txt").Close();
+            string newPath = @$"{Root}temp\testdir2\";
 
-        //    Directory.Move(path, newPath);
+            Directory.Move(path, newPath);
 
-        //    Assert.IsFalse(Directory.Exists(path));
-        //    Assert.IsTrue(Directory.Exists(newPath));
-        //    Assert.AreEqual(3, Directory.GetFiles(newPath).Length);
-        //    Assert.AreEqual(3, Directory.GetDirectories(newPath).Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir1").Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir2").Length);
-        //    Assert.AreEqual(3, Directory.GetFiles($@"{newPath}\subdir3").Length);
+            Assert.IsFalse(Directory.Exists(path), "Origin path exists after move and it shoudln't.");
+            Assert.IsTrue(Directory.Exists(newPath), "Destination doesn't exist and it should.");
+            Assert.AreEqual(3, Directory.GetFiles(newPath).Length, $"Wrong file count @ {newPath}.");
+            Assert.AreEqual(3, Directory.GetDirectories(newPath).Length, $"Wrong directory count @ {newPath}.");
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir1").Length, $@"Wrong file count @ {newPath}\subdir1.");
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir2").Length, $@"Wrong file count @ {newPath}\subdir2.");
+            Assert.AreEqual(3, Directory.GetFiles($@"{newPath}subdir3").Length, $@"Wrong file count @ {newPath}\subdir3.");
 
-        //    // Clean up after the test
-        //    Directory.Delete(newPath, true);
-        //}
+            // Clean up after the test
+            Directory.Delete(newPath, true);
+        }
 
         [TestMethod]
         public void TestGetDirectoryRoot()

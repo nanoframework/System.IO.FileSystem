@@ -154,7 +154,6 @@ namespace System.IO
         {
             return GetChildren(
                 path,
-                "*",
                 false);
         }
 
@@ -170,7 +169,6 @@ namespace System.IO
         {
             return GetChildren(
                 path,
-                "*",
                 true);
         }
 
@@ -249,11 +247,9 @@ namespace System.IO
 
         private static string[] GetChildren(
             string path,
-            string searchPattern,
-            bool isDirectory)
+            bool directoryOnly)
         {
-            // path and searchPattern validation happening in the call
-
+            // path validation happening in the call
             path = Path.GetFullPath(path);
 
             if (!Exists(path))
@@ -263,37 +259,9 @@ namespace System.IO
                     (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
             }
 
-            ArrayList fileNames = new();
-
-            object record = FileSystemManager.AddToOpenListForRead(path);
-
-            NativeFindFile ff = null;
-
-            try
-            {
-                ff = new NativeFindFile(path, searchPattern);
-
-                uint targetAttribute = isDirectory ? (uint)FileAttributes.Directory : 0;
-
-                NativeFileInfo fileinfo = ff.GetNext();
-
-                while (fileinfo != null)
-                {
-                    if ((fileinfo.Attributes & (uint)FileAttributes.Directory) == targetAttribute)
-                    {
-                        fileNames.Add(fileinfo.FileName);
-                    }
-
-                    fileinfo = ff.GetNext();
-                }
-            }
-            finally
-            {
-                ff?.Close();
-                FileSystemManager.RemoveFromOpenList(record);
-            }
-
-            return (string[])fileNames.ToArray(typeof(string));
+            return NativeGetChildren(
+                path,
+                directoryOnly);
         }
 
         private static void RecursiveCopyAndDelete(string sourceDirName,
@@ -359,5 +327,12 @@ namespace System.IO
                 FileSystemManager.RemoveFromOpenList(recordSrc);
             }
         }
+
+        #region native calls
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern string[] NativeGetChildren(string path, bool directoryOnly);
+
+        #endregion
     }
 }
