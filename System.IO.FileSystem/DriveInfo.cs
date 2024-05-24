@@ -78,7 +78,7 @@ namespace System.IO
         /// Formats the specified drive.
         /// *** NOTE THAT THIS OPERATION IS NOT REVERSIBLE ***.
         /// </summary>
-        /// <param name="driveName">  </param>
+        /// <param name="driveName">The drive to format.</param>
         /// <exception cref="ArgumentException"><paramref name="driveName"/> does not refer to a valid drive.</exception>
         /// <exception cref="NotSupportedException">Thrown when the target doesn't have support for performing the format operation on the specified drive.</exception>
         /// <exception cref="IOException">Thrown when the operation fails.</exception>
