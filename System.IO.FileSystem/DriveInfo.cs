@@ -89,6 +89,15 @@ namespace System.IO
         [MethodImpl(MethodImplOptions.InternalCall)] 
         public static extern void Format(string driveName);
 
+        /// <summary>
+        /// Tries to mount all removable volumes.
+        /// </summary>
+        /// <remarks>
+        /// This method is implemented in the .NET nanoFramework API but it is not supported on all target devices.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern void MountRemovableVolumes();
+
         #region Native Calls
 
         [DebuggerNonUserCode]
