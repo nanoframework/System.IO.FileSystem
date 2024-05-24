@@ -152,9 +152,6 @@ namespace System.IO.FileSystem.UnitTests
             File.Create($@"{path}file2.txt").Close();
             File.Create($@"{path}file3.txt").Close();
 
-            // create the new directory
-            Directory.CreateDirectory(newPath);
-
             // perform the move
             Directory.Move(path, newPath);
 
@@ -187,7 +184,6 @@ namespace System.IO.FileSystem.UnitTests
             File.Create($@"{path}file3.txt").Close();
 
             string newPath = @$"{Root}temp\testdir2\";
-            Directory.CreateDirectory(newPath);
 
             Directory.Move(path, newPath);
 
@@ -221,7 +217,6 @@ namespace System.IO.FileSystem.UnitTests
             Directory.CreateDirectory($@"{path}subdir3\");
 
             string newPath = @$"{Root}temp\testdir2\";
-            Directory.CreateDirectory(newPath);
 
             Directory.Move(path, newPath);
 
@@ -266,7 +261,6 @@ namespace System.IO.FileSystem.UnitTests
             File.Create($@"{path}subdir3\file3.txt").Close();
 
             string newPath = @$"{Root}temp\testdir2\";
-            Directory.CreateDirectory(newPath);
 
             Directory.Move(path, newPath);
 
