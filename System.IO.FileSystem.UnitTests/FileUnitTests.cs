@@ -88,13 +88,15 @@ namespace System.IO.FileSystem.UnitTests
         {
             if (content is not null)
             {
+                OutputHelper.WriteLine($"Creating file: {path}...");
+
                 File.WriteAllBytes(
                     path,
                     content);
-            }
 
-            AssertFileExists(path);
-            AssertContentEquals(path, content);
+                AssertFileExists(path);
+                AssertContentEquals(path, content);
+            }
         }
 
         /// <summary>
@@ -102,6 +104,8 @@ namespace System.IO.FileSystem.UnitTests
         /// </summary>
         private static void CreateFile(string path, string content)
         {
+            OutputHelper.WriteLine($"Creating file: {path}...");
+
             CreateFile(
                 path,
                 Encoding.UTF8.GetBytes(content));
@@ -109,6 +113,8 @@ namespace System.IO.FileSystem.UnitTests
 
         private static void DeleteFile(string path)
         {
+            OutputHelper.WriteLine($"Deleting file: {path}...");
+
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -141,10 +147,10 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Copy_copies_to_destination()
         {
-            var content = BinaryContent;
-
             ExecuteTestAndTearDown(() =>
             {
+                var content = BinaryContent;
+
                 CreateFile(
                     Source,
                     content);
@@ -164,6 +170,8 @@ namespace System.IO.FileSystem.UnitTests
 
             ExecuteTestAndTearDown(() =>
             {
+                var content = BinaryContent;
+
                 CreateFile(
                     Source,
                     content);
@@ -186,10 +194,10 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void Copy_overwrites_destination()
         {
-            var content = BinaryContent;
-
             ExecuteTestAndTearDown(() =>
             {
+                var content = BinaryContent;
+
                 CreateFile(
                     Source,
                     content);
@@ -754,7 +762,7 @@ namespace System.IO.FileSystem.UnitTests
             {
                 File.WriteAllText(
                     Source,
-                    string.Empty);
+                    TextContent);
 
                 AssertFileExists(Source);
             });
