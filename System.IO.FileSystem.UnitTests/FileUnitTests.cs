@@ -768,6 +768,39 @@ namespace System.IO.FileSystem.UnitTests
             });
         }
 
+
+        [TestMethod]
+        public void WriteAllTextLargeContent_should_create_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                var largeContent = new StringBuilder();
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+                largeContent.AppendLine(Guid.NewGuid().ToString());
+                largeContent.Append(TextContent);
+
+                File.WriteAllText(
+                    Source,
+                    largeContent.ToString());
+
+                AssertFileExists(Source);
+
+                AssertContentEquals(
+                    Source,
+                    largeContent.ToString());
+            });
+        }
+
         [TestMethod]
         public void WriteAllText_should_overwrite_existing_file()
         {
