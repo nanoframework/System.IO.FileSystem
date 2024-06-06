@@ -241,34 +241,75 @@ namespace System.IO
                 return path;
             }
 
-            var components = path.Split(DirectorySeparatorChar, AltDirectorySeparatorChar);
+            bool hasNavigationComponents = false;
+
+            var components = path.Split(new[]
+            {
+                DirectorySeparatorChar,
+                AltDirectorySeparatorChar
+            });
             var resultComponents = new string[components.Length];
             var resultIndex = 0;
 
-            foreach (var component in components)
+            for (int i = 0; i < components.Length; i++)
             {
+                var component = components[i];
+
                 if (component == "..")
                 {
-                    if (resultIndex > 0)
+                    // We're navigating, so remember that
+                    hasNavigationComponents = true;
+
+                    // If the previous component is also "..", or if it's the start of the path, add ".." to the result
+                    if (i == 0 && (resultIndex == 0
+                                   || resultComponents[resultIndex - 1] == ".."))
                     {
-                        resultIndex--; // Go up one directory level
+                        resultComponents[resultIndex] = "..";
+                        resultIndex++;
+                    }
+                    else
+                    {
+                        // Otherwise, go up one directory level, if we're not already at the root
+                        if (resultIndex > 0)
+                        {
+                            resultIndex--;
+                        }
                     }
                 }
-                else if (component != ".")
+                else if (component != "."
+                         && component != "")
                 {
-                    resultComponents[resultIndex] = component; // Add the directory to the result
+                    resultComponents[resultIndex] = component;
                     resultIndex++;
                 }
             }
 
             var builder = new StringBuilder();
+
+            // if the original path started with a directory separator, ensure the result does too
+            // unless there were navigation components, in which case we can't start with a separator
+            if (!hasNavigationComponents && (path.StartsWith(DirectorySeparatorCharAsString)
+                                             || path.StartsWith(AltDirectorySeparatorChar.ToString())))
+            {
+                builder.Append(DirectorySeparatorChar);
+            }
+
             for (var i = 0; i < resultIndex; i++)
             {
-                if (i > 0)
+                if (i > 0
+                    && builder.Length > 0)
                 {
                     builder.Append(DirectorySeparatorChar);
                 }
+
                 builder.Append(resultComponents[i]);
+            }
+
+            // if the original path ended with a directory separator, ensure the result does too
+            if (path.EndsWith(DirectorySeparatorCharAsString)
+                || path.EndsWith(AltDirectorySeparatorChar.ToString()))
+            {
+                builder.Append(DirectorySeparatorChar);
             }
 
             return builder.ToString();

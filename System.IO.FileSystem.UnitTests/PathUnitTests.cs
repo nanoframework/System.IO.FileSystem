@@ -318,24 +318,25 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [DataRow(@"\dir1\dir2\file.ext", @"\dir1\dir2\file.ext", false)]
-        [DataRow(@"\dir1\..\dir2\file.ext", @"\dir2\file.ext", false)]
+        [DataRow(@"\dir1\..\dir2\file.ext", @"dir2\file.ext", false)]
         [DataRow(@"dir1\..\dir2\file.ext", @"dir2\file.ext", true)]
-        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext", @"\dir3\file.ext", false)]
+        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext", @"dir3\file.ext", false)]
         [TestMethod]
         public void GetFullPathWithFiles(
             string pathToTest,
             string expectedPath,
-            bool hasRoot)
+            bool isRooted)
         {
-            string fullPath = Path.GetFullPath(pathToTest);
+            string resultPath = Path.GetFullPath(pathToTest);
 
-            if (hasRoot)
+            if (isRooted)
             {
-                Assert.AreEqual($@"{Root}{expectedPath}", fullPath);
+                Assert.AreEqual($"{Root}{expectedPath}", resultPath);
             }
             else
             {
-                Assert.AreEqual(expectedPath, fullPath);
+                Assert.AreEqual(expectedPath, resultPath);
+
             }
         }
 
@@ -348,17 +349,17 @@ namespace System.IO.FileSystem.UnitTests
         public void GetFullPathWithDirectories(
             string pathToTest,
             string expectedPath,
-            bool hasRoot)
+            bool isRooted)
         {
-            string fullPath = Path.GetFullPath(pathToTest);
+            string resultPath = Path.GetFullPath(pathToTest);
 
-            if (hasRoot)
+            if (isRooted)
             {
-                Assert.AreEqual($@"{Root}{expectedPath}", fullPath);
+                Assert.AreEqual($"{Root}{expectedPath}", resultPath);
             }
             else
             {
-                Assert.AreEqual(expectedPath, fullPath);
+                Assert.AreEqual(expectedPath, resultPath);
             }
         }
 
