@@ -1,4 +1,9 @@
-﻿using nanoFramework.TestFramework;
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
+using nanoFramework.TestFramework;
 
 namespace System.IO.FileSystem.UnitTests
 {
@@ -28,7 +33,10 @@ namespace System.IO.FileSystem.UnitTests
         [DataRow("folder1/folder2/..folder3", "folder1\\folder2\\..folder3", "Case: Navigation command in filename")]
         [DataRow("folder1/folder2/.../folder3", "folder1\\folder2\\...\\folder3", "Case: Triple dot in path")]
         [DataRow("D:\\", "D:\\", "Case: Handle root paths")]
-        public void NormalizeDirectorySeparators_Returns_Correct_Path(string path, string expected, string caseName)
+        public void NormalizeDirectorySeparators_Returns_Correct_Path(
+            string path,
+            string expected,
+            string caseName)
         {
             var actual = PathInternal.NormalizeDirectorySeparators(path);
             Assert.AreEqual(expected, actual, caseName);

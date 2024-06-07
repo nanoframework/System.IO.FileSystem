@@ -1,24 +1,45 @@
-﻿using System.Text;
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
 using nanoFramework.TestFramework;
+using System.Text;
+using System.Threading;
 
 namespace System.IO.FileSystem.UnitTests
 {
     [TestClass]
-    public class FileUnitTests
+    public class FileUnitTests : FileSystemUnitTestsBase
     {
-        [Setup]
-        public void Setup()
-        {
-            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
-        }
-
-        private const string Root = @"I:\";
         private static readonly string Destination = $"{Root}{nameof(FileUnitTests)}-Destination.test";
         private static readonly string Source = $"{Root}{nameof(FileUnitTests)}-Source.test";
 
         private static readonly byte[] BinaryContent = Encoding.UTF8.GetBytes(TextContent);
         private static readonly byte[] EmptyContent = new byte[0];
         private const string TextContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+        [Setup]
+        public void Setup()
+        {
+            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+
+            //////////////////////////////////////////////////////////////////
+            // these are needed when running the tests on a removable drive //
+            //////////////////////////////////////////////////////////////////
+            if (_waitForRemovableDrive)
+            {
+                DriveInfo.MountRemovableVolumes();
+
+                // wait until all removable drives are mounted
+                while (DriveInfo.GetDrives().Length < _numberOfDrives)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+            //////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////
+        }
 
         #region Test helpers
 

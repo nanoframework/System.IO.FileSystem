@@ -1,15 +1,37 @@
 ﻿//
 // Copyright (c) .NET Foundation and Contributors
 // See LICENSE file in the project root for full license information.
+//
 
 using nanoFramework.TestFramework;
+using System.Threading;
 
 namespace System.IO.FileSystem.UnitTests
 {
     [TestClass]
-    internal class PathUnitTests
+    public class PathUnitTests : FileSystemUnitTestsBase
     {
-        private const string Root = @"I:\";
+        [Setup]
+        public void Setup()
+        {
+            //Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+
+            //////////////////////////////////////////////////////////////////
+            // these are needed when running the tests on a removable drive //
+            //////////////////////////////////////////////////////////////////
+            if (_waitForRemovableDrive)
+            {
+                DriveInfo.MountRemovableVolumes();
+
+                // wait until all removable drives are mounted
+                while (DriveInfo.GetDrives().Length < _numberOfDrives)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+            //////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////
+        }
 
         [TestMethod]
         public void ChangeExtension_adds_extension()
