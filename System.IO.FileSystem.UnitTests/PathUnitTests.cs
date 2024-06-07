@@ -345,36 +345,17 @@ namespace System.IO.FileSystem.UnitTests
             }
         }
 
-        [DataRow(@"\dir1\dir2\file.ext", @"\dir1\dir2\file.ext", false)]
-        [DataRow(@"\dir1\..\dir2\file.ext", @"dir2\file.ext", false)]
-        [DataRow(@"dir1\..\dir2\file.ext", @"dir2\file.ext", true)]
-        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext", @"dir3\file.ext", false)]
-        [TestMethod]
-        public void GetFullPathWithFiles(
-            string pathToTest,
-            string expectedPath,
-            bool isRooted)
-        {
-            string resultPath = Path.GetFullPath(pathToTest);
-
-            if (isRooted)
-            {
-                Assert.AreEqual($"{Root}{expectedPath}", resultPath);
-            }
-            else
-            {
-                Assert.AreEqual(expectedPath, resultPath);
-
-            }
-        }
-
         [DataRow(@"\dir1\..\..\dir2\", @"dir2\", false)]
         [DataRow(@"\dir1\..\..\dir2", @"dir2", false)]
         [DataRow(@"dir1\dir2\", @"dir1\dir2\", true)]
         [DataRow(@"dir1\dir2", @"dir1\dir2", true)]
         [DataRow(@"\dir1\dir2\", @"\dir1\dir2\", false)]
+        [DataRow(@"\dir1\dir2\file.ext", @"\dir1\dir2\file.ext", false)]
+        [DataRow(@"\dir1\..\dir2\file.ext", @"dir2\file.ext", false)]
+        [DataRow(@"dir1\..\dir2\file.ext", @"dir2\file.ext", true)]
+        [DataRow(@"\dir1\..\dir2\..\dir3\file.ext", @"dir3\file.ext", false)]
         [TestMethod]
-        public void GetFullPathWithDirectories(
+        public void TestGetFullPath(
             string pathToTest,
             string expectedPath,
             bool isRooted)
@@ -383,11 +364,17 @@ namespace System.IO.FileSystem.UnitTests
 
             if (isRooted)
             {
-                Assert.AreEqual($"{Root}{expectedPath}", resultPath);
+                Assert.AreEqual(
+                    $"{Root}{expectedPath}",
+                    resultPath,
+                    message: $"Case: {expectedPath}");
             }
             else
             {
-                Assert.AreEqual(expectedPath, resultPath);
+                Assert.AreEqual(
+                    expectedPath,
+                    resultPath,
+                    $"Case: {expectedPath}");
             }
         }
 
