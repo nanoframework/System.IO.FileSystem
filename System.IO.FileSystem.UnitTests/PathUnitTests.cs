@@ -122,19 +122,21 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
-        public void GetDirectoryName_returns_directory_UNC_paths()
+        [DataRow(@"\\server\share\", @"\\server\share", "server UNC")]
+        [DataRow(@"\\server\share\file.ext", @"\\server\share", "file UNC")]
+        public void GetDirectoryName_returns_directory_UNC_paths(
+            string test,
+            string expected,
+            string caseName)
         {
-            var tests = new[] { @"\\server\share\", @"\\server\share\file.ext" };
-            var answers = new[] { @"\\server\share", @"\\server\share" };
+            Assert.SkipTest("UNC paths are not supported in the default build");
 
-            for (var i = 0; i < tests.Length; i++)
-            {
-                var test = tests[i];
-                var expected = answers[i];
-
-                Assert.AreEqual(expected, Path.GetDirectoryName(test), $"Case: {test}");
-            }
+            Assert.AreEqual(
+                expected,
+                Path.GetDirectoryName(test),
+                $"Case: {caseName}");
         }
+
 
         [TestMethod]
         public void GetDirectoryName_returns_null()
@@ -190,6 +192,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetExtension_returns_extension_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             var file = "file.ext";
             var expect = ".ext";
 
@@ -222,6 +226,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilename_returns_filename_without_extension_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             Assert.AreEqual("file", Path.GetFileName(@"\\server\share\directory\file"));
             Assert.AreEqual("file.ext", Path.GetFileName(@"\\server\share\directory\file.ext"));
         }
@@ -251,6 +257,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void GetFilenameWithoutExtension_returns_filename_without_extension_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file"));
             Assert.AreEqual("file", Path.GetFileNameWithoutExtension(@"\\server\share\directory\file.ext"));
         }
@@ -381,6 +389,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void HasExtension_returns_false_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             var tests = new[]
             {
                 @"\\server\share\file.", @"\\server\share\directory\file"
@@ -411,6 +421,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void HasExtension_returns_true_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             var tests = new[]
             {
                 @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
@@ -441,6 +453,8 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void IsPathRooted_returns_true_UNC_paths()
         {
+            Assert.SkipTest("UNC paths are not supported in the default build");
+
             var tests = new[]
             {
                 @"\\server\share", @"\\server\share\file.ext", @"\\server\share\directory\file.ext"
