@@ -227,18 +227,10 @@ namespace System.IO
                 && mode != FileMode.OpenOrCreate
                 && !wantsWrite)
             {
-                // Parameter names used into ArgumentException constructors should match an existing one 
-#pragma warning disable S3928 
                 throw new ArgumentException();
-#pragma warning restore S3928
             }
 
-            // need to register the share information prior to the actual file open call (the NativeFileStream ctor)
-            // so subsequent file operations on the same file will behave correctly
-            _fileRecord = FileSystemManager.AddToOpenList(
-                _fileName,
-                (int)access,
-                (int)share);
+            RegisterShareInformation(access, share);
 
             try
             {
@@ -261,89 +253,27 @@ namespace System.IO
                 switch (mode)
                 {
                     case FileMode.CreateNew:
-                        // if the file exists, IOException is thrown
-                        if (exists)
-                        {
-                            throw new IOException(
-                                string.Empty,
-                                (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
-                        }
-
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
+                        CreateNewFile(exists, bufferSize);
                         break;
 
                     case FileMode.Create:
-                        // if the file exists, it should be overwritten
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
-                        if (exists)
-                        {
-                            _nativeFileStream.SetLength(0);
-                        }
-
+                        CreateFile(exists, bufferSize);
                         break;
 
                     case FileMode.Open:
-                        // if the file does not exist, IOException/FileNotFound is thrown
-                        if (!exists)
-                        {
-                            throw new IOException(
-                                string.Empty,
-                                (int)IOException.IOExceptionErrorCode.FileNotFound);
-                        }
-
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
+                        OpenFile(exists, bufferSize);
                         break;
 
                     case FileMode.OpenOrCreate:
-                        // if the file does not exist, it is created
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
+                        OpenOrCreateFile(bufferSize);
                         break;
 
                     case FileMode.Truncate:
-                        // the file would be overwritten. if the file does not exist, IOException/FileNotFound is thrown
-                        if (!exists)
-                        {
-                            throw new IOException(
-                                string.Empty,
-                                (int)IOException.IOExceptionErrorCode.FileNotFound);
-                        }
-
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
-                        _nativeFileStream.SetLength(0);
-
+                        TruncateFile(exists, bufferSize);
                         break;
 
                     case FileMode.Append:
-                        // Opens the file if it exists and seeks to the end of the file. Append can only be used in conjunction with FileAccess.Write
-                        // Attempting to seek to a position before the end of the file will throw an IOException and any attempt to read fails and throws an NotSupportedException
-                        if (access != FileAccess.Write)
-                        {
-                            throw new ArgumentException("");
-                        }
-
-                        _nativeFileStream = new NativeFileStream(
-                            _fileName,
-                            bufferSize);
-
-                        _seekLimit = _nativeFileStream.Seek(
-                            0,
-                            (uint)SeekOrigin.End);
-
+                        AppendToFile(access, bufferSize);
                         break;
 
                     default:
@@ -353,37 +283,10 @@ namespace System.IO
                 // Now that we have a valid NativeFileStream, we add it to the FileRecord, so it can get cleaned-up in case an eject or force format
                 _fileRecord.NativeFileStream = _nativeFileStream;
 
-                // Retrive the filesystem capabilities
-                _nativeFileStream.GetStreamProperties(
-                    out _canRead,
-                    out _canWrite,
-                    out _canSeek);
-
-                // Ii the file is readonly, regardless of the filesystem capability, we'll turn off write
-                if (isReadOnly)
-                {
-                    _canWrite = false;
-                }
-
-                // Make sure the requests (wantsRead / wantsWrite) matches the filesystem capabilities (canRead / canWrite)
-                if ((wantsRead
-                     && !_canRead) || (wantsWrite
-                                       && !_canWrite))
-                {
-                    throw new IOException(
-                        string.Empty,
-                        (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
-                }
-
-                // finally, adjust the _canRead / _canWrite to match the requests
-                if (!wantsWrite)
-                {
-                    _canWrite = false;
-                }
-                else if (!wantsRead)
-                {
-                    _canRead = false;
-                }
+                AdjustCapabilities(
+                    wantsRead,
+                    wantsWrite,
+                    isReadOnly);
             }
             catch
             {
@@ -643,9 +546,145 @@ namespace System.IO
 
         #endregion
 
-        public override int Read(SpanByte buffer)
+        private void AdjustCapabilities(bool wantsRead, bool wantsWrite, bool isReadOnly)
         {
-            throw new NotImplementedException();
+            // Retrive the filesystem capabilities
+            _nativeFileStream.GetStreamProperties(
+                out _canRead,
+                out _canWrite,
+                out _canSeek);
+
+            // Ii the file is readonly, regardless of the filesystem capability, we'll turn off write
+            if (isReadOnly)
+            {
+                _canWrite = false;
+            }
+
+            // Make sure the requests (wantsRead / wantsWrite) matches the filesystem capabilities (canRead / canWrite)
+            if ((wantsRead
+                 && !_canRead) || (wantsWrite
+                                   && !_canWrite))
+            {
+                throw new IOException(
+                    string.Empty,
+                    (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+            }
+
+            // finally, adjust the _canRead / _canWrite to match the requests
+            if (!wantsWrite)
+            {
+                _canWrite = false;
+            }
+            else if (!wantsRead)
+            {
+                _canRead = false;
+            }
+        }
+
+        private void RegisterShareInformation(
+            FileAccess access,
+            FileShare share)
+        {
+            _fileRecord = FileSystemManager.AddToOpenList(
+                _fileName,
+                (int)access,
+                (int)share);
+        }
+
+        private void CreateNewFile(
+            bool exists,
+            int bufferSize)
+        {
+            // if the file exists, IOException is thrown
+            if (exists)
+            {
+                throw new IOException(
+                    string.Empty,
+                    (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
+            }
+
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+        }
+
+        private void CreateFile(
+            bool exists,
+            int bufferSize)
+        {
+            // if the file exists, it should be overwritten
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+
+            if (exists)
+            {
+                _nativeFileStream.SetLength(0);
+            }
+        }
+
+        private void OpenFile(
+            bool exists,
+            int bufferSize)
+        {
+            // if the file does not exist, IOException/FileNotFound is thrown
+            if (!exists)
+            {
+                throw new IOException(
+                    string.Empty,
+                    (int)IOException.IOExceptionErrorCode.FileNotFound);
+            }
+
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+        }
+
+        private void OpenOrCreateFile(int bufferSize)
+        {
+            // if the file does not exist, it is created
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+        }
+
+        private void TruncateFile(
+            bool exists,
+            int bufferSize)
+        {
+            // the file would be overwritten. if the file does not exist, IOException/FileNotFound is thrown
+            if (!exists)
+            {
+                throw new IOException(
+                    string.Empty,
+                    (int)IOException.IOExceptionErrorCode.FileNotFound);
+            }
+
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+
+            _nativeFileStream.SetLength(0);
+        }
+
+        private void AppendToFile(
+            FileAccess access,
+            int bufferSize)
+        {
+            // Opens the file if it exists and seeks to the end of the file. Append can only be used in conjunction with FileAccess.Write
+            // Attempting to seek to a position before the end of the file will throw an IOException and any attempt to read fails and throws an NotSupportedException
+            if (access != FileAccess.Write)
+            {
+                throw new ArgumentException("");
+            }
+
+            _nativeFileStream = new NativeFileStream(
+                _fileName,
+                bufferSize);
+
+            _seekLimit = _nativeFileStream.Seek(
+                0,
+                (uint)SeekOrigin.End);
         }
     }
 }
