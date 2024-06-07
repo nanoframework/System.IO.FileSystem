@@ -39,7 +39,7 @@ namespace System.IO
             {
                 RefreshIfNull();
 
-                return (long)_nativeFileInfo.Size;
+                return _nativeFileInfo.Size;
             }
         }
 
@@ -89,6 +89,14 @@ namespace System.IO
             {
                 return File.Exists(_fullPath);
             }
+        }
+
+        /// <inheritdoc/>
+        protected override void HandleRefreshError()
+        {
+            throw new IOException(
+                string.Empty,
+                (int)IOException.IOExceptionErrorCode.FileNotFound);
         }
 
         /// <summary>

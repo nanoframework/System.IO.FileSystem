@@ -536,7 +536,7 @@ namespace System.IO
 
                 byte[] buffer = new byte[ChunkSize];
 
-                for (; ; )
+                while (true)
                 {
                     int readSize = reader.Read(buffer, 0, ChunkSize);
 

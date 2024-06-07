@@ -177,6 +177,14 @@ namespace System.IO
                 recursive);
         }
 
+        /// <inheritdoc/>
+        protected override void HandleRefreshError()
+        {
+            throw new IOException(
+                string.Empty,
+                (int)IOException.IOExceptionErrorCode.DirectoryNotFound);
+        }
+
         /// <summary>
         /// Returns the original path that was passed to the <see cref="DirectoryInfo"/> constructor. Use the <see cref="FileSystemInfo.FullName"/> or <see cref="Name"/> properties for the full path or file/directory name instead of this method.
         /// </summary>

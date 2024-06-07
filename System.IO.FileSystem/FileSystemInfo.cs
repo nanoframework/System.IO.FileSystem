@@ -80,7 +80,7 @@ namespace System.IO
         /// Refreshes the state of the object.
         /// </summary>
         /// <exception cref="IOException">A device such as a disk drive is not ready.</exception>
-        public void Refresh()
+        public virtual void Refresh()
         {
             object record = FileSystemManager.AddToOpenListForRead(_fullPath);
 
@@ -90,11 +90,7 @@ namespace System.IO
 
                 if (_nativeFileInfo == null)
                 {
-                    IOException.IOExceptionErrorCode errorCode = (this is FileInfo) ? IOException.IOExceptionErrorCode.FileNotFound : IOException.IOExceptionErrorCode.DirectoryNotFound;
-
-                    throw new IOException(
-                        string.Empty,
-                        (int)errorCode);
+                    HandleRefreshError();
                 }
             }
             finally
@@ -102,6 +98,11 @@ namespace System.IO
                 FileSystemManager.RemoveFromOpenList(record);
             }
         }
+
+        /// <summary>
+        /// Handler for the case when the file or directory does not exist.
+        /// </summary>
+        protected abstract void HandleRefreshError();
 
         internal void RefreshIfNull()
         {

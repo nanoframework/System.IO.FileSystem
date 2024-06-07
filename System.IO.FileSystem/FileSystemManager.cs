@@ -30,20 +30,20 @@ namespace System.IO
             }
         }
 
-        public static object AddToOpenList(string fullName)
-        {
-            return AddToOpenList(
-                fullName,
-                FileAccess.ReadWrite,
-                FileShare.None);
-        }
-
         public static object AddToOpenListForRead(string fullName)
         {
             return AddToOpenList(
                 fullName,
                 FileAccess.Read,
                 FileShare.ReadWrite);
+        }
+
+        public static object AddToOpenList(string fullName)
+        {
+            return AddToOpenList(
+                fullName,
+                FileAccess.ReadWrite,
+                FileShare.None);
         }
 
         public static FileRecord AddToOpenList(

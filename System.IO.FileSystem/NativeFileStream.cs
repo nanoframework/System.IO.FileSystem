@@ -12,7 +12,9 @@ namespace System.IO
         // field is required for native interop
 #pragma warning disable IDE0051
 #pragma warning disable CS0169
+#pragma warning disable S1144
         object _fs;
+#pragma warning restore S1144
 #pragma warning restore CS0169
 #pragma warning restore IDE0051
 
