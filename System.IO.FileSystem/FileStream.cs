@@ -599,8 +599,8 @@ namespace System.IO
         {
             _fileRecord = FileSystemManager.AddToOpenList(
                 _fileName,
-                (int)access,
-                (int)share);
+                access,
+                share);
         }
 
         private void CreateNewFile(

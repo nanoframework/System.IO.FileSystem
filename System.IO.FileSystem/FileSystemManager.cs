@@ -9,16 +9,6 @@ namespace System.IO
 {
     internal class FileSystemManager
     {
-        // KEEP IN-SYNC WITH FileAccess.cs and FileShare.cs
-        private const int _fileAccessRead = 1;
-        private const int _fileAccessWrite = 2;
-        private const int _fileAccessReadWrite = 3;
-
-        private const int _fileShareNone = 0;
-        private const int _fileShareRead = 1;
-        private const int _fileShareWrite = 2;
-        private const int _fileShareReadWrite = 3;
-
         private static readonly ArrayList _openFiles = new();
         private static readonly ArrayList _lockedDirs = new();
         private static object _currentDirectoryRecord = null;
@@ -29,11 +19,11 @@ namespace System.IO
         {
             public string FullName;
             public NativeFileStream NativeFileStream;
-            public int Share;
+            public FileShare Share;
 
             public FileRecord(
                 string fullName,
-                int share)
+                FileShare share)
             {
                 FullName = fullName;
                 Share = share;
@@ -44,22 +34,22 @@ namespace System.IO
         {
             return AddToOpenList(
                 fullName,
-                _fileAccessReadWrite,
-                _fileShareNone);
+                FileAccess.ReadWrite,
+                FileShare.None);
         }
 
         public static object AddToOpenListForRead(string fullName)
         {
             return AddToOpenList(
                 fullName,
-                _fileAccessRead,
-                _fileShareReadWrite);
+                FileAccess.Read,
+                FileShare.ReadWrite);
         }
 
         public static FileRecord AddToOpenList(
             string fullName,
-            int access,
-            int share)
+            FileAccess access,
+            FileShare share)
         {
             fullName = fullName.ToUpper();
 
@@ -106,8 +96,8 @@ namespace System.IO
                         // Read, Write, and ReadWrite in FileAccess enum and FileShare enum are
                         // identical.
 
-                        if ((share != _fileShareReadWrite)
-                            || ((current.Share & access) != access))
+                        if ((share != FileShare.ReadWrite)
+                            || (((int)current.Share & (int)access) != (int)access))
                         {
                             throw new IOException(
                                 string.Empty,
