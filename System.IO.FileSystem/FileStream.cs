@@ -3,8 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System.Runtime.CompilerServices;
-
 namespace System.IO
 {
     /// <summary>
@@ -18,11 +16,11 @@ namespace System.IO
         private bool _canWrite;
         private bool _canSeek;
 
-        private readonly long _seekLimit;
+        private long _seekLimit;
 
         private bool _disposed;
 
-        private string _fileName;
+        private readonly string _fileName;
 
         private NativeFileStream _nativeFileStream;
         private FileSystemManager.FileRecord _fileRecord;
@@ -59,7 +57,9 @@ namespace System.IO
             {
                 if (_disposed)
                 {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
                     throw new ObjectDisposedException();
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
                 }
 
                 if (!_canSeek)
@@ -81,7 +81,9 @@ namespace System.IO
             {
                 if (_disposed)
                 {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
                     throw new ObjectDisposedException();
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
                 }
 
                 if (!_canSeek)
@@ -334,10 +336,9 @@ namespace System.IO
                         _canSeek = false;
                     }
 
-                    if (_nativeFileStream != null)
-                    {
-                        _nativeFileStream.Close();
-                    }
+                    _nativeFileStream?.Close();
+
+                    base.Dispose(disposing);
                 }
                 finally
                 {
@@ -412,6 +413,17 @@ namespace System.IO
                     count,
                     NativeFileStream.TimeoutDefault);
             }
+        }
+
+        /// <summary>
+        /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+        /// </summary>
+        /// <param name="buffer">The buffer to write the data into.</param>
+        /// <returns>The total number of bytes read into the buffer. This might be less than the number of bytes requested if that number of bytes are not currently available, or zero if the end of the stream is reached.</returns>
+        /// <exception cref="NotImplementedException">This method is currently not implemented.</exception>
+        public override int Read(SpanByte buffer)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
