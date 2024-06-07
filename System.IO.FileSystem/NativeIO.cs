@@ -47,5 +47,12 @@ namespace System.IO
         internal static extern void SetAttributes(
             string path,
             uint attributes);
+
+        [DebuggerNonUserCode]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Format(
+            string rootName,
+            string fileSystem,
+            uint parameter);
     }
 }
