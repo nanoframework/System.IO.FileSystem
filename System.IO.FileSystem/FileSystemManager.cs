@@ -13,7 +13,7 @@ namespace System.IO
         private static readonly ArrayList _lockedDirs = new();
         private static object _currentDirectoryRecord = null;
 
-        public static string CurrentDirectory = NativeIO.FSRoot;
+        internal static string CurrentDirectory = NativeIO.FSRoot;
 
         internal class FileRecord
         {
