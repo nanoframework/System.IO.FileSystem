@@ -16,6 +16,7 @@ namespace System.IO
         private DriveType _driveType;
         private string _name;
         private long _totalSize;
+        internal uint _volumeIndex;
 
         /// <summary>
         /// Gets the drive type, such as removable, fixed or RAM.
@@ -103,6 +104,10 @@ namespace System.IO
         [DebuggerNonUserCode]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void DriveInfoNative(string driveName);
+
+        [DebuggerNonUserCode]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern DriveInfo(uint volumeIndex);
 
         [DebuggerNonUserCode]
         [MethodImpl(MethodImplOptions.InternalCall)]

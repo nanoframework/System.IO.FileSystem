@@ -4,44 +4,35 @@
 //
 
 using System;
+using System.IO;
 
-namespace nanoFramework.System.IO.FileSystem
+namespace nanoFramework.System.IO
 {
     /// <summary>
-    /// Contains argument values for Removable Devices events.
+    /// Contains argument values for Removable Drive events.
     /// </summary>
-    public class RemovableDeviceEventArgs : EventArgs
+    public class RemovableDriveEventArgs : EventArgs
     {
-        private readonly string _path;
+        private readonly DriveInfo _drive;
         private readonly RemovableDeviceEvent _event;
 
-        internal RemovableDeviceEventArgs(string path, RemovableDeviceEvent deviceEvent)
+        internal RemovableDriveEventArgs(
+            DriveInfo drive,
+            RemovableDeviceEvent deviceEvent)
         {
-            _path = path;
+            _drive = drive;
             _event = deviceEvent;
         }
 
         /// <summary>
-        /// The path of the Removable Device.
+        /// The <see cref="DriveInfo"/> of the removable drive.
         /// </summary>
-        public string Path
-        {
-            get
-            {
-                return _path;
-            }
-        }
+        public DriveInfo Drive => _drive;
 
         /// <summary>
         /// The <see cref="RemovableDeviceEvent"/> occurred.
         /// </summary>
-        public RemovableDeviceEvent Event
-        {
-            get
-            {
-                return _event;
-            }
-        }
+        public RemovableDeviceEvent Event => _event;
 
         /// <summary>
         /// Specifies the type of event occurred with the Removable Device specified.

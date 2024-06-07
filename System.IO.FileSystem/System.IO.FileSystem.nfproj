@@ -57,7 +57,7 @@
     <Compile Include="FileSystemInfo.cs" />
     <Compile Include="FileSystemManager.cs" />
     <Compile Include="nanoFramework\SDCard.cs" />
-    <Compile Include="nanoFramework\RemovableDeviceEventArgs.cs" />
+    <Compile Include="nanoFramework\RemovableDriveEventArgs.cs" />
     <Compile Include="nanoFramework\StorageEventManager.cs" />
     <Compile Include="NativeFileInfo.cs" />
     <Compile Include="NativeFileStream.cs" />

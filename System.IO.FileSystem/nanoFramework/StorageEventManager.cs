@@ -5,16 +5,20 @@
 
 using nanoFramework.Runtime.Events;
 using System;
-using static nanoFramework.System.IO.FileSystem.RemovableDeviceEventArgs;
+using System.Collections;
+using System.IO;
+using static nanoFramework.System.IO.RemovableDriveEventArgs;
 
-namespace nanoFramework.System.IO.FileSystem
+namespace nanoFramework.System.IO
 {
     /// <summary>
     /// Provides an event handler that is called when a Removable Device event occurs.
     /// </summary>
     /// <param name="sender">Specifies the object that sent the Removable Device event. </param>
     /// <param name="e">Contains the Removable Device event arguments. </param>
-    public delegate void RemovableDeviceEventHandler(object sender, RemovableDeviceEventArgs e);
+    public delegate void RemovableDeviceEventHandler(
+        object sender,
+        RemovableDriveEventArgs e);
 
     /// <summary>
     /// Event manager for Storage events.
@@ -32,7 +36,7 @@ namespace nanoFramework.System.IO.FileSystem
         internal class StorageEvent : BaseEvent
         {
             public StorageEventType EventType;
-            public byte DriveIndex;
+            public uint VolumeIndex;
             public DateTime Time;
         }
 
@@ -47,8 +51,8 @@ namespace nanoFramework.System.IO.FileSystem
             {
                 StorageEvent storageEvent = new StorageEvent
                 {
-                    EventType = (StorageEventType)((data1 >> 16) & 0xFF),
-                    DriveIndex = (byte)(data2 & 0xFF),
+                    EventType = (StorageEventType)(data1 & 0xFF),
+                    VolumeIndex = data2,
                     Time = time
                 };
 
@@ -70,7 +74,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// Event that occurs when a Removable Device is inserted.
         /// </summary>
         /// <remarks>
-        /// The <see cref="StorageEventManager"/> class raises <see cref="RemovableDeviceEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
+        /// The <see cref="StorageEventManager"/> class raises <see cref="RemovableDriveEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
         /// 
         /// To have a <see cref="StorageEventManager"/> object call an event-handling method when a <see cref="RemovableDeviceInserted"/> event occurs, 
         /// you must associate the method with a <see cref="RemovableDeviceEventHandler"/> delegate, and add this delegate to this event. 
@@ -81,79 +85,79 @@ namespace nanoFramework.System.IO.FileSystem
         /// Event that occurs when a Removable Device is removed.
         /// </summary>
         /// <remarks>
-        /// The <see cref="StorageEventManager"/> class raises <see cref="RemovableDeviceEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
+        /// The <see cref="StorageEventManager"/> class raises <see cref="RemovableDriveEventArgs"/> events when Removable Devices (typically SD Cards and USB mass storage device) are inserted and removed.
         /// 
         /// To have a <see cref="StorageEventManager"/> object call an event-handling method when a <see cref="RemovableDeviceRemoved"/> event occurs, 
         /// you must associate the method with a <see cref="RemovableDeviceEventHandler"/> delegate, and add this delegate to this event. 
         /// </remarks>
         public static event RemovableDeviceEventHandler RemovableDeviceRemoved;
 
+        private static ArrayList _drives;
+
         static StorageEventManager()
         {
-            StorageEventListener storageEventListener = new StorageEventListener();
+            StorageEventListener storageEventListener = new();
 
             EventSink.AddEventProcessor(EventCategory.Storage, storageEventListener);
             EventSink.AddEventListener(EventCategory.Storage, storageEventListener);
+
+            _drives = new ArrayList();
+
+            DriveInfo.MountRemovableVolumes();
         }
 
         internal static void OnStorageEventCallback(StorageEvent storageEvent)
         {
-            switch (storageEvent.EventType)
+            lock (_drives)
             {
-                case StorageEventType.RemovableDeviceInsertion:
-                    {
-                        if (RemovableDeviceInserted != null)
+                switch (storageEvent.EventType)
+                {
+                    case StorageEventType.RemovableDeviceInsertion:
                         {
-                            RemovableDeviceEventArgs args = new RemovableDeviceEventArgs(DriveIndexToPath(storageEvent.DriveIndex), RemovableDeviceEvent.Inserted);
+                            DriveInfo drive = new(storageEvent.VolumeIndex);
+                            _drives.Add(drive);
 
-                            RemovableDeviceInserted(null, args);
-                        }
-                        break;
-                    }
-                case StorageEventType.RemovableDeviceRemoval:
-                    {
-                        if (RemovableDeviceRemoved != null)
-                        {
-                            RemovableDeviceEventArgs args = new RemovableDeviceEventArgs(DriveIndexToPath(storageEvent.DriveIndex), RemovableDeviceEvent.Removed);
-
-                            RemovableDeviceRemoved(null, args);
+                            RemovableDeviceInserted?.Invoke(null, new RemovableDriveEventArgs(
+                                drive,
+                                RemovableDeviceEvent.Inserted));
+                            break;
                         }
 
+                    case StorageEventType.RemovableDeviceRemoval:
+                        {
+                            DriveInfo drive = RemoveDrive(storageEvent.VolumeIndex);
+
+                            if (drive != null)
+                            {
+                                FileSystemManager.ForceRemoveNameSpace(drive.Name);
+
+                                RemovableDeviceRemoved?.Invoke(null, new RemovableDriveEventArgs(drive, RemovableDeviceEvent.Removed));
+                            }
+
+                            break;
+                        }
+
+                    default:
                         break;
-                    }
-                default:
-                    {
-                        break;
-                    }
+                }
             }
         }
 
-        internal static string DriveIndexToPath(byte driveIndex)
+
+        private static DriveInfo RemoveDrive(uint volumeIndex)
         {
-            /////////////////////////////////////////////////////////////////////////////////////
-            // Drive indexes have a fixed mapping with a driver letter
-            // Keep the various INDEX0_DRIVE_LETTER in sync with nanoHAL_Windows_Storage.h in native code
-            /////////////////////////////////////////////////////////////////////////////////////
-
-            switch (driveIndex)
+            for (int i = 0; i < _drives.Count; i++)
             {
-                // INDEX0_DRIVE_LETTER
-                case 0:
-                    return "D:";
+                DriveInfo drive = (DriveInfo)_drives[i];
 
-                // INDEX1_DRIVE_LETTER
-                case 1:
-                    return "E:";
-
-                // INDEX2_DRIVE_LETTER
-                case 2:
-                    return "F:";
-
-                default:
-#pragma warning disable S112 // General exceptions should never be thrown
-                    throw new IndexOutOfRangeException();
-#pragma warning restore S112 // General exceptions should never be thrown
+                if (drive._volumeIndex == volumeIndex)
+                {
+                    _drives.RemoveAt(i);
+                    return drive;
+                }
             }
+
+            return null;
         }
     }
 }

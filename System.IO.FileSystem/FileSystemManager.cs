@@ -136,36 +136,30 @@ namespace System.IO
 
             lock (_openFiles)
             {
-                int count = _openFiles.Count;
-
-                for (int i = 0; i < count; i++)
+                if (_lockedDirs.Contains(directory) || AnyFileOpenInDirectory(directory))
                 {
-                    if (IsInDirectory(
-                        ((FileRecord)_openFiles[i]).FullName,
-                        directory))
-                    {
-                        throw new IOException(
-                            string.Empty,
-                            (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
-                    }
-                }
-
-                count = _lockedDirs.Count;
-
-                for (int i = 0; i < count; i++)
-                {
-                    if (((string)_lockedDirs[i]) == directory)
-                    {
-                        throw new IOException(
-                            string.Empty,
-                            (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
-                    }
+                    throw new IOException(
+                        string.Empty,
+                        (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
                 _lockedDirs.Add(directory);
             }
 
             return (object)directory;
+        }
+
+        private static bool AnyFileOpenInDirectory(string directory)
+        {
+            foreach (FileRecord record in _openFiles)
+            {
+                if (IsInDirectory(record.FullName, directory))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static void UnlockDirectory(object record)
@@ -182,40 +176,29 @@ namespace System.IO
 
             lock (_openFiles)
             {
-                int count = _lockedDirs.Count;
-
-                for (int i = 0; i < count; i++)
-                {
-                    if (((string)_lockedDirs[i]) == directory)
-                    {
-                        _lockedDirs.RemoveAt(i);
-
-                        break;
-                    }
-                }
+                _lockedDirs.Remove(directory);
             }
         }
 
         public static void ForceRemoveNameSpace(string nameSpace)
         {
-            string root = NativeIO.FSRoot + nameSpace.ToUpper();
-
-            FileRecord record;
+            string root = nameSpace.ToUpper();
+            ArrayList recordsToRemove = new();
 
             lock (_openFiles)
             {
-                int count = _openFiles.Count;
-
-                for (int i = 0; i < count; i++)
+                foreach (FileRecord record in _openFiles)
                 {
-                    record = (FileRecord)_openFiles[i];
-
                     if (IsInDirectory(record.FullName, root))
                     {
                         record.NativeFileStream?.Close();
-
-                        _openFiles.RemoveAt(i);
+                        recordsToRemove.Add(record);
                     }
+                }
+
+                foreach (FileRecord record in recordsToRemove)
+                {
+                    _openFiles.Remove(record);
                 }
             }
         }
