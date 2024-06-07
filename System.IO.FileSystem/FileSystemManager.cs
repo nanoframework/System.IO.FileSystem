@@ -180,9 +180,9 @@ namespace System.IO
             }
         }
 
-        public static void ForceRemoveNameSpace(string nameSpace)
+        public static void ForceRemoveRootname(string rootNamme)
         {
-            string root = nameSpace.ToUpper();
+            string root = rootNamme.ToUpper();
             ArrayList recordsToRemove = new();
 
             lock (_openFiles)

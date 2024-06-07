@@ -129,7 +129,7 @@ namespace nanoFramework.System.IO
 
                             if (drive != null)
                             {
-                                FileSystemManager.ForceRemoveNameSpace(drive.Name);
+                                FileSystemManager.ForceRemoveRootname(drive.Name);
 
                                 RemovableDeviceRemoved?.Invoke(null, new RemovableDriveEventArgs(drive, RemovableDeviceEvent.Removed));
                             }
