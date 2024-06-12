@@ -283,9 +283,8 @@ namespace System.IO
 
             if (!IsPathRooted(path))
             {
-                // TODO: will be implemented in next PR
-                // string currDir = Directory.GetCurrentDirectory();
-                // path = Combine(currDir, path);
+                string currDir = Directory.GetCurrentDirectory();
+                path = Combine(currDir, path);
             }
 
             return PathInternal.NormalizeDirectorySeparators(path);

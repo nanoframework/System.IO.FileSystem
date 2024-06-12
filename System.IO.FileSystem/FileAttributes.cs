@@ -35,5 +35,10 @@ namespace System.IO
         /// This file is marked to be included in incremental backup operation.
         /// </summary>
         Archive = 0x20,
+
+        /// <summary>
+        /// The file is a standard file that has no special attributes. This attribute is valid only if it is used alone.
+        /// </summary>
+        Normal = 0x80,
     }
 }
