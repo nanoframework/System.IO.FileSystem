@@ -270,8 +270,15 @@ namespace System.IO
             string[] files;
             int filesCount, i;
 
-            // relative path starts after the sourceDirName and a path seperator
-            int relativePathIndex = sourceDirName.Length + 1; 
+            // relative path starts after the sourceDirName and a path separator
+            int relativePathIndex = sourceDirName.LastIndexOf(Path.DirectorySeparatorChar);
+            if(relativePathIndex == -1)
+            {
+                relativePathIndex = sourceDirName.LastIndexOf(Path.AltDirectorySeparatorChar);
+            }
+
+            // relative path starts after the sourceDirName and a path separator
+            relativePathIndex++;
             
             // make sure no other thread/process can modify it (for example, delete the directory and create a file of the same name) while we're moving
             object recordSrc = FileSystemManager.AddToOpenList(sourceDirName);
