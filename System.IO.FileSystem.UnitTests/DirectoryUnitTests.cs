@@ -213,10 +213,17 @@ namespace System.IO.FileSystem.UnitTests
         {
             string path = @$"{Root}temp\testdir\";
 
+            string newPath = @$"{Root}temp\testdir2\";
+
             // make sure the directory doesn't exist
             if (Directory.Exists(path))
             {
                 Directory.Delete(path, true);
+            }
+
+            if (Directory.Exists(newPath))
+            {
+                Directory.Delete(newPath, true);
             }
 
             Directory.CreateDirectory(path);
@@ -228,8 +235,6 @@ namespace System.IO.FileSystem.UnitTests
             Directory.CreateDirectory($@"{path}subdir1\");
             Directory.CreateDirectory($@"{path}subdir2\");
             Directory.CreateDirectory($@"{path}subdir3\");
-
-            string newPath = @$"{Root}temp\testdir2\";
 
             Directory.Move(path, newPath);
 
