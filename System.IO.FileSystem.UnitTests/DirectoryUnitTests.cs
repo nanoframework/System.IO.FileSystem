@@ -212,7 +212,6 @@ namespace System.IO.FileSystem.UnitTests
         public void TestMoveDirectoryWithSubdirectories()
         {
             string path = @$"{Root}temp\testdir\";
-
             string newPath = @$"{Root}temp\testdir2\";
 
             // make sure the directory doesn't exist
@@ -251,11 +250,17 @@ namespace System.IO.FileSystem.UnitTests
         public void TestMoveDirectoryWithSubdirectoriesAndFiles()
         {
             string path = @$"{Root}temp\testdir\";
+            string newPath = @$"{Root}temp\testdir2\";
 
             // make sure the directory doesn't exist
             if (Directory.Exists(path))
             {
                 Directory.Delete(path, true);
+            }
+
+            if (Directory.Exists(newPath))
+            {
+                Directory.Delete(newPath, true);
             }
 
             Directory.CreateDirectory(path);
@@ -277,8 +282,6 @@ namespace System.IO.FileSystem.UnitTests
             File.Create($@"{path}subdir3\file1.txt").Close();
             File.Create($@"{path}subdir3\file2.txt").Close();
             File.Create($@"{path}subdir3\file3.txt").Close();
-
-            string newPath = @$"{Root}temp\testdir2\";
 
             Directory.Move(path, newPath);
 
