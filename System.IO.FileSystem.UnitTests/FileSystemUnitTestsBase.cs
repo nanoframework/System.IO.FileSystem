@@ -17,19 +17,19 @@ namespace System.IO.FileSystem.UnitTests
         /////////////////////////////////////////////////////////////////////
 
         // set to the number of drives available in the target
-        internal const int _numberOfDrives = 2;
+        internal const int _numberOfDrives = 1;
 
         // set to the root of the drive to use for the tests
         // D: SD card
         // E: USB mass storage
         // I: and J: internal flash
-        internal const string Root = @"D:\";
+        internal const string Root = @"I:\";
 
         // set to true to wait for removable drive(s) to be mounted
-        internal const bool _waitForRemovableDrive = true;
+        internal const bool _waitForRemovableDrive = false;
 
         // set to true to have SPI SD card mounted
-        internal const bool _configAndMountSdCard = true;
+        internal const bool _configAndMountSdCard = false;
 
         //////////////////////////////////////////////////
 
