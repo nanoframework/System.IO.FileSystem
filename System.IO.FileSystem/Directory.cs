@@ -152,6 +152,13 @@ namespace System.IO
         /// <exception cref="IOException"> Logical drive or a directory under given path does not exist. </exception>
         public static string[] GetFiles(string path)
         {
+            // if path doesn't end with a separator, add one
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString())
+                && !path.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+            {
+                path += Path.DirectorySeparatorChar;
+            }
+
             return GetChildren(
                 path,
                 false);
@@ -270,16 +277,6 @@ namespace System.IO
             string[] files;
             int filesCount, i;
 
-            // relative path starts after the sourceDirName and a path separator
-            int relativePathIndex = sourceDirName.LastIndexOf(Path.DirectorySeparatorChar);
-            if(relativePathIndex == -1)
-            {
-                relativePathIndex = sourceDirName.LastIndexOf(Path.AltDirectorySeparatorChar);
-            }
-
-            // relative path starts after the sourceDirName and a path separator
-            relativePathIndex++;
-            
             // make sure no other thread/process can modify it (for example, delete the directory and create a file of the same name) while we're moving
             object recordSrc = FileSystemManager.AddToOpenList(sourceDirName);
 
@@ -301,30 +298,36 @@ namespace System.IO
                         (int)IOException.IOExceptionErrorCode.PathAlreadyExists);
                 }
 
+                // create it
                 NativeIO.CreateDirectory(destDirName);
 
+                // get all files in sourceDir ...
                 files = GetFiles(sourceDirName);
                 filesCount = files.Length;
 
+                // ... and copy them to destDir
                 for (i = 0; i < filesCount; i++)
                 {
                     File.Copy(
                         files[i],
-                        Path.Combine(destDirName, files[i].Substring(relativePathIndex)),
+                        Path.Combine(destDirName, Path.GetFileName(files[i])),
                         false,
                         true);
                 }
 
+                // now get all directories in sourceDir ...
                 files = GetDirectories(sourceDirName);
                 filesCount = files.Length;
 
+                // ... and copy them to destDir
                 for (i = 0; i < filesCount; i++)
                 {
                     RecursiveCopyAndDelete(
                         files[i],
-                        Path.Combine(destDirName, files[i].Substring(relativePathIndex)));
+                        Path.Combine(destDirName, Path.GetFileName(files[i])));
                 }
 
+                // finally, delete sourceDir
                 NativeIO.Delete(
                     sourceDirName,
                     true);
