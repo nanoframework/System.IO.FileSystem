@@ -5,7 +5,6 @@
 
 using nanoFramework.TestFramework;
 using System.Text;
-using System.Threading;
 
 namespace System.IO.FileSystem.UnitTests
 {
@@ -24,19 +23,7 @@ namespace System.IO.FileSystem.UnitTests
         {
             Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
 
-            //////////////////////////////////////////////////////////////////
-            // these are needed when running the tests on a removable drive //
-            //////////////////////////////////////////////////////////////////
-            if (_waitForRemovableDrive)
-            {
-                // wait until all removable drives are mounted
-                while (DriveInfo.GetDrives().Length < _numberOfDrives)
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-            //////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////
+            RemovableDrivesHelper();
         }
 
         #region Test helpers
@@ -708,6 +695,10 @@ namespace System.IO.FileSystem.UnitTests
         [TestMethod]
         public void SetAttributes_sets_FileAttributes()
         {
+            //////////////////////////////////////////////////////////////////////////////////////////
+            // this is failing on ESP32 littlefs because the current API doesn't support attributes //
+            //////////////////////////////////////////////////////////////////////////////////////////
+
             ExecuteTestAndTearDown(() =>
             {
                 CreateFile(
