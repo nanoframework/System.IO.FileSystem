@@ -25,30 +25,11 @@ namespace System.IO.FileSystem.UnitTests
         // I: and J: internal flash
         internal const string Root = @"I:\";
 
-        // set to true to wait for removable drive(s) to be mounted
-        internal const bool _waitForRemovableDrive = false;
+        public static bool WaitForRemovableDrive { get; set; } = false;
 
-        // set to true to have SPI SD card mounted
-        internal const bool _configAndMountSdCard = false;
+        public static bool ConfigAndMountSdCard { get; set; } = false;
 
         //////////////////////////////////////////////////
-
-        private SDCard _mycardBacking;
-
-        internal SDCard MyCard
-        {
-            set
-            {
-                _mycardBacking = value;
-            }
-
-            get
-            {
-                _mycardBacking ??= InitializeSDCard();
-
-                return _mycardBacking;
-            }
-        }
 
         /// <summary>
         /// Initializes the SD card. Can be overridden in the derived class to provide specific initialization.
@@ -72,13 +53,14 @@ namespace System.IO.FileSystem.UnitTests
         /// </summary>
         internal void RemovableDrivesHelper()
         {
-            if (_configAndMountSdCard)
+            if (ConfigAndMountSdCard)
             {
             TryToMountAgain:
 
                 try
                 {
-                    MyCard.Mount();
+                    SDCard card = InitializeSDCard();
+                    card.Mount();
                 }
                 catch (Exception ex)
                 {
@@ -86,19 +68,29 @@ namespace System.IO.FileSystem.UnitTests
 
                     Thread.Sleep(TimeSpan.FromSeconds(2));
 
-                    MyCard = null;
-
                     goto TryToMountAgain;
                 }
             }
+            else
+            {
+                OutputHelper.WriteLine("***************************************");
+                OutputHelper.WriteLine("*** Skipping SD card initialization ***");
+                OutputHelper.WriteLine("***************************************");
+            }
 
-            if (_waitForRemovableDrive)
+            if (WaitForRemovableDrive)
             {
                 // wait until all removable drives are mounted
                 while (DriveInfo.GetDrives().Length < _numberOfDrives)
                 {
                     Thread.Sleep(1000);
                 }
+            }
+            else
+            {
+                OutputHelper.WriteLine("******************************************");
+                OutputHelper.WriteLine("*** Skipping wait for removable drives ***");
+                OutputHelper.WriteLine("******************************************");
             }
         }
     }
