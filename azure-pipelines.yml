@@ -59,6 +59,8 @@ steps:
 - template: azure-pipelines-templates/class-lib-build.yml@templates
   parameters:
     sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
+    runUnitTests: true
+    unitTestRunsettings: '$(System.DefaultWorkingDirectory)\System.IO.FileSystem.UnitTests\nano.runsettings'
 
 # update dependents
 - template: azure-pipelines-templates/update-dependents.yml@templates  

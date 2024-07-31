@@ -21,7 +21,9 @@ namespace System.IO.FileSystem.UnitTests
         [Setup]
         public void Setup()
         {
-            Assert.SkipTest("These test will only run on real hardware. Comment out this line if you are testing on real hardware.");
+            // setting these to false assuming that the SD card is already mounted
+            WaitForRemovableDrive = false;
+            ConfigAndMountSdCard = false;
 
             RemovableDrivesHelper();
         }
@@ -112,9 +114,9 @@ namespace System.IO.FileSystem.UnitTests
         {
             OutputHelper.WriteLine($"Creating file: {path}...");
 
-            CreateFile(
+            File.AppendAllText(
                 path,
-                Encoding.UTF8.GetBytes(content));
+                content);
         }
 
         private static void DeleteFile(string path)
@@ -359,15 +361,17 @@ namespace System.IO.FileSystem.UnitTests
             ExecuteTestAndTearDown(() =>
             {
                 OutputHelper.WriteLine($"Creating file {Destination} WITHOUT content...");
-                using var stream = File.Create(Destination);
+                File.AppendAllText(
+                    Destination,
+                    string.Empty);
 
                 Console.WriteLine("Checking it file exists...");
                 AssertFileExists(Destination);
 
                 Console.WriteLine("Checking file content...");
                 AssertContentEquals(
-                    stream,
-                    EmptyContent);
+                    Destination,
+                    string.Empty);
             });
 
             ExecuteTestAndTearDown(() =>
@@ -378,14 +382,16 @@ namespace System.IO.FileSystem.UnitTests
                     new byte[100]);
 
                 Console.WriteLine("Creating file and truncating it...");
-                using var stream = File.Create(Destination);
+                File.WriteAllBytes(
+                    Destination,
+                    EmptyContent);
 
                 Console.WriteLine("Checking it file exists...");
                 AssertFileExists(Destination);
 
                 Console.WriteLine("Checking file content...");
                 AssertContentEquals(
-                    stream,
+                    Destination,
                     EmptyContent);
             });
         }
