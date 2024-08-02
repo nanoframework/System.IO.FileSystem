@@ -835,5 +835,103 @@ namespace System.IO.FileSystem.UnitTests
                     TextContent);
             });
         }
+
+        [TestMethod]
+        public void TestAccessingFileProperties()
+        {
+            string path = @$"{Root}temp\testdir\";
+            string fileName = "file1.txt";
+
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+
+            Directory.CreateDirectory(path);
+
+            OutputHelper.WriteLine($"Creating {fileName}...");
+            File.WriteAllBytes($@"{path}{fileName}", BinaryContent);
+
+            // getting directory info
+            OutputHelper.WriteLine($"Getting directory info for {path}...");
+
+            var dirInfo = new DirectoryInfo(path);
+
+            // getting file info
+            OutputHelper.WriteLine($"Getting file info for {fileName}...");
+
+            var fileList = dirInfo.GetFiles();
+            var file = fileList[0];
+
+            // access file properties
+            OutputHelper.WriteLine($"Accessing file properties for {fileName}...");
+
+            var fileNameProperty = file.FullName;
+            Assert.AreEqual($@"{path}{fileName}", fileNameProperty);
+
+            var fileSizePropert = file.Length;
+            Assert.AreEqual(BinaryContent.Length, fileSizePropert, "Reported file length is different than expected.");
+
+            Assert.AreEqual(FileAttributes.Normal, (file.Attributes & FileAttributes.Normal), "File attribute Normal is not set.");
+
+            Assert.AreEqual(fileName, file.Name);
+        }
+
+        [TestMethod]
+        public void TestListingSysAndHiddenFiles_00()
+        {
+            string path = @$"{Root}temp\testdir\";
+            string fileName = "this_is_a_system_file.sys";
+            string filePath = Path.Combine(path, fileName);
+
+            // make sure the directory doesn't exist
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+
+            // make sure the file doesn't exist
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            Directory.CreateDirectory(path);
+
+            CreateFile(filePath, EmptyContent);
+
+            // list directory
+            var dirInfo = new DirectoryInfo(path);
+
+            var fileList = dirInfo.GetFiles();
+
+            Assert.AreEqual(0, fileList.Length, "System file is listed when it shouldn't.");
+        }
+
+        [TestMethod]
+        public void TestListingSysAndHiddenFiles_01()
+        {
+            // this is looking for config files stored in ESP32 devices internal storage
+
+            // check if this test run is using the internal storage
+            if (!Root.StartsWith(@"I:\"))
+            {
+                // this is not the internal storage, skip the test
+                OutputHelper.WriteLine("Skipping test because it's not running on the internal storage.");
+
+                return;
+            }
+
+            // list directory
+            var dirInfo = new DirectoryInfo(Root);
+
+            var fileList = dirInfo.GetFiles();
+
+            foreach (var file in fileList)
+            {
+                Assert.IsFalse(file.Name.Contains(".sys"), "System file is listed when it shouldn't.");
+            }
+        }
     }
 }
