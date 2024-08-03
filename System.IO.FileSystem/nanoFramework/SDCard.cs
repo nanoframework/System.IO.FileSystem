@@ -9,6 +9,16 @@ using Diagnostics = System.Diagnostics;
 
 namespace nanoFramework.System.IO.FileSystem
 {
+
+    /// <summary>
+    /// Provides an event handler that is called when a SD card detect state change event occurs.
+    /// </summary>
+    /// <param name="sender">Specifies the object that sent the event.</param>
+    /// <param name="e">Contains the Card detect changed event arguments</param>
+    public delegate void CardDetectStateEventHandler(
+      object sender,
+      CardDetectChangedEventArgs e);
+
     /// <summary>
     /// Class to allow a SD memory card to be configured and mounted on the system.
     /// </summary>
@@ -26,17 +36,19 @@ namespace nanoFramework.System.IO.FileSystem
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private bool _disposed;
 
-
         // Common parameters
         private SDInterfaceType _sdCardType;
-        private bool _enableCardDetectPin;
+        // Card detect parameters
+        private bool _enableCardDetectPin = false;
+        private bool _cardDetectedState = false;
         private uint _cardDetectPin;
+        private uint _slotIndex;
+        private bool _autoMount = true;
         // MMC parameters
         private SDDataWidth _dataWidth;
         // SPI parameters
         private uint _spiBus;
         private uint _chipSelectPin;
-
 
         #region Properties
         /// <summary>
@@ -45,24 +57,47 @@ namespace nanoFramework.System.IO.FileSystem
         public SDInterfaceType CardType => _sdCardType;
 
         /// <summary>
-        /// Indicates if the SD card has been mounted
+        /// Indicates if the SD card has been mounted.
         /// </summary>
         public bool IsMounted => _mounted;
 
         /// <summary>
-        /// Return true if Card detection is enabled
+        /// Return true if Card detection is enabled.
         /// </summary>
         public bool CardDetectEnabled => _enableCardDetectPin;
 
         /// <summary>
+        /// SD card slot index.
+        /// </summary>
+        public uint SlotIndex => _slotIndex;
+
+        /// <summary>
         /// The parameters for a MMC connected SD card.
         /// </summary>
-        public SDCardMmcParameters MmcParameters { get => new SDCardMmcParameters { dataWidth=_dataWidth, enableCardDetectPin=_enableCardDetectPin, cardDetectPin=_cardDetectPin }; }
+        public SDCardMmcParameters MmcParameters { get => new SDCardMmcParameters { slotIndex = _slotIndex, dataWidth = _dataWidth}; }
 
         /// <summary>
         /// The parameters for a SPI connected SD card. 
         /// </summary>
-        public SDCardSpiParameters SpiParameters { get => new SDCardSpiParameters { spiBus=_spiBus, chipSelectPin=_chipSelectPin, enableCardDetectPin = _enableCardDetectPin, cardDetectPin = _cardDetectPin }; }
+        public SDCardSpiParameters SpiParameters { get => new SDCardSpiParameters { slotIndex = _slotIndex, spiBus = _spiBus, chipSelectPin = _chipSelectPin}; }
+
+        /// <summary>
+        /// The Card detect parameters for SD card.
+        /// </summary>
+        public SDCardCDParameters CdParameters { get => new SDCardCDParameters { autoMount=_autoMount, cardDetectedState = _cardDetectedState, cardDetectPin = _cardDetectPin, enableCardDetectPin = _enableCardDetectPin }; }
+
+        /// <summary>
+        /// Event that occurs when SD card detect changes state.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <see cref="SDCard"/> class raises the <see cref="CardDetectChanged"/> event when an SD Cards is inserted or removed.
+        /// This is only raised if SD card is configured with a Card Detect pin. Some SD card holders don't have this feature.
+        /// </para>
+        /// You only need to use this event if the <see cref="SDCardCDParameters"/> are configured for a manual mount of card on card detect. The default is automatic.
+        /// </remarks>
+        public event CardDetectStateEventHandler CardDetectChanged;
+
 
         /// <summary>
         /// Indicates if SD card has been detected if optional cardDetectPin parameter is enabled with a valid GPIO pin.
@@ -84,100 +119,60 @@ namespace nanoFramework.System.IO.FileSystem
         }
         #endregion
 
-        #region Parameters
-        /// <summary>
-        /// Parameter used for creating a MMC card instance.
-        /// </summary>
-        public class SDCardMmcParameters
-        {
-            /// <summary>
-            /// Data width to use on MMC SD protocol.
-            /// </summary>
-            public SDDataWidth dataWidth;
-
-            /// <summary>
-            /// Set true when an Card Detect Pin is used. 
-            /// The cardDetectPin parameter must have a valid GPIO pin.
-            /// </summary>
-            /// <remarks>
-            /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
-            /// </remarks>
-            public bool enableCardDetectPin;
-
-            /// <summary>
-            /// The optional card detect GPIO pin which must be set to a valid pin if EnableCardDetectPin is true.
-            /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
-            /// </summary>
-            public uint cardDetectPin;
-        }
-
-        /// <summary>
-        /// Parameter used for creating a SPI card instance.
-        /// </summary>
-        public class SDCardSpiParameters
-        {
-            /// <summary>
-            /// The SPI bus to use for SD Card.
-            /// </summary>
-            public uint spiBus;
-            /// <summary>
-            /// The chip select pin to use for SD Card.
-            /// </summary>
-            public uint chipSelectPin;
-
-            /// <summary>
-            /// Set true when an Card Detect Pin is used. 
-            /// The cardDetectPin parameter must have a valid GPIO pin.
-            /// </summary>
-            /// <remarks>
-            /// Not all SD Card modules have a card detect pin or the pin connected to a GPIO pin. 
-            /// </remarks>
-            public bool enableCardDetectPin;
-
-            /// <summary>
-            /// The optional card detect GPIO pin which must be set to a valid pin if EnableCardDetectPin is true.
-            /// If defined a StorageEventManager event will be raised when a card is inserted or removed.
-            /// </summary>
-            public uint cardDetectPin;
-        };
-
-        #endregion
-
         /// <summary>
         /// Creates an instance of SDcard where parameters have already been defined in firmware. 
         /// </summary>
-        public SDCard()
+        public SDCard(uint slotIndex = 0)
         {
             _sdCardType = SDInterfaceType.System;
 
-            InitNative();
+            Initialise(slotIndex, null);
         }
 
         /// <summary>
         /// Create an instance of SDCard for a MMC connected SD card.
         /// </summary>
-        /// <param name="parameters">Connection parameters</param>
-        public SDCard(SDCardMmcParameters parameters)
+        /// <param name="mmcParameters">Connection parameters</param>
+        /// <param name="cdParameters">Card detect parameters</param>
+        public SDCard(SDCardMmcParameters mmcParameters, SDCardCDParameters cdParameters = null)
         {
             _sdCardType = SDInterfaceType.Mmc;
-            _dataWidth = parameters.dataWidth;
-            _enableCardDetectPin = parameters.enableCardDetectPin;
-            _cardDetectPin = parameters.cardDetectPin;
+            _dataWidth = mmcParameters.dataWidth;
 
-            InitNative();
+            Initialise(mmcParameters.slotIndex, cdParameters);
         }
 
         /// <summary>
         /// Create an instance of SDCard for a SPI connected SD card.
         /// </summary>
-        /// <param name="parameters">Connection parameters</param>
-        public SDCard(SDCardSpiParameters parameters)
+        /// <param name="spiParameters">Connection parameters</param>
+        /// <param name="cdParameters">Card detect parameters</param>
+        public SDCard(SDCardSpiParameters spiParameters, SDCardCDParameters cdParameters = null)
         {
             _sdCardType = SDInterfaceType.Spi;
-            _spiBus = parameters.spiBus;
-            _chipSelectPin = parameters.chipSelectPin;
-            _enableCardDetectPin = parameters.enableCardDetectPin;
-            _cardDetectPin = parameters.cardDetectPin;
+            _spiBus = spiParameters.spiBus;
+            _chipSelectPin = spiParameters.chipSelectPin;
+ 
+            Initialise(spiParameters.slotIndex, cdParameters);
+        }
+
+        private void Initialise(uint slotIndex, SDCardCDParameters cdParameters)
+        {
+            _slotIndex = slotIndex;
+
+            _enableCardDetectPin = false;
+            if (cdParameters != null)
+            {
+                _enableCardDetectPin = cdParameters.enableCardDetectPin;
+                _cardDetectedState = cdParameters.cardDetectedState;
+                _cardDetectPin = cdParameters.cardDetectPin;
+                _autoMount = cdParameters.autoMount;
+            }
+
+            if (StorageEventManager.RegisterSDcardForEvents(this) == false)
+            {
+                throw new ArgumentException();
+            };
 
             InitNative();
         }
@@ -195,7 +190,7 @@ namespace nanoFramework.System.IO.FileSystem
             MountNative();
         }
 
-         /// <summary>
+        /// <summary>
         /// Unmount a mounted SD memory card.
         /// </summary>
         public void Unmount()
@@ -204,12 +199,51 @@ namespace nanoFramework.System.IO.FileSystem
             UnmountNative();
         }
 
+        internal void OnEvent(bool pinstate, uint slotIndex)
+        {
+            CardDetectState cdstate = (pinstate == _cardDetectedState) ? CardDetectState.Inserted : CardDetectState.Removed;
+            if (_autoMount)
+            {
+                // ignore any exceptions
+                try
+                {
+                    if (cdstate == CardDetectState.Inserted)
+                    {
+                        // Auto mount volume if not already mounted
+                        if (!IsMounted)
+                        {
+                            Mount();
+                        }
+                    }
+                    else
+                    {
+                        // Auto unmount volume if mounted
+                        if (IsMounted)
+                        {
+                            Unmount();
+                        }
+                    }
+                }
+                catch (Exception) { }
+            }
+
+            CardDetectChanged?.Invoke(this, new CardDetectChangedEventArgs(cdstate, slotIndex));
+        }
+
         #region IDisposable Support
 
         private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
+                StorageEventManager.RemoveSDcardFromEvents(this);
+
+                // Try to unmount if disposed
+                if (IsMounted)
+                {
+                    Unmount();
+                }
+
                 NativeDispose();
 
                 _disposed = true;
@@ -250,7 +284,7 @@ namespace nanoFramework.System.IO.FileSystem
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void MountNative();
-        
+
         [Diagnostics.DebuggerStepThrough]
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void UnmountNative();
@@ -266,8 +300,8 @@ namespace nanoFramework.System.IO.FileSystem
         /// <summary>
         /// SDCard interface type.
         /// </summary>
-        public enum SDInterfaceType 
-        { 
+        public enum SDInterfaceType
+        {
             /// <summary>
             /// Interface already defined in firmware. 
             /// </summary>
@@ -299,6 +333,7 @@ namespace nanoFramework.System.IO.FileSystem
             /// </summary>
             _4_bit = 2
         }
+
         #endregion
     }
 }
