@@ -38,14 +38,20 @@ namespace System.IO.FileSystem.UnitTests
         protected SDCard InitializeSDCard()
         {
             // Example initialization logic
-            SDCard.SDCardMmcParameters parameters = new SDCard.SDCardMmcParameters
+            SDCardMmcParameters parameters = new SDCardMmcParameters
             {
+                slotIndex = 0,
                 dataWidth = SDCard.SDDataWidth._4_bit,
-                enableCardDetectPin = true,
-                cardDetectPin = 21
             };
 
-            return new SDCard(parameters);
+            SDCardCDParameters cdParameters = new SDCardCDParameters()
+            {
+                enableCardDetectPin = true,
+                cardDetectPin = 21,
+                autoMount = true
+            };
+
+            return new SDCard(parameters, cdParameters);
         }
 
         /// <summary>
