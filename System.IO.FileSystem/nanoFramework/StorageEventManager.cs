@@ -150,6 +150,7 @@ namespace nanoFramework.System.IO
 
                             break;
                         }
+
                     case StorageEventType.CardDetectChanged:
                         {
                             SDCard card = FindRegisteredEvent(storageEvent.SlotIndex);
@@ -225,7 +226,5 @@ namespace nanoFramework.System.IO
             }
             return null;
         }
-
-
     }
 }
