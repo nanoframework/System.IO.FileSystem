@@ -44,7 +44,7 @@ namespace System.IO.FileSystem.UnitTests
                 dataWidth = SDCard.SDDataWidth._4_bit,
             };
 
-            SDCardCDParameters cdParameters = new SDCardCDParameters()
+            CardDetectParameters cdParameters = new CardDetectParameters()
             {
                 enableCardDetectPin = true,
                 cardDetectPin = 21,

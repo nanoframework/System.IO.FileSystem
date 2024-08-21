@@ -8,7 +8,7 @@ namespace nanoFramework.System.IO.FileSystem
     /// <summary>
     /// Parameter used for Card detection when creating a SDcard instance.
     /// </summary>
-    public class SDCardCDParameters
+    public class CardDetectParameters
     {
         /// <summary>
         /// Set true when an Card Detect Pin is used. 

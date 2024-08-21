@@ -84,7 +84,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// <summary>
         /// The Card detect parameters for SD card.
         /// </summary>
-        public SDCardCDParameters CdParameters { get => new SDCardCDParameters { autoMount=_autoMount, cardDetectedState = _cardDetectedState, cardDetectPin = _cardDetectPin, enableCardDetectPin = _enableCardDetectPin }; }
+        public CardDetectParameters CdParameters { get => new CardDetectParameters { autoMount=_autoMount, cardDetectedState = _cardDetectedState, cardDetectPin = _cardDetectPin, enableCardDetectPin = _enableCardDetectPin }; }
 
         /// <summary>
         /// Event that occurs when SD card detect changes state.
@@ -94,7 +94,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// The <see cref="SDCard"/> class raises the <see cref="CardDetectChanged"/> event when an SD Cards is inserted or removed.
         /// This is only raised if SD card is configured with a Card Detect pin. Some SD card holders don't have this feature.
         /// </para>
-        /// You only need to use this event if the <see cref="SDCardCDParameters"/> are configured for a manual mount of card on card detect. The default is automatic.
+        /// You only need to use this event if the <see cref="CardDetectParameters"/> are configured for a manual mount of card on card detect. The default is automatic.
         /// </remarks>
         public event CardDetectStateEventHandler CardDetectChanged;
 
@@ -134,7 +134,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// </summary>
         /// <param name="mmcParameters">Connection parameters</param>
         /// <param name="cdParameters">Card detect parameters</param>
-        public SDCard(SDCardMmcParameters mmcParameters, SDCardCDParameters cdParameters = null)
+        public SDCard(SDCardMmcParameters mmcParameters, CardDetectParameters cdParameters = null)
         {
             _sdCardType = SDInterfaceType.Mmc;
             _dataWidth = mmcParameters.dataWidth;
@@ -147,7 +147,7 @@ namespace nanoFramework.System.IO.FileSystem
         /// </summary>
         /// <param name="spiParameters">Connection parameters</param>
         /// <param name="cdParameters">Card detect parameters</param>
-        public SDCard(SDCardSpiParameters spiParameters, SDCardCDParameters cdParameters = null)
+        public SDCard(SDCardSpiParameters spiParameters, CardDetectParameters cdParameters = null)
         {
             _sdCardType = SDInterfaceType.Spi;
             _spiBus = spiParameters.spiBus;
@@ -156,7 +156,7 @@ namespace nanoFramework.System.IO.FileSystem
             Initialise(spiParameters.slotIndex, cdParameters);
         }
 
-        private void Initialise(uint slotIndex, SDCardCDParameters cdParameters)
+        private void Initialise(uint slotIndex, CardDetectParameters cdParameters)
         {
             _slotIndex = slotIndex;
 

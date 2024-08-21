@@ -54,7 +54,7 @@
     <Compile Include="FileShare.cs" />
     <Compile Include="FileStream.cs" />
     <Compile Include="nanoFramework\CardDetectChangedEventArgs.cs" />
-    <Compile Include="nanoFramework\SDCardCDParameters.cs" />
+    <Compile Include="nanoFramework\CardDetectParameters.cs" />
     <Compile Include="nanoFramework\SDCardMmcParameters.cs" />
     <Compile Include="nanoFramework\SDCardSpiParameters.cs" />
     <Compile Include="NativeFindFile.cs" />
