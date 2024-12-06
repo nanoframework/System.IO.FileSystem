@@ -98,6 +98,10 @@ namespace System.IO.FileSystem.UnitTests
             Directory.CreateDirectory($@"{path}subdir2\");
             Directory.CreateDirectory($@"{path}subdir3\");
 
+            // Add files to test we don't see files only directories
+            File.Create($@"{path}file1.txt").Close();
+            File.Create($@"{path}file2.txt").Close();
+
             var directories = Directory.GetDirectories(path);
 
             Assert.AreEqual(3, directories.Length);
@@ -119,13 +123,26 @@ namespace System.IO.FileSystem.UnitTests
 
             Directory.CreateDirectory(path);
 
-            File.Create($@"{path}file1.txt").Close();
-            File.Create($@"{path}file2.txt").Close();
-            File.Create($@"{path}file3.txt").Close();
+            string file1 = $@"{path}file1.txt";
+            string file2 = $@"{path}file2.txt";
+            string file3 = $@"{path}file3.txt";
+
+            // Add a mix of directories and files
+            Directory.CreateDirectory($@"{path}TestDir1");
+            Directory.CreateDirectory($@"{path}TestDir2");
+
+            File.Create(file1).Close();
+            File.Create(file2).Close();
+            File.Create(file3).Close();
 
             var files = Directory.GetFiles(path);
 
             Assert.AreEqual(3, files.Length);
+
+            // Check correct file names returned
+            Assert.IsTrue((files[0] == file1), "Invalid file1 in GetFiles()");
+            Assert.IsTrue((files[1] == file2), "Invalid file2 in GetFiles()");
+            Assert.IsTrue((files[2] == file3), "Invalid file3 in GetFiles()");
 
             // Clean up after the test
             Directory.Delete(path, true);
