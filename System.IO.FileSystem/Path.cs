@@ -164,10 +164,8 @@ namespace System.IO
                 return -1;
             }
 
-            while (end > rootLength && !PathInternal.IsDirectorySeparator(path[--end]))
-            {
-            }
-
+            while (end > rootLength && !PathInternal.IsDirectorySeparator(path[--end]));
+ 
             // Trim off any remaining separators (to deal with C:\foo\\bar)
             while (end > rootLength && PathInternal.IsDirectorySeparator(path[end - 1]))
             {

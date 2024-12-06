@@ -37,7 +37,7 @@ namespace nanoFramework.System.IO.FileSystem
         private bool _disposed;
 
         // Common parameters
-        private SDInterfaceType _sdCardType;
+        readonly private SDInterfaceType _sdCardType;
         // Card detect parameters
         private bool _enableCardDetectPin = false;
         private bool _cardDetectedState = false;
@@ -45,10 +45,10 @@ namespace nanoFramework.System.IO.FileSystem
         private uint _slotIndex;
         private bool _autoMount = true;
         // MMC parameters
-        private SDDataWidth _dataWidth;
+        readonly private SDDataWidth _dataWidth;
         // SPI parameters
-        private uint _spiBus;
-        private uint _chipSelectPin;
+        readonly private uint _spiBus;
+        readonly private uint _chipSelectPin;
 
         #region Properties
         /// <summary>
@@ -169,10 +169,10 @@ namespace nanoFramework.System.IO.FileSystem
                 _autoMount = cdParameters.autoMount;
             }
 
-            if (StorageEventManager.RegisterSDcardForEvents(this) == false)
+            if (!StorageEventManager.RegisterSDcardForEvents(this))
             {
                 throw new ArgumentException();
-            };
+            }
 
             InitNative();
         }
@@ -224,7 +224,10 @@ namespace nanoFramework.System.IO.FileSystem
                         }
                     }
                 }
-                catch (Exception) { }
+                catch (Exception) 
+                {  
+                    //ignore exception
+                }
             }
 
             CardDetectChanged?.Invoke(this, new CardDetectChangedEventArgs(cdstate, slotIndex));

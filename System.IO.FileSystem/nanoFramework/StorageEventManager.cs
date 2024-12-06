@@ -28,9 +28,9 @@ namespace nanoFramework.System.IO
     public static class StorageEventManager
     {
         [Flags]
-        internal enum StorageEventType : byte
+        internal enum StorageEventTypes : byte
         {
-            Invalid = 0,
+            None = 0,
             RemovableDeviceInsertion = 1,
             RemovableDeviceRemoval = 2,
             CardDetectChanged = 3
@@ -38,7 +38,7 @@ namespace nanoFramework.System.IO
 
         internal class StorageEvent : BaseEvent
         {
-            public StorageEventType EventType;
+            public StorageEventTypes EventType;
             public uint VolumeIndex;
             public uint SlotIndex;
             public DateTime Time;
@@ -61,7 +61,7 @@ namespace nanoFramework.System.IO
                 StorageEvent storageEvent = new StorageEvent()
                 {
                     // EventType = subCategory
-                    EventType = (StorageEventType)(data1 & 0xFF),
+                    EventType = (StorageEventTypes)(data1 & 0xFF),
                     state = ((data1 >> 16) == 1),
                     VolumeIndex = data2,
                     SlotIndex = data2,
@@ -126,7 +126,7 @@ namespace nanoFramework.System.IO
             {
                 switch (storageEvent.EventType)
                 {
-                    case StorageEventType.RemovableDeviceInsertion:
+                    case StorageEventTypes.RemovableDeviceInsertion:
                         {
                             DriveInfo drive = new(storageEvent.VolumeIndex);
                             _drives.Add(drive);
@@ -137,7 +137,7 @@ namespace nanoFramework.System.IO
                             break;
                         }
 
-                    case StorageEventType.RemovableDeviceRemoval:
+                    case StorageEventTypes.RemovableDeviceRemoval:
                         {
                             DriveInfo drive = RemoveDrive(storageEvent.VolumeIndex);
 
@@ -151,7 +151,7 @@ namespace nanoFramework.System.IO
                             break;
                         }
 
-                    case StorageEventType.CardDetectChanged:
+                    case StorageEventTypes.CardDetectChanged:
                         {
                             SDCard card = FindRegisteredEvent(storageEvent.SlotIndex);
                             if (card != null)   
@@ -207,7 +207,7 @@ namespace nanoFramework.System.IO
             {
                 SDCard item = (SDCard)_sdCardList[i];
 
-                if (item.SlotIndex == item.SlotIndex)
+                if (item.SlotIndex == card.SlotIndex)
                 {
                     _sdCardList.RemoveAt(i);
                 }

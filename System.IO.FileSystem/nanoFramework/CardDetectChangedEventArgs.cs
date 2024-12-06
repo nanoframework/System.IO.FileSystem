@@ -28,8 +28,8 @@ namespace nanoFramework.System.IO
     /// </summary>
     public class CardDetectChangedEventArgs : EventArgs
     {
-        private CardDetectState _cardState;
-        private uint _slotIndex;
+        readonly private CardDetectState _cardState;
+        readonly private uint _slotIndex;
 
         internal CardDetectChangedEventArgs(CardDetectState state, uint SlotIndex)
         {
