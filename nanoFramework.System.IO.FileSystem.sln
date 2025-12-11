@@ -6,7 +6,9 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "System.IO.FileSystem", "Sys
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B262EE3-4A14-4208-909B-31350360405E}"
 	ProjectSection(SolutionItems) = preProject
+		.runsettings = .runsettings
 		nanoFramework.System.IO.FileSystem.nuspec = nanoFramework.System.IO.FileSystem.nuspec
+		README.md = README.md
 		version.json = version.json
 	EndProjectSection
 EndProject

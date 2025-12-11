@@ -421,7 +421,7 @@ namespace System.IO
         /// <param name="buffer">The buffer to write the data into.</param>
         /// <returns>The total number of bytes read into the buffer. This might be less than the number of bytes requested if that number of bytes are not currently available, or zero if the end of the stream is reached.</returns>
         /// <exception cref="NotImplementedException">This method is currently not implemented.</exception>
-        public override int Read(SpanByte buffer)
+        public override int Read(Span<byte> buffer)
         {
             throw new NotImplementedException();
         }
