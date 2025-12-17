@@ -508,7 +508,28 @@ namespace System.IO
         /// <param name="buffer">The buffer containing data to write to the stream.</param>
         /// <param name="offset">The zero-based byte offset in array from which to begin copying bytes to the stream.</param>
         /// <param name="count">The maximum number of bytes to write.</param>
-        public override void Write(byte[] buffer, int offset, int count)
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="offset"/> and <paramref name="count"/> describe an invalid range in buffer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> or <paramref name="count"/> is negative.</exception>
+        /// <exception cref="IOException">
+        /// <para>
+        /// An I/O error occurred.
+        /// -or-
+        /// </para>
+        /// <para>
+        /// Another thread may have caused an unexpected change in the position of the operating system's file handle.
+        /// -or-
+        /// </para>
+        /// <para>
+        /// The underlying pipe is closed or disconnected.
+        /// </para>
+        /// </exception>
+        /// <exception cref="ObjectDisposedException">The stream is closed.</exception>
+        /// <exception cref="NotSupportedException">The current stream instance does not support writing.</exception>"
+        public override void Write(
+            byte[] buffer,
+            int offset,
+            int count)
         {
             if (_disposed)
             {
