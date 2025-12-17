@@ -546,6 +546,16 @@ namespace System.IO
         }
 
         /// <summary>
+        /// Writes a sequence of bytes from a read-only span to the current file stream and advances the current position within this file stream by the number of bytes written.
+        /// </summary>
+        /// <param name="buffer">A region of memory. This method copies the contents of this region to the current file stream.</param>
+        /// <exception cref="IOException">The underlying pipe is closed or disconnected.</exception>
+        public override void Write(ReadOnlySpan<byte> buffer)
+        {
+            Write(buffer.ToArray(), 0, buffer.Length);
+        }
+
+        /// <summary>
         /// Writes a byte to the current position in the file stream.
         /// </summary>
         /// <param name="value">A byte to write to the stream.</param>
