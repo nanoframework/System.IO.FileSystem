@@ -250,7 +250,10 @@ namespace System.IO
                 }
 
                 // a read-only file can't be opened with write access
-                if (isReadOnly && wantsWrite)
+                // (CreateNew is left to report that the file already exists, as in full .NET)
+                if (isReadOnly
+                    && wantsWrite
+                    && mode != FileMode.CreateNew)
                 {
                     throw new IOException(
                         string.Empty,
