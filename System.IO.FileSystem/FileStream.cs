@@ -249,29 +249,37 @@ namespace System.IO
                         (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
                 }
 
+                // a read-only file can't be opened with write access
+                if (isReadOnly && wantsWrite)
+                {
+                    throw new IOException(
+                        string.Empty,
+                        (int)IOException.IOExceptionErrorCode.UnauthorizedAccess);
+                }
+
                 // The seek limit is 0 (the beginning of the file) for all modes except Append
                 _seekLimit = 0;
 
                 switch (mode)
                 {
                     case FileMode.CreateNew:
-                        CreateNewFile(exists, bufferSize);
+                        CreateNewFile(exists, access, bufferSize);
                         break;
 
                     case FileMode.Create:
-                        CreateFile(exists, bufferSize);
+                        CreateFile(exists, access, bufferSize);
                         break;
 
                     case FileMode.Open:
-                        OpenFile(exists, bufferSize);
+                        OpenFile(exists, access, bufferSize);
                         break;
 
                     case FileMode.OpenOrCreate:
-                        OpenOrCreateFile(bufferSize);
+                        OpenOrCreateFile(access, bufferSize);
                         break;
 
                     case FileMode.Truncate:
-                        TruncateFile(exists, bufferSize);
+                        TruncateFile(exists, access, bufferSize);
                         break;
 
                     case FileMode.Append:
@@ -605,6 +613,7 @@ namespace System.IO
 
         private void CreateNewFile(
             bool exists,
+            FileAccess access,
             int bufferSize)
         {
             // if the file exists, IOException is thrown
@@ -617,17 +626,20 @@ namespace System.IO
 
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
         }
 
         private void CreateFile(
             bool exists,
+            FileAccess access,
             int bufferSize)
         {
             // if the file exists, it should be overwritten
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
 
             if (exists)
             {
@@ -637,6 +649,7 @@ namespace System.IO
 
         private void OpenFile(
             bool exists,
+            FileAccess access,
             int bufferSize)
         {
             // if the file does not exist, IOException/FileNotFound is thrown
@@ -649,19 +662,24 @@ namespace System.IO
 
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
         }
 
-        private void OpenOrCreateFile(int bufferSize)
+        private void OpenOrCreateFile(
+            FileAccess access,
+            int bufferSize)
         {
             // if the file does not exist, it is created
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
         }
 
         private void TruncateFile(
             bool exists,
+            FileAccess access,
             int bufferSize)
         {
             // the file would be overwritten. if the file does not exist, IOException/FileNotFound is thrown
@@ -674,7 +692,8 @@ namespace System.IO
 
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
 
             _nativeFileStream.SetLength(0);
         }
@@ -692,7 +711,8 @@ namespace System.IO
 
             _nativeFileStream = new NativeFileStream(
                 _fileName,
-                bufferSize);
+                bufferSize,
+                (int)access);
 
             _seekLimit = _nativeFileStream.Seek(
                 0,
