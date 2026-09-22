@@ -908,7 +908,9 @@ namespace System.IO.FileSystem.UnitTests
             });
         }
 
-        private static void AssertThrowsUnauthorizedAccess(Func<FileStream> open)
+        private delegate FileStream OpenFileStream();
+
+        private static void AssertThrowsUnauthorizedAccess(OpenFileStream open)
         {
             try
             {
