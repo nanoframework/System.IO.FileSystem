@@ -829,6 +829,44 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
+        public void FileStream_CreateNew_throws_PathAlreadyExists_for_read_only_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(
+                    Source,
+                    BinaryContent);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.ReadOnly);
+
+                try
+                {
+                    using var stream = new FileStream(
+                        Source,
+                        FileMode.CreateNew);
+
+                    Assert.IsTrue(false, "CreateNew on an existing file should throw IOException");
+                }
+                catch (IOException ex)
+                {
+                    Assert.AreEqual(
+                        (int)IOException.IOExceptionErrorCode.PathAlreadyExists,
+                        (int)ex.ErrorCode,
+                        "Unexpected IOException error code");
+                }
+                finally
+                {
+                    // clear the attribute so the file can be deleted on tear down
+                    File.SetAttributes(
+                        Source,
+                        FileAttributes.Normal);
+                }
+            });
+        }
+
+        [TestMethod]
         public void FileStream_can_open_for_write_after_read_only_is_cleared()
         {
             ExecuteTestAndTearDown(() =>
