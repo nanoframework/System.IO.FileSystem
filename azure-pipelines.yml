@@ -71,7 +71,7 @@ jobs:
     parameters:
       sonarCloudProject: 'nanoframework_lib-System.IO.FileSystem'
       runUnitTests: true
-      unitTestRunsettings: '$(System.DefaultWorkingDirectory)\System.IO.FileSystem.UnitTests\nano.runsettings'
+      unitTestRunsettings: '$(System.DefaultWorkingDirectory)\.runsettings'
 
 ##############################
 - job: Update_Dependents
