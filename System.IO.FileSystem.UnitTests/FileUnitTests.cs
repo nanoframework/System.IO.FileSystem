@@ -740,6 +740,194 @@ namespace System.IO.FileSystem.UnitTests
         }
 
         [TestMethod]
+        public void FileStream_can_open_read_only_file_for_read()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(
+                    Source,
+                    BinaryContent);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.ReadOnly);
+
+                try
+                {
+                    using var stream = new FileStream(
+                        Source,
+                        FileMode.Open,
+                        FileAccess.Read);
+
+                    Assert.IsTrue(stream.CanRead, "Stream should be readable");
+                    Assert.IsFalse(stream.CanWrite, "Stream should not be writable");
+
+                    AssertContentEquals(
+                        stream,
+                        BinaryContent);
+                }
+                finally
+                {
+                    // clear the attribute so the file can be deleted on tear down
+                    File.SetAttributes(
+                        Source,
+                        FileAttributes.Normal);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void FileStream_throws_if_read_only_file_is_opened_for_write()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(
+                    Source,
+                    BinaryContent);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.ReadOnly);
+
+                try
+                {
+                    AssertThrowsUnauthorizedAccess(
+                        () => new FileStream(
+                            Source,
+                            FileMode.Open,
+                            FileAccess.ReadWrite));
+
+                    AssertThrowsUnauthorizedAccess(
+                        () => new FileStream(
+                            Source,
+                            FileMode.Open,
+                            FileAccess.Write));
+
+                    AssertThrowsUnauthorizedAccess(
+                        () => new FileStream(
+                            Source,
+                            FileMode.Append));
+
+                    AssertThrowsUnauthorizedAccess(
+                        () => new FileStream(
+                            Source,
+                            FileMode.Truncate));
+
+                    // the file must be untouched
+                    AssertContentEquals(
+                        Source,
+                        BinaryContent);
+                }
+                finally
+                {
+                    // clear the attribute so the file can be deleted on tear down
+                    File.SetAttributes(
+                        Source,
+                        FileAttributes.Normal);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void FileStream_CreateNew_throws_PathAlreadyExists_for_read_only_file()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(
+                    Source,
+                    BinaryContent);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.ReadOnly);
+
+                try
+                {
+                    using var stream = new FileStream(
+                        Source,
+                        FileMode.CreateNew);
+
+                    Assert.IsTrue(false, "CreateNew on an existing file should throw IOException");
+                }
+                catch (IOException ex)
+                {
+                    Assert.AreEqual(
+                        (int)IOException.IOExceptionErrorCode.PathAlreadyExists,
+                        (int)ex.ErrorCode,
+                        "Unexpected IOException error code");
+                }
+                finally
+                {
+                    // clear the attribute so the file can be deleted on tear down
+                    File.SetAttributes(
+                        Source,
+                        FileAttributes.Normal);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void FileStream_can_open_for_write_after_read_only_is_cleared()
+        {
+            ExecuteTestAndTearDown(() =>
+            {
+                CreateFile(
+                    Source,
+                    BinaryContent);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.ReadOnly);
+
+                File.SetAttributes(
+                    Source,
+                    FileAttributes.Normal);
+
+                using (var stream = new FileStream(
+                    Source,
+                    FileMode.Open,
+                    FileAccess.ReadWrite))
+                {
+                    Assert.IsTrue(stream.CanWrite, "Stream should be writable");
+
+                    stream.Seek(0, SeekOrigin.End);
+
+                    stream.Write(
+                        BinaryContent,
+                        0,
+                        BinaryContent.Length);
+                }
+
+                var expected = new byte[BinaryContent.Length * 2];
+                BinaryContent.CopyTo(expected, 0);
+                BinaryContent.CopyTo(expected, BinaryContent.Length);
+
+                AssertContentEquals(
+                    Source,
+                    expected);
+            });
+        }
+
+        private delegate FileStream OpenFileStream();
+
+        private static void AssertThrowsUnauthorizedAccess(OpenFileStream open)
+        {
+            try
+            {
+                using var stream = open();
+
+                Assert.IsTrue(false, "Opening a read-only file with write access should throw IOException");
+            }
+            catch (IOException ex)
+            {
+                Assert.AreEqual(
+                    (int)IOException.IOExceptionErrorCode.UnauthorizedAccess,
+                    (int)ex.ErrorCode,
+                    "Unexpected IOException error code");
+            }
+        }
+
+        [TestMethod]
         public void WriteAllBytes_should_create_file()
         {
             ExecuteTestAndTearDown(() =>

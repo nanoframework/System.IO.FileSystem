@@ -24,7 +24,8 @@ namespace System.IO
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern NativeFileStream(
             string path,
-            int bufferSize);
+            int bufferSize,
+            int access);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern int Read(
