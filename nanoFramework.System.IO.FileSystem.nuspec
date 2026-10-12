@@ -16,11 +16,11 @@
     <repository type="git" url="https://github.com/nanoframework/System.IO.FileSystem" commit="$commit$" />
     <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
     <description>This package includes the System.IO.FileSystem assembly for .NET nanoFramework C# projects.
-This package requires a target with System.IO.FileSystem v$nativeVersion$ (checksum $checksum$).</description>
-    <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem</tags>
+This package requires a target with System.IO.FileSystem native contract hash $nativeContractHash$.</description>
+    <tags>nanoFramework C# csharp netmf netnf System.IO.FileSystem nfnc-$nativeContractHash$</tags>
     <dependencies>
       <group targetFramework=".NETnanoFramework1.0">
-        <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.52" />
+        <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.63" />
         <dependency id="nanoFramework.Runtime.Events" version="2.0.0-preview.13" />
         <dependency id="nanoFramework.System.IO.Streams" version="2.0.0-preview.22" />
         <dependency id="nanoFramework.System.Text" version="2.0.0-preview.23" />
